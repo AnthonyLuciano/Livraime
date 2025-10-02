@@ -1,6 +1,6 @@
 package Livraime.Unp.Livraime.modelo;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class cliente {
     private int id;
@@ -9,8 +9,8 @@ public class cliente {
     private String senha;
     private String endereco;
     private String telefone;
-    private String planoAssinatura;
-    private LocalDate dataInicioAssinatura;
+    private planos  planoAssinatura;
+    private LocalDateTime dataInicioAssinatura;
     private boolean ativo;
     private int beneficiadoId; // ID do beneficiado que este cliente está ajudando
     
@@ -18,7 +18,7 @@ public class cliente {
     public cliente() {}
     
     public cliente(int id, String nome, String email, String senha, String endereco, 
-                  String telefone, String planoAssinatura, LocalDate dataInicioAssinatura, 
+                  String telefone, planos planoAssinatura, LocalDateTime dataInicioAssinatura, 
                   boolean ativo, int beneficiadoId) {
         this.id = id;
         this.nome = nome;
@@ -51,11 +51,11 @@ public class cliente {
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
     
-    public String getPlanoAssinatura() { return planoAssinatura; }
-    public void setPlanoAssinatura(String planoAssinatura) { this.planoAssinatura = planoAssinatura; }
+    public planos getPlanoAssinatura() { return planoAssinatura; }
+    public void setPlanoAssinatura(planos planoAssinatura) { this.planoAssinatura = planoAssinatura; }
     
-    public LocalDate getDataInicioAssinatura() { return dataInicioAssinatura; }
-    public void setDataInicioAssinatura(LocalDate dataInicioAssinatura) { this.dataInicioAssinatura = dataInicioAssinatura; }
+    public LocalDateTime getDataInicioAssinatura() { return dataInicioAssinatura; }
+    public void setDataInicioAssinatura(LocalDateTime dataInicioAssinatura) { this.dataInicioAssinatura = dataInicioAssinatura; }
     
     public boolean isAtivo() { return ativo; }
     public void setAtivo(boolean ativo) { this.ativo = ativo; }
