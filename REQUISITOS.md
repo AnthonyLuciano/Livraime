@@ -49,5 +49,3 @@ Plataforma para conectar doadores a crianças necessitadas por meio de doações
 - Internacionalização (i18n) das mensagens.
 - Monitoramento e alertas para processos críticos.
 
----
-Resumo: focar primeiro na persistência e autenticação segura (registro com e‑mail e JWT), depois estabilizar APIs administrativas e painel operacional, acrescentando observabilidade e testes.
