@@ -3,6 +3,7 @@ package Livraime.Unp.Livraime.controller;
 import Livraime.Unp.Livraime.modelo.usuario;
 import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
 import Livraime.Unp.Livraime.servico.ServicoEmail;
+import Livraime.Unp.Livraime.dto.LoginRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,7 +46,10 @@ public class AuthController {
 
     @PostMapping("/login")
     @Operation(summary = "Login do usuário")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String senha) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+        String email = loginRequest.getEmail();
+        String senha = loginRequest.getSenha();
+
         Optional<usuario> usuarioOpt = usuarioRepository.findByEmail(email);
         if (usuarioOpt.isPresent() && passwordEncoder.matches(senha, usuarioOpt.get().getSenha())) {
             usuario usuario = usuarioOpt.get();
