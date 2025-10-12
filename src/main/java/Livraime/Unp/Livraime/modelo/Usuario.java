@@ -11,6 +11,8 @@ public class Usuario {
     private int id;
     private String nome;
     private String email;
+    private String cpf;
+    
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
     private String endereco;
@@ -25,10 +27,11 @@ public class Usuario {
     public Usuario() {}
 
     // Construtor completo
-    public Usuario(int id, String nome, String email, String senha, String endereco, String telefone, Planos plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
+    public Usuario(int id, String nome, String email, String cpf, String senha, String endereco, String telefone, Planos plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
         this.id = id;
         this.nome = nome;
         this.email = email;
+        this.cpf = cpf;
         this.senha = senha;
         this.endereco = endereco;
         this.telefone = telefone;
@@ -72,4 +75,14 @@ public class Usuario {
 
     public boolean isEmailVerificado() { return emailVerificado; }
     public void setEmailVerificado(boolean emailVerificado) { this.emailVerificado = emailVerificado; }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+    
+    
 }

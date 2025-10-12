@@ -21,6 +21,7 @@ public final class UsuarioMapper {
                 u.getId(),
                 u.getNome(),
                 u.getEmail(),
+                u.getCpf(),
                 u.getEndereco(),
                 u.getTelefone(),
                 planoNome,

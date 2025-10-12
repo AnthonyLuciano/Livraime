@@ -1,19 +1,23 @@
 package Livraime.Unp.Livraime.controller;
 
-import Livraime.Unp.Livraime.modelo.Usuario;
-import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
-import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
-import Livraime.Unp.Livraime.modelo.Planos;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
+import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
+import Livraime.Unp.Livraime.modelo.Planos;
+import Livraime.Unp.Livraime.modelo.Usuario;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -25,7 +29,9 @@ public class UsuarioController {
     @GetMapping
     @Operation(summary = "Listar todos os usuarios")
     public List<UsuarioResponseDTO> listarusuarios() {
-        usuarios.add(new Usuario(1, "joao", "joao@gmail.com", "123123123", "rua padilha", "9999999999", Planos.BASICO, LocalDateTime.now(),true, "133231", true));
+        usuarios.add(new Usuario(1, "joao", "joao@gmail.com",
+                "99999999999",
+                "123123123", "rua padilha", "9999999999", Planos.BASICO, LocalDateTime.now(), true, "133231", true));
         return UsuarioMapper.toResponseList(usuarios);
     }
 
