@@ -1,9 +1,9 @@
 package Livraime.Unp.Livraime.controller;
 
 import Livraime.Unp.Livraime.modelo.Usuario;
+import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
+import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
 import Livraime.Unp.Livraime.modelo.Planos;
-import Livraime.Unp.Livraime.modelo.UsuarioResponseDTO;
-import Livraime.Unp.Livraime.mapper.UsuarioMapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 

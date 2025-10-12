@@ -1,9 +1,9 @@
 package Livraime.Unp.Livraime.controller;
 
+import Livraime.Unp.Livraime.controller.dto.request.LoginRequest;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
 import Livraime.Unp.Livraime.servico.ServicoEmail;
-import Livraime.Unp.Livraime.dto.LoginRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
 package Livraime.Unp.Livraime.controller;
 
+import Livraime.Unp.Livraime.controller.dto.response.PlanoDTO;
 import Livraime.Unp.Livraime.modelo.Planos;
-import Livraime.Unp.Livraime.modelo.PlanoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;

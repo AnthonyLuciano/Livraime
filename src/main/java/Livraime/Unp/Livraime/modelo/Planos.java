@@ -4,6 +4,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import Livraime.Unp.Livraime.controller.dto.response.BeneficioDTO;
+import Livraime.Unp.Livraime.controller.dto.response.PlanoDTO;
+
 public enum Planos {
     BASICO(1, "BASICO", 50,
             new Beneficio[] {

@@ -1,7 +1,7 @@
-package Livraime.Unp.Livraime.mapper;
+package Livraime.Unp.Livraime.controller.dto.mapper;
 
+import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
 import Livraime.Unp.Livraime.modelo.Usuario;
-import Livraime.Unp.Livraime.modelo.UsuarioResponseDTO;
 
 import java.util.List;
 import java.util.stream.Collectors;
