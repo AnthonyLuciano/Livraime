@@ -1,6 +1,6 @@
 package Livraime.Unp.Livraime.controller;
 
-import Livraime.Unp.Livraime.modelo.planos;
+import Livraime.Unp.Livraime.modelo.Planos;
 import Livraime.Unp.Livraime.modelo.PlanoDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -18,14 +18,14 @@ public class PlanoController {
     @GetMapping
     @Operation(summary = "Listar todos os planos")
     public List<PlanoDTO> listarPlanos() {
-        return Arrays.stream(planos.values())
-                .map(planos::toDto)
+        return Arrays.stream(Planos.values())
+                .map(Planos::toDto)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{input}")
     @Operation(summary = "Buscar plano pelo código ou apelido")
     public PlanoDTO buscarPlano(@PathVariable String input) {
-        return planos.fromInput(input).toDto();
+        return Planos.fromInput(input).toDto();
     }
 }

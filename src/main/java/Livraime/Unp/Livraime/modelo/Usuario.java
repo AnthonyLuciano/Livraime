@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 
 @Entity
-public class usuario {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -15,17 +15,17 @@ public class usuario {
     private String senha;
     private String endereco;
     private String telefone;
-    private planos plano;
+    private Planos plano;
     private LocalDateTime dataCadastro = LocalDateTime.now();
     private boolean ativo = true;
     private String codigoVerificacao;
     private boolean emailVerificado = false;
 
     // Construtor padrão
-    public usuario() {}
+    public Usuario() {}
 
     // Construtor completo
-    public usuario(int id, String nome, String email, String senha, String endereco, String telefone, planos plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
+    public Usuario(int id, String nome, String email, String senha, String endereco, String telefone, Planos plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -58,8 +58,8 @@ public class usuario {
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
 
-    public planos getPlano() { return plano; }
-    public void setPlano(planos plano) { this.plano = plano; }
+    public Planos getPlano() { return plano; }
+    public void setPlano(Planos plano) { this.plano = plano; }
 
     public LocalDateTime getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDateTime dataCadastro) { this.dataCadastro = dataCadastro; }

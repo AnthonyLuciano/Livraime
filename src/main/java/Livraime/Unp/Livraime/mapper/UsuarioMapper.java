@@ -1,6 +1,6 @@
 package Livraime.Unp.Livraime.mapper;
 
-import Livraime.Unp.Livraime.modelo.usuario;
+import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.modelo.UsuarioResponseDTO;
 
 import java.util.List;
@@ -10,7 +10,7 @@ public final class UsuarioMapper {
 
     private UsuarioMapper() {}
 
-    public static UsuarioResponseDTO toResponse(usuario u) {
+    public static UsuarioResponseDTO toResponse(Usuario u) {
         if (u == null) return null;
         String planoNome = null;
         if (u.getPlano() != null) {
@@ -29,7 +29,7 @@ public final class UsuarioMapper {
         );
     }
 
-    public static List<UsuarioResponseDTO> toResponseList(List<usuario> usuarios) {
+    public static List<UsuarioResponseDTO> toResponseList(List<Usuario> usuarios) {
         return usuarios.stream().map(UsuarioMapper::toResponse).collect(Collectors.toList());
     }
 }

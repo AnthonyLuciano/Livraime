@@ -1,6 +1,6 @@
 package Livraime.Unp.Livraime.modelo;
 
-public class admin {
+public class Admin {
     private int id;
     private String nome;
     private String email;
@@ -8,9 +8,9 @@ public class admin {
     private String nivelAcesso;
     
     // Construtores, getters e setters
-    public admin() {}
+    public Admin() {}
     
-    public admin(int id, String nome, String email, String senha, String nivelAcesso) {
+    public Admin(int id, String nome, String email, String senha, String nivelAcesso) {
         this.id = id;
         this.nome = nome;
         this.email = email;

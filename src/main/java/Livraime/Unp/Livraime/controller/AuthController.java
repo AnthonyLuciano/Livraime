@@ -1,6 +1,6 @@
 package Livraime.Unp.Livraime.controller;
 
-import Livraime.Unp.Livraime.modelo.usuario;
+import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
 import Livraime.Unp.Livraime.servico.ServicoEmail;
 import Livraime.Unp.Livraime.dto.LoginRequest;
@@ -30,7 +30,7 @@ public class AuthController {
 
     @PostMapping("/cadastro")
     @Operation(summary = "Cadastrar novo usuário")
-    public ResponseEntity<?> cadastrar(@RequestBody usuario novoUsuario) {
+    public ResponseEntity<?> cadastrar(@RequestBody Usuario novoUsuario) {
         if (usuarioRepository.findByEmail(novoUsuario.getEmail()).isPresent()) {
             return ResponseEntity.badRequest().body("E-mail já cadastrado.");
         }
@@ -50,9 +50,9 @@ public class AuthController {
         String email = loginRequest.getEmail();
         String senha = loginRequest.getSenha();
 
-        Optional<usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
         if (usuarioOpt.isPresent() && passwordEncoder.matches(senha, usuarioOpt.get().getSenha())) {
-            usuario usuario = usuarioOpt.get();
+            Usuario usuario = usuarioOpt.get();
             if (!usuario.isEmailVerificado()) {
                 return ResponseEntity.status(403).body("Confirme seu e-mail para acessar o sistema.");
             }
@@ -67,9 +67,9 @@ public class AuthController {
     @PostMapping("/confirmar-email")
     @Operation(summary = "Confirmar e-mail do usuário")
     public ResponseEntity<?> confirmarEmail(@RequestParam String email, @RequestParam String codigo) {
-        Optional<usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
         if (usuarioOpt.isPresent() && codigo.equals(usuarioOpt.get().getCodigoVerificacao())) {
-            usuario usuario = usuarioOpt.get();
+            Usuario usuario = usuarioOpt.get();
             usuario.setEmailVerificado(true);
             usuario.setCodigoVerificacao(null);
             usuarioRepository.save(usuario);
@@ -81,9 +81,9 @@ public class AuthController {
     @PostMapping("/reenviar-codigo")
     @Operation(summary = "Reenviar código de verificação de e-mail")
     public ResponseEntity<?> reenviarCodigo(@RequestParam String email) {
-        Optional<usuario> usuarioOpt = usuarioRepository.findByEmail(email);
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
         if (usuarioOpt.isPresent()) {
-            usuario usuario = usuarioOpt.get();
+            Usuario usuario = usuarioOpt.get();
             String novoCodigo = String.format("%06d", new Random().nextInt(999999));
             usuario.setCodigoVerificacao(novoCodigo);
             usuarioRepository.save(usuario);

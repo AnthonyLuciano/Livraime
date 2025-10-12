@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public enum planos {
+public enum Planos {
     BASICO(1, "BASICO", 50,
             new Beneficio[] {
                     new Beneficio("receive:used_book", "Receber 1 livro usado por mês.")
@@ -30,7 +30,7 @@ public enum planos {
     private final Beneficio[] beneficios;
     private final String[] aliases;
 
-    planos(int codigo, String nivel, int valor, Beneficio[] beneficios, String... aliases) {
+    Planos(int codigo, String nivel, int valor, Beneficio[] beneficios, String... aliases) {
         this.codigo = codigo;
         this.nivel = nivel;
         this.valor = valor;
@@ -67,8 +67,8 @@ public enum planos {
     }
 
     // busca o código, apelido ou nível
-    public static planos fromInput(String input) {
-        for (planos p : values()) {
+    public static Planos fromInput(String input) {
+        for (Planos p : values()) {
             if (String.valueOf(p.codigo).equalsIgnoreCase(input)) {
                 return p;
             }
