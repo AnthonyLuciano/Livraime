@@ -1,6 +1,7 @@
 package Livraime.Unp.Livraime.modelo;
 
 import jakarta.persistence.*;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 
 @Entity
@@ -10,6 +11,7 @@ public class usuario {
     private int id;
     private String nome;
     private String email;
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
     private String endereco;
     private String telefone;
