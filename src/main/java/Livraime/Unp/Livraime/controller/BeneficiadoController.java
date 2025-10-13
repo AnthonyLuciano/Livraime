@@ -1,6 +1,6 @@
 package Livraime.Unp.Livraime.controller;
 
-import Livraime.Unp.Livraime.modelo.beneficiado;
+import Livraime.Unp.Livraime.modelo.Beneficiado;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -13,24 +13,24 @@ import java.util.List;
 @Tag(name = "Beneficiados", description = "Informações sobre as crianças beneficiadas")
 public class BeneficiadoController {
 
-    private List<beneficiado> beneficiados = new ArrayList<>();
+    private List<Beneficiado> beneficiados = new ArrayList<>();
 
     @GetMapping
     @Operation(summary = "Listar todos os beneficiados")
-    public List<beneficiado> listarBeneficiados() {
+    public List<Beneficiado> listarBeneficiados() {
         return beneficiados;
     }
 
     @PostMapping
     @Operation(summary = "Cadastrar novo beneficiado")
-    public beneficiado criarBeneficiado(@RequestBody beneficiado novoBeneficiado) {
+    public Beneficiado criarBeneficiado(@RequestBody Beneficiado novoBeneficiado) {
         beneficiados.add(novoBeneficiado);
         return novoBeneficiado;
     }
 
     @GetMapping("/{id}")
     @Operation(summary = "Buscar beneficiado por ID")
-    public beneficiado buscarPorId(@PathVariable int id) {
+    public Beneficiado buscarPorId(@PathVariable int id) {
         return beneficiados.stream().filter(b -> b.getId() == id).findFirst().orElse(null);
     }
 }
