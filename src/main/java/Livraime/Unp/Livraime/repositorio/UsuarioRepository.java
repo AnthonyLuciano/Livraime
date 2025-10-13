@@ -1,10 +1,10 @@
 package Livraime.Unp.Livraime.repositorio;
-import Livraime.Unp.Livraime.modelo.usuario;
+import Livraime.Unp.Livraime.modelo.Usuario;
 import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface UsuarioRepository extends JpaRepository<usuario, Integer> {
-    Optional<usuario> findByNome(String nome);
-    Optional<usuario> findById(int id);
-    Optional<usuario> findByEmail(String email);
+public interface UsuarioRepository extends JpaRepository<Usuario, Integer> {
+    Optional<Usuario> findByNome(String nome);
+    Optional<Usuario> findById(int id);
+    Optional<Usuario> findByEmail(String email);
 }

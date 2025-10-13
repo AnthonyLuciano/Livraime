@@ -2,7 +2,7 @@ package Livraime.Unp.Livraime.modelo;
 
 import java.time.LocalDate;
 
-public class beneficiado {
+public class Beneficiado {
     private int id;
     private String nome;
     private int idade;
@@ -15,9 +15,9 @@ public class beneficiado {
     private int clienteAssinanteId; // ID do cliente que está ajudando este beneficiado
     
     // Construtores, getters e setters
-    public beneficiado() {}
+    public Beneficiado() {}
     
-    public beneficiado(int id, String nome, int idade, LocalDate dataNascimento, 
+    public Beneficiado(int id, String nome, int idade, LocalDate dataNascimento, 
                       String endereco, String cidade, String estado, 
                       String descricaoNecessidades, boolean ativo, int clienteAssinanteId) {
         this.id = id;

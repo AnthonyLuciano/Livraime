@@ -1,4 +1,4 @@
-package Livraime.Unp.Livraime.dto;
+package Livraime.Unp.Livraime.controller.dto.request;
 
 public class LoginRequest {
     private String email;

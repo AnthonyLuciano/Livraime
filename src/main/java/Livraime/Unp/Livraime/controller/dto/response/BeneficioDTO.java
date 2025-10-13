@@ -1,4 +1,4 @@
-package Livraime.Unp.Livraime.modelo;
+package Livraime.Unp.Livraime.controller.dto.response;
 
 public class BeneficioDTO {
     private String nome;
