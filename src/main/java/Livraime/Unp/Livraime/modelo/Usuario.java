@@ -3,6 +3,11 @@ package Livraime.Unp.Livraime.modelo;
 import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
+import java.util.Set;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 
 @Entity
 public class Usuario {
@@ -22,6 +27,10 @@ public class Usuario {
     private boolean ativo = true;
     private String codigoVerificacao;
     private boolean emailVerificado = false;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @Enumerated(EnumType.STRING)
+    private Set<Role> roles;
 
     // Construtor padrão
     public Usuario() {}
@@ -76,13 +85,9 @@ public class Usuario {
     public boolean isEmailVerificado() { return emailVerificado; }
     public void setEmailVerificado(boolean emailVerificado) { this.emailVerificado = emailVerificado; }
 
-    public String getCpf() {
-        return cpf;
-    }
+    public String getCpf() {return cpf;}
+    public void setCpf(String cpf) {this.cpf = cpf;}
 
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-    
-    
+    public Set<Role> getRoles() {return roles;}
+    public void setRoles(Set<Role> roles) {this.roles = roles;}
 }
