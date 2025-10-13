@@ -6,7 +6,6 @@
 ## 🚀 Fase 1 — Fundamentos do Sistema (Infra e Autenticação)
 - [X] **Configuração do projeto Spring Boot 3 + Java 21**
 - [X] Configuração de banco de dados **MariaDB**
-- [ ] Setup de migrações automáticas (**Flyway/Liquibase**)
 - [X] Criação das entidades base: `User`, `Admin`, `Partner`, `Beneficiary`, `Plan`
 - [X] Configuração do **JPA/Hibernate**
 - [X] Implementar **CRUD** básico com validações (Jakarta Validation)

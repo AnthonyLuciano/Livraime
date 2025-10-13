@@ -2,6 +2,7 @@ package Livraime.Unp.Livraime.controller;
 
 import Livraime.Unp.Livraime.controller.dto.request.LoginRequest;
 import Livraime.Unp.Livraime.modelo.Usuario;
+import Livraime.Unp.Livraime.modelo.Role;
 import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
 import Livraime.Unp.Livraime.servico.ServicoEmail;
 import io.swagger.v3.oas.annotations.Operation;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.Optional;
 import java.util.Random;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -39,6 +41,8 @@ public class AuthController {
         novoUsuario.setEmailVerificado(false);
         novoUsuario.setCodigoVerificacao(codigo);
         novoUsuario.setAtivo(true);
+        // atribuir role padrão
+        novoUsuario.setRoles(Set.of(Role.USER));
         usuarioRepository.save(novoUsuario);
         servicoEmail.enviarCodigoVerificacao(novoUsuario.getEmail(), codigo);
         return ResponseEntity.ok("Usuário cadastrado. Verifique seu e-mail para confirmar.");
