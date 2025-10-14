@@ -1,6 +1,6 @@
 package Livraime.Unp.Livraime.modelo;
 
-public class Parceiros {
+public class Parceiro {
     private int id;
     private String nome;
     private String tipo; // "sebo" ou "autor_independente"
@@ -11,9 +11,9 @@ public class Parceiros {
     private boolean ativo;
     
     // Construtores, getters e setters
-    public Parceiros() {}
+    public Parceiro() {}
     
-    public Parceiros(int id, String nome, String tipo, String endereco, 
+    public Parceiro(int id, String nome, String tipo, String endereco, 
                     String telefone, String email, String descricaoServicos, boolean ativo) {
         this.id = id;
         this.nome = nome;

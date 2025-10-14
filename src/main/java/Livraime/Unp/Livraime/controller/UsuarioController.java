@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
 import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
-import Livraime.Unp.Livraime.modelo.Planos;
+import Livraime.Unp.Livraime.modelo.Plano;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -31,7 +31,7 @@ public class UsuarioController {
     public List<UsuarioResponseDTO> listarusuarios() {
         usuarios.add(new Usuario(1, "joao", "joao@gmail.com",
                 "99999999999",
-                "123123123", "rua padilha", "9999999999", Planos.BASICO, LocalDateTime.now(), true, "133231", true));
+                "123123123", "rua padilha", "9999999999", Plano.BASICO, LocalDateTime.now(), true, "133231", true));
         return UsuarioMapper.toResponseList(usuarios);
     }
 

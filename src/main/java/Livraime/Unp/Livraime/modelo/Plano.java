@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 import Livraime.Unp.Livraime.controller.dto.response.BeneficioDTO;
 import Livraime.Unp.Livraime.controller.dto.response.PlanoDTO;
 
-public enum Planos {
+public enum Plano {
     BASICO(1, "BASICO", 50,
             new Beneficio[] {
                     new Beneficio("receive:used_book", "Receber 1 livro usado por mês.")
@@ -33,7 +33,7 @@ public enum Planos {
     private final Beneficio[] beneficios;
     private final String[] aliases;
 
-    Planos(int codigo, String nivel, int valor, Beneficio[] beneficios, String... aliases) {
+    Plano(int codigo, String nivel, int valor, Beneficio[] beneficios, String... aliases) {
         this.codigo = codigo;
         this.nivel = nivel;
         this.valor = valor;
@@ -70,8 +70,8 @@ public enum Planos {
     }
 
     // busca o código, apelido ou nível
-    public static Planos fromInput(String input) {
-        for (Planos p : values()) {
+    public static Plano fromInput(String input) {
+        for (Plano p : values()) {
             if (String.valueOf(p.codigo).equalsIgnoreCase(input)) {
                 return p;
             }

@@ -22,7 +22,7 @@ public class Usuario {
     private String senha;
     private String endereco;
     private String telefone;
-    private Planos plano;
+    private Plano plano;
     private LocalDateTime dataCadastro = LocalDateTime.now();
     private boolean ativo = true;
     private String codigoVerificacao;
@@ -36,7 +36,7 @@ public class Usuario {
     public Usuario() {}
 
     // Construtor completo
-    public Usuario(int id, String nome, String email, String cpf, String senha, String endereco, String telefone, Planos plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
+    public Usuario(int id, String nome, String email, String cpf, String senha, String endereco, String telefone, Plano plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -70,8 +70,8 @@ public class Usuario {
     public String getTelefone() { return telefone; }
     public void setTelefone(String telefone) { this.telefone = telefone; }
 
-    public Planos getPlano() { return plano; }
-    public void setPlano(Planos plano) { this.plano = plano; }
+    public Plano getPlano() { return plano; }
+    public void setPlano(Plano plano) { this.plano = plano; }
 
     public LocalDateTime getDataCadastro() { return dataCadastro; }
     public void setDataCadastro(LocalDateTime dataCadastro) { this.dataCadastro = dataCadastro; }
