@@ -1,20 +1,36 @@
 package Livraime.Unp.Livraime.modelo;
 
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
+@Entity
+@Table(name = "parceiros")
 public class Parceiros {
-    private int id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
     private String nome;
     private String tipo; // "sebo" ou "autor_independente"
     private String endereco;
     private String telefone;
     private String email;
     private String descricaoServicos;
-    private boolean ativo;
+    
+    @Column(name = "created_at", nullable = false)
+    private LocalDateTime createdAt = LocalDateTime.now();
+    
+    @Column(name = "deleted_at")
+    private LocalDateTime deletedAt;
+    
+    @Column(name = "active", nullable = false)
+    private boolean active = true;
     
     // Construtores, getters e setters
     public Parceiros() {}
     
-    public Parceiros(int id, String nome, String tipo, String endereco, 
-                    String telefone, String email, String descricaoServicos, boolean ativo) {
+    public Parceiros(Long id, String nome, String tipo, String endereco, 
+                    String telefone, String email, String descricaoServicos, boolean active) {
         this.id = id;
         this.nome = nome;
         this.tipo = tipo;
@@ -22,12 +38,13 @@ public class Parceiros {
         this.telefone = telefone;
         this.email = email;
         this.descricaoServicos = descricaoServicos;
-        this.ativo = ativo;
+        this.active = active;
+        this.createdAt = LocalDateTime.now();
     }
     
-    // Getters e setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    // Getters e setters existentes...
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
     
     public String getNome() { return nome; }
     public void setNome(String nome) { this.nome = nome; }
@@ -47,6 +64,12 @@ public class Parceiros {
     public String getDescricaoServicos() { return descricaoServicos; }
     public void setDescricaoServicos(String descricaoServicos) { this.descricaoServicos = descricaoServicos; }
     
-    public boolean isAtivo() { return ativo; }
-    public void setAtivo(boolean ativo) { this.ativo = ativo; }
+    public boolean isActive() { return active; }
+    public void setActive(boolean active) { this.active = active; }
+    
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    
+    public LocalDateTime getDeletedAt() { return deletedAt; }
+    public void setDeletedAt(LocalDateTime deletedAt) { this.deletedAt = deletedAt; }
 }

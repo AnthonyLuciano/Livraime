@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Métricas - Painel ADM (Teste)</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 24px; background:#f7f7f7; color:#222; }
+        h1 { margin-bottom: 12px; }
+        .card { background:#fff; padding:16px; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.08); }
+        table { width:100%; border-collapse:collapse; margin-top:12px; }
+        th, td { padding:10px 12px; text-align:left; border-bottom:1px solid #eee; }
+        th { background:#fafafa; font-weight:600; }
+        .controls { display:flex; gap:8px; margin-top:8px; }
+        button { padding:8px 12px; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer; }
+        button:active { transform:translateY(1px); }
+        .status { margin-top:8px; color:#666; font-size:0.95rem; }
+        .error { color:#b00020; }
+        @media (max-width:600px) {
+            th, td { padding:8px; font-size:0.95rem; }
+        }
+    </style>
+</head>
+<body>
+    <h1>Métricas — Últimos 6 meses (teste)</h1>
+    <div class="card">
+        <div class="controls">
+            <button id="btn-refresh">Atualizar</button>
+            <button id="btn-sample">Usar dados de exemplo</button>
+            <div id="loading" class="status">Aguardando...</div>
+        </div>
+
+        <table id="metrics-table" aria-label="Tabela de métricas">
+            <thead>
+                <tr>
+                    <th>Mês</th>
+                    <th>Inscrições</th>
+                    <th>Livros Doados</th>
+                    <th>Parceiros</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Linhas preenchidas por JavaScript -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        const loadingEl = document.getElementById('loading');
+        const tbody = document.querySelector('#metrics-table tbody');
+        const apiUrl = '/api/admins/metrics';
+
+        function renderTable(data) {
+            tbody.innerHTML = '';
+            if (!Array.isArray(data) || data.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4">Nenhum dado disponível</td></tr>';
+                return;
+            }
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                // espera-se objeto com chaves: mes, inscricoes, livrosDoados, parceiros
+                tr.innerHTML = `<td>${item.mes ?? ''}</td>
+                                <td>${item.inscricoes ?? 0}</td>
+                                <td>${item.livrosDoados ?? 0}</td>
+                                <td>${item.parceiros ?? 0}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function fetchMetrics() {
+            loadingEl.textContent = 'Carregando...';
+            loadingEl.classList.remove('error');
+            try {
+                const res = await fetch(apiUrl, { cache: 'no-store' });
+                if (!res.ok) throw new Error('Resposta não OK: ' + res.status);
+                const data = await res.json();
+                renderTable(data);
+                loadingEl.textContent = 'Dados carregados com sucesso.';
+            } catch (err) {
+                loadingEl.textContent = 'Erro ao buscar métricas — usando dados de exemplo. Veja console.';
+                loadingEl.classList.add('error');
+                console.error('Erro ao buscar métricas:', err);
+                renderSample();
+            }
+        }
+
+        function renderSample() {
+            const sample = [
+                { mes: 'mai', inscricoes: 158, livrosDoados: 520, parceiros: 20 },
+                { mes: 'jun', inscricoes: 162, livrosDoados: 580, parceiros: 22 },
+                { mes: 'jul', inscricoes: 170, livrosDoados: 610, parceiros: 23 },
+                { mes: 'ago', inscricoes: 175, livrosDoados: 640, parceiros: 24 },
+                { mes: 'set', inscricoes: 180, livrosDoados: 670, parceiros: 25 },
+                { mes: 'out', inscricoes: 185, livrosDoados: 700, parceiros: 26 }
+            ];
+            renderTable(sample);
+        }
+
+        document.getElementById('btn-refresh').addEventListener('click', fetchMetrics);
+        document.getElementById('btn-sample').addEventListener('click', () => {
+            loadingEl.textContent = 'Mostrando dados de exemplo.';
+            loadingEl.classList.remove('error');
+            renderSample();
+        });
+
+        // carregar ao abrir
+        window.addEventListener('load', fetchMetrics);
+    </script>
+</body>
+</html>
