@@ -4,9 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BookOpen, CheckCircle, CreditCard, Heart, Star, User } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom"
 
 const AssinantePage = () => {
   const [selectedPlan, setSelectedPlan] = useState("basico");
+  const navigate = useNavigate();
 
   const plans = [
     {
@@ -47,7 +49,6 @@ const AssinantePage = () => {
         "5 livros usados por mês",
         "Conexão com 5 beneficiários",
         "Kit pedagógico trimestral",
-        "Videochamadas com beneficiários",
         "Relatórios personalizados",
         "Suporte VIP",
       ],
@@ -155,6 +156,7 @@ const AssinantePage = () => {
                       className={`w-full ${
                         plan.popular ? "bg-gradient-secondary hover:opacity-90" : "bg-gradient-primary hover:opacity-90"
                       } shadow-button`}
+                      onClick={() => navigate("/pagamento")}
                     >
                       <Heart className="h-4 w-4 mr-2" />
                       Assinar Agora
