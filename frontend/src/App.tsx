@@ -7,6 +7,7 @@ import Layout from "./components/Layout";
 import HomePage from "./pages/HomePage";
 import LoginPage from "./pages/LoginPage";
 import AssinantePage from "./pages/AssinantePage";
+import PagamentoPage from "./pages/PagamentoPage";
 import SebosPage from "./pages/SebosPage";
 import AdminPage from "./pages/admin/AdminPage";
 import QuemSomosPage from "./pages/QuemSomosPage";
@@ -27,7 +28,7 @@ const App = () => (
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/assinante" element={<AssinantePage />} />
-            <Route path="/sebos" element={<SebosPage />} />
+            <Route path="/pagamento" element={<PagamentoPage />} />            <Route path="/sebos" element={<SebosPage />} />
             <Route path="/admin" element={<AdminPage />} />
             <Route path="/quem-somos" element={<QuemSomosPage />} />
             <Route path="/sobre" element={<SobrePage />} />
