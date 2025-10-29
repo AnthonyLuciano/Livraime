@@ -32,3 +32,4 @@ build/
 ### VS Code ###
 .vscode/
 data/database.mv.db
+/frontend/node_modules
