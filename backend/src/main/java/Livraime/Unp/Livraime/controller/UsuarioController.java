@@ -1,5 +1,12 @@
 package Livraime.Unp.Livraime.controller;
 
+/**
+ * Controller responsável pelo gerenciamento de usuários assinantes.
+ * Permite listar, cadastrar e buscar usuários do sistema.
+ * Gerencia informações básicas dos assinantes e suas assinaturas.
+ * -Anthony
+ */
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +33,11 @@ public class UsuarioController {
 
     private List<Usuario> usuarios = new ArrayList<>();
 
+    /**
+     * Lista todos os usuários cadastrados no sistema.
+     * Retorna uma lista de DTOs com informações não sensíveis.
+     * -Anthony
+     */
     @GetMapping
     @Operation(summary = "Listar todos os usuarios")
     public List<UsuarioResponseDTO> listarusuarios() {
@@ -35,6 +47,11 @@ public class UsuarioController {
         return UsuarioMapper.toResponseList(usuarios);
     }
 
+    /**
+     * Cadastra um novo usuário no sistema.
+     * @param novousuario Dados do novo usuário a ser cadastrado
+     * -Anthony
+     */
     @PostMapping
     @Operation(summary = "Cadastrar novo usuario")
     public ResponseEntity<Usuario> criarusuario(@RequestBody Usuario novousuario) {
@@ -42,6 +59,12 @@ public class UsuarioController {
         return ResponseEntity.ok(novousuario);
     }
 
+    /**
+     * Busca um usuário específico pelo seu ID.
+     * Retorna um DTO com informações não sensíveis.
+     * @param id ID do usuário a ser buscado
+     * -Anthony
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Buscar usuario por ID")
     public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable int id) {

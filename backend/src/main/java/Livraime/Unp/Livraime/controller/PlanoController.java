@@ -1,5 +1,12 @@
 package Livraime.Unp.Livraime.controller;
 
+/**
+ * Controller responsável pelo gerenciamento dos planos de assinatura.
+ * Permite listar todos os planos disponíveis e buscar planos específicos
+ * por código ou apelido.
+ * -Anthony
+ */
+
 import Livraime.Unp.Livraime.controller.dto.response.PlanoDTO;
 import Livraime.Unp.Livraime.modelo.Planos;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +22,11 @@ import java.util.stream.Collectors;
 @Tag(name = "Planos", description = "Planos de assinatura disponíveis")
 public class PlanoController {
 
+    /**
+     * Lista todos os planos de assinatura disponíveis.
+     * Converte os planos para DTOs antes de retornar.
+     * -Anthony
+     */
     @GetMapping
     @Operation(summary = "Listar todos os planos")
     public List<PlanoDTO> listarPlanos() {
@@ -23,6 +35,11 @@ public class PlanoController {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Busca um plano específico pelo código ou apelido.
+     * @param input Código ou apelido do plano
+     * -Anthony
+     */
     @GetMapping("/{input}")
     @Operation(summary = "Buscar plano pelo código ou apelido")
     public PlanoDTO buscarPlano(@PathVariable String input) {

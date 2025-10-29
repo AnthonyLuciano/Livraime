@@ -1,5 +1,12 @@
 package Livraime.Unp.Livraime.controller;
 
+/**
+ * Controller responsável pelo gerenciamento de autenticação de usuários.
+ * Fornece endpoints para cadastro, login, confirmação de email e reenvio de códigos.
+ * Implementa a segurança básica do sistema com verificação de email.
+ * -Anthony
+ */
+
 import Livraime.Unp.Livraime.controller.dto.request.LoginRequest;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.modelo.Role;
@@ -30,6 +37,12 @@ public class AuthController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+        /**
+     * Cadastra um novo usuário no sistema.
+     * Cria um código de verificação e envia por email.
+     * Senha é criptografada antes de salvar.
+     * -Anthony
+     */
     @PostMapping("/cadastro")
     @Operation(summary = "Cadastrar novo usuário")
     public ResponseEntity<?> cadastrar(@RequestBody Usuario novoUsuario) {
@@ -48,6 +61,19 @@ public class AuthController {
         return ResponseEntity.ok("Usuário cadastrado. Verifique seu e-mail para confirmar.");
     }
 
+    /**
+     * Realiza o login do usuário.
+     * Verifica se o email está confirmado e se a conta está ativa.
+     * @param loginRequest Dados de login do usuário
+     * -Anthony
+     */
+
+    /**
+     * Realiza o login do usuário.
+     * Verifica se o email está confirmado e se a conta está ativa.
+     * @param loginRequest Objeto contendo email e senha do usuário
+     * -Anthony
+     */
     @PostMapping("/login")
     @Operation(summary = "Login do usuário")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
@@ -68,6 +94,12 @@ public class AuthController {
         return ResponseEntity.status(401).body("E-mail ou senha inválidos.");
     }
 
+    /**
+     * Confirma o email do usuário através do código enviado.
+     * @param email Email do usuário
+     * @param codigo Código de verificação recebido
+     * -Anthony
+     */
     @PostMapping("/confirmar-email")
     @Operation(summary = "Confirmar e-mail do usuário")
     public ResponseEntity<?> confirmarEmail(@RequestParam String email, @RequestParam String codigo) {
@@ -82,6 +114,11 @@ public class AuthController {
         return ResponseEntity.badRequest().body("Código inválido.");
     }
 
+    /**
+     * Reenvia o código de verificação para o email do usuário.
+     * @param email Email do usuário que solicitou novo código
+     * -Anthony
+     */
     @PostMapping("/reenviar-codigo")
     @Operation(summary = "Reenviar código de verificação de e-mail")
     public ResponseEntity<?> reenviarCodigo(@RequestParam String email) {

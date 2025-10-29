@@ -1,5 +1,12 @@
 package Livraime.Unp.Livraime.controller;
 
+/**
+ * Controller responsável pela administração do sistema.
+ * Gerencia administradores e fornece métricas importantes do sistema
+ * como número de assinaturas, livros doados e parceiros nos últimos 6 meses.
+ * -Anthony
+ */
+
 import Livraime.Unp.Livraime.controller.dto.response.MetricDto;
 import Livraime.Unp.Livraime.modelo.Admin;
 import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
@@ -39,12 +46,21 @@ public class AdminController {
 
     private List<Admin> admins = new ArrayList<>();
 
+    /**
+     * Lista todos os administradores cadastrados no sistema.
+     * -Anthony
+     */
     @GetMapping
     @Operation(summary = "Listar todos os administradores")
     public List<Admin> listarAdmins() {
         return admins;
     }
 
+    /**
+     * Cadastra um novo administrador no sistema.
+     * @param novoAdmin Dados do novo administrador
+     * -Anthony
+     */
     @PostMapping
     @Operation(summary = "Criar novo administrador")
     public Admin criarAdmin(@RequestBody Admin novoAdmin) {
@@ -52,12 +68,24 @@ public class AdminController {
         return novoAdmin;
     }
 
+    /**
+     * Busca um administrador específico pelo seu ID.
+     * @param id ID do administrador a ser buscado
+     * -Anthony
+     */
     @GetMapping("/{id}")
     @Operation(summary = "Buscar administrador por ID")
     public Admin buscarPorId(@PathVariable int id) {
         return admins.stream().filter(a -> a.getId() == id).findFirst().orElse(null);
     }
 
+    /**
+     * Retorna métricas dos últimos 6 meses incluindo:
+     * - Número de assinaturas
+     * - Quantidade de livros doados
+     * - Número de parceiros
+     * -Anthony
+     */
     @GetMapping("/metrics")
     @Operation(summary = "Métricas dos últimos 6 meses")
     public List<MetricDto> buscarMetricasUltimos6Meses() {
