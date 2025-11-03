@@ -12,8 +12,17 @@ import Livraime.Unp.Livraime.modelo.Admin;
 import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
 import Livraime.Unp.Livraime.repositorio.DonationRepository;
 import Livraime.Unp.Livraime.repositorio.PartnerRepository;
+import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
+import Livraime.Unp.Livraime.modelo.Usuario;
+import Livraime.Unp.Livraime.controller.dto.request.UsuarioEditRequest;
+import Livraime.Unp.Livraime.controller.dto.request.ParceiroEditRequest;
+import Livraime.Unp.Livraime.modelo.Parceiros;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
@@ -35,13 +44,16 @@ public class AdminController {
     private final SubscriptionRepository subscriptionRepository;
     private final DonationRepository donationRepository;
     private final PartnerRepository partnerRepository;
+    private final UsuarioRepository usuarioRepository;
 
     public AdminController(SubscriptionRepository subscriptionRepository,
                            DonationRepository donationRepository,
-                           PartnerRepository partnerRepository) {
+                           PartnerRepository partnerRepository,
+                           UsuarioRepository usuarioRepository) {
         this.subscriptionRepository = subscriptionRepository;
         this.donationRepository = donationRepository;
         this.partnerRepository = partnerRepository;
+        this.usuarioRepository = usuarioRepository;
     }
 
     private List<Admin> admins = new ArrayList<>();
@@ -127,5 +139,97 @@ public class AdminController {
     private long countPartnersAtMonthEnd(LocalDateTime monthEndDateTime) {
         // Conta parceiros ativos até a data (ex.: createdAt <= monthEndDateTime AND active = true)
         return partnerRepository.countActiveUntil(monthEndDateTime);
+    }
+
+    /**
+     * Edita campos básicos de um usuário. Campos editáveis:
+     * - name -> nome
+     * - email -> email
+     * - address -> endereco
+     * - phone -> telefone
+     * Essa rota será usada tanto pelo Painel ADM quanto pela Área do Assinante.
+     * @param id id do usuário a ser editado
+     * @param req payload contendo somente os campos editáveis
+     * -Anthony
+     */
+    @PatchMapping("/users/{id}")
+    @Operation(summary = "Editar usuário (ADM / assinante)")
+    public ResponseEntity<Usuario> editarUsuario(@PathVariable int id, @RequestBody UsuarioEditRequest req) {
+        return usuarioRepository.findById(id)
+                .map(u -> {
+                    if (req.name() != null) u.setNome(req.name());
+                    if (req.email() != null) u.setEmail(req.email());
+                    if (req.address() != null) u.setEndereco(req.address());
+                    if (req.phone() != null) u.setTelefone(req.phone());
+                    usuarioRepository.save(u);
+                    return ResponseEntity.ok(u);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Desabilita um usuário (marca como inativo).
+     * Recebe o id do usuário via path variable.
+     * @param id id do usuário a ser desabilitado
+     * -Anthony
+     */
+    @PatchMapping("/users/{id}/disable")
+    @Operation(summary = "Desabilitar usuário")
+    public ResponseEntity<?> desabilitarUsuario(@PathVariable int id) {
+        return usuarioRepository.findById(id)
+                .map(u -> {
+                    u.setAtivo(false);
+                    usuarioRepository.save(u);
+                    return ResponseEntity.ok("Usuário desabilitado com sucesso.");
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Edita campos básicos de um parceiro. Campos editáveis:
+     * - nome
+     * - tipo (sebo ou autor_independente)
+     * - endereco
+     * - telefone
+     * - email
+     * - descricaoServicos
+     * @param id id do parceiro a ser editado
+     * @param req payload contendo os campos editáveis
+     * -Anthony
+     */
+    @PatchMapping("/partners/{id}")
+    @Operation(summary = "Editar parceiro")
+    public ResponseEntity<Parceiros> editarParceiro(@PathVariable Long id, @RequestBody ParceiroEditRequest req) {
+        return partnerRepository.findById(id)
+                .map(p -> {
+                    if (req.nome() != null) p.setNome(req.nome());
+                    if (req.tipo() != null) p.setTipo(req.tipo());
+                    if (req.endereco() != null) p.setEndereco(req.endereco());
+                    if (req.telefone() != null) p.setTelefone(req.telefone());
+                    if (req.email() != null) p.setEmail(req.email());
+                    if (req.descricaoServicos() != null) p.setDescricaoServicos(req.descricaoServicos());
+                    partnerRepository.save(p);
+                    return ResponseEntity.ok(p);
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
+     * Desativa um parceiro do sistema.
+     * Marca como inativo e registra a data de deleção.
+     * @param id id do parceiro a ser desativado
+     * -Anthony
+     */
+    @PatchMapping("/partners/{id}/disable")
+    @Operation(summary = "Desativar parceiro")
+    public ResponseEntity<?> desativarParceiro(@PathVariable Long id) {
+        return partnerRepository.findById(id)
+                .map(p -> {
+                    p.setActive(false);
+                    p.setDeletedAt(LocalDateTime.now());
+                    partnerRepository.save(p);
+                    return ResponseEntity.ok("Parceiro desativado com sucesso.");
+                })
+                .orElse(ResponseEntity.notFound().build());
     }
 }
