@@ -3,6 +3,8 @@
 
 # 🗺️ Roadmap (em discussão) — Livrai-me
 
+nem tudo nessa lista sera implementado
+
 ## 🚀 Fase 1 — Fundamentos do Sistema (Infra e Autenticação)
 - [X] **Configuração do projeto Spring Boot 3 + Java 21**
 - [X] Configuração de banco de dados **MariaDB**
@@ -55,10 +57,9 @@
 ---
 
 ## 💻 Fase 5 — Painéis e Interfaces
-- [ ] Criar **painel administrativo**
-- [ ] Criar **painel do assinante**
-- [ ] Criar **painel de parceiros**
-- [ ] Criar **interface pública** (páginas institucionais e de planos)
+- [X] Criar **painel administrativo**
+- [X] Criar **painel do assinante**
+- [X] Criar **interface pública** (páginas institucionais e de planos)
 
 ---
 
