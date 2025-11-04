@@ -5,7 +5,7 @@ import Livraime.Unp.Livraime.controller.dto.request.ParceiroEditRequest;
 import Livraime.Unp.Livraime.controller.dto.response.MetricDto;
 import Livraime.Unp.Livraime.modelo.Admin;
 import Livraime.Unp.Livraime.modelo.Usuario;
-import Livraime.Unp.Livraime.modelo.Parceiros;
+import Livraime.Unp.Livraime.modelo.Parceiro;
 import Livraime.Unp.Livraime.repositorio.DonationRepository;
 import Livraime.Unp.Livraime.repositorio.PartnerRepository;
 import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
@@ -136,7 +136,7 @@ class AdminControllerTest {
 
     @Test
     void editarParceiro_whenExists_shouldUpdateFields() {
-        Parceiros p = new Parceiros(1L, "oldName", "sebo", "oldAddr", "0000", "old@mail", "desc", true);
+        Parceiro p = new Parceiro(1L, "oldName", "sebo", "oldAddr", "0000", "old@mail", "desc", true);
         when(partnerRepository.findById(1L)).thenReturn(Optional.of(p));
         
         ParceiroEditRequest req = new ParceiroEditRequest(
@@ -146,7 +146,7 @@ class AdminControllerTest {
         var resp = controller.editarParceiro(1L, req);
         assertTrue(resp.getStatusCode().is2xxSuccessful());
         
-        Parceiros body = resp.getBody();
+        Parceiro body = resp.getBody();
         assertNotNull(body);
         assertEquals("newName", body.getNome());
         assertEquals("autor_independente", body.getTipo());
@@ -167,7 +167,7 @@ class AdminControllerTest {
 
     @Test
     void desativarParceiro_whenExists_shouldSetInactiveAndDeletedAt() {
-        Parceiros p = new Parceiros(2L, "x", "sebo", "addr", "999", "x@x", "desc", true);
+        Parceiro p = new Parceiro(2L, "x", "sebo", "addr", "999", "x@x", "desc", true);
         when(partnerRepository.findById(2L)).thenReturn(Optional.of(p));
 
         var resp = controller.desativarParceiro(2L);

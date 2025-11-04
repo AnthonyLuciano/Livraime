@@ -16,7 +16,7 @@ import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.controller.dto.request.UsuarioEditRequest;
 import Livraime.Unp.Livraime.controller.dto.request.ParceiroEditRequest;
-import Livraime.Unp.Livraime.modelo.Parceiros;
+import Livraime.Unp.Livraime.modelo.Parceiro;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -199,7 +199,7 @@ public class AdminController {
      */
     @PatchMapping("/partners/{id}")
     @Operation(summary = "Editar parceiro")
-    public ResponseEntity<Parceiros> editarParceiro(@PathVariable Long id, @RequestBody ParceiroEditRequest req) {
+    public ResponseEntity<Parceiro> editarParceiro(@PathVariable Long id, @RequestBody ParceiroEditRequest req) {
         return partnerRepository.findById(id)
                 .map(p -> {
                     if (req.nome() != null) p.setNome(req.nome());

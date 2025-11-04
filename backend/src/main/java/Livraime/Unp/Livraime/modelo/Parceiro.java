@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "parceiros")
-public class Parceiros {
+public class Parceiro {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -27,9 +27,9 @@ public class Parceiros {
     private boolean active = true;
     
     // Construtores, getters e setters
-    public Parceiros() {}
+    public Parceiro() {}
     
-    public Parceiros(Long id, String nome, String tipo, String endereco, 
+    public Parceiro(Long id, String nome, String tipo, String endereco, 
                     String telefone, String email, String descricaoServicos, boolean active) {
         this.id = id;
         this.nome = nome;

@@ -7,7 +7,7 @@ package Livraime.Unp.Livraime.controller;
  * -Anthony
  */
 
-import Livraime.Unp.Livraime.modelo.Parceiros;
+import Livraime.Unp.Livraime.modelo.Parceiro;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +20,7 @@ import java.util.List;
 @Tag(name = "Parceiros", description = "Gerenciamento de parceiros (sebos e autores independentes)")
 public class ParceiroController {
 
-    private List<Parceiros> parceirosList = new ArrayList<>();
+    private List<Parceiro> parceirosList = new ArrayList<>();
 
     /**
      * Lista todos os parceiros cadastrados no sistema.
@@ -29,7 +29,7 @@ public class ParceiroController {
      */
     @GetMapping
     @Operation(summary = "Listar todos os parceiros")
-    public List<Parceiros> listarParceiros() {
+    public List<Parceiro> listarParceiros() {
         return parceirosList;
     }
 
@@ -40,7 +40,7 @@ public class ParceiroController {
      */
     @PostMapping
     @Operation(summary = "Cadastrar novo parceiro")
-    public Parceiros criarParceiro(@RequestBody Parceiros novoParceiro) {
+    public Parceiro criarParceiro(@RequestBody Parceiro novoParceiro) {
         parceirosList.add(novoParceiro);
         return novoParceiro;
     }
@@ -52,7 +52,7 @@ public class ParceiroController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Buscar parceiro por ID")
-    public Parceiros buscarPorId(@PathVariable int id) {
+    public Parceiro buscarPorId(@PathVariable int id) {
         return parceirosList.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
     }
 }
