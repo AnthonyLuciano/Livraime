@@ -3,7 +3,7 @@
 
 # 🗺️ Roadmap (em discussão) — Livrai-me
 
-nem tudo nessa lista sera implementado
+# ⚠️**Nem tudo nessa lista sera implementado**⚠️
 
 ## 🚀 Fase 1 — Fundamentos do Sistema (Infra e Autenticação)
 - [X] **Configuração do projeto Spring Boot 3 + Java 21**
