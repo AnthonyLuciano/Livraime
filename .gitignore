@@ -33,3 +33,4 @@ build/
 .vscode/
 data/database.mv.db
 /frontend/node_modules
+backend/data/database.mv.db
