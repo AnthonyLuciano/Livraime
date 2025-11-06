@@ -1,6 +1,6 @@
-import { User, UserFromAPI } from "../user.types";
+import { User, UserFromAPI } from "../types/user.types";
 
-export const userMapper = {
+export const userAdapter = {
   toAPI(entity: User): UserFromAPI {
     return {
       id: entity.id,
@@ -14,7 +14,7 @@ export const userMapper = {
       ativo: entity.isActive,
     };
   },
-  
+
   toEntity(apiObject: UserFromAPI): User {
     return {
       id: apiObject.id,

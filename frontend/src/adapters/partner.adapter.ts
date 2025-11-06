@@ -1,6 +1,6 @@
-import { Partner, PartnerResponseDTO } from "../partner.types";
+import { Partner, PartnerResponseDTO } from "../types/partner.types";
 
-export const partnerMapper = {
+export const partnerAdapter = {
   toAPI(entity: Partner): PartnerResponseDTO {
     return {
       id: entity.id,
