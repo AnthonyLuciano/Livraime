@@ -11,7 +11,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useDisableUser } from "@/hooks/tanstack/user/useDisableUser";
+import { useToast } from "@/hooks/use-toast";
 import { User } from "@/types/user.types";
+import axios from "axios";
 import { Settings, Trash2 } from "lucide-react";
 import { useState } from "react";
 
@@ -20,6 +23,9 @@ interface EditUserDialogProps {
 }
 
 export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
+  const { toast } = useToast();
+  const { mutate: deleteUser, error: deleteError } = useDisableUser();
+
   const [formData, setFormData] = useState({
     nome: user.name,
     email: user.contact.email,
@@ -38,8 +44,24 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
   }
 
   function handleDisableUser() {
-    console.log("Usuário desativado:", user.contact.email);
-    // Aqui você chamaria a API DELETE ou PUT (ativo=false)
+    deleteUser(user.id, {
+      onSuccess: () => {
+        toast({
+          title: "Usuário desativado com sucesso",
+          description: "O usuário foi desativado com sucesso.",
+        });
+      },
+      onError: () => {
+        toast({
+          title: "Erro ao desativar usuário",
+          description: `Ocorreu um erro ao desativar o usuário: ${
+            axios.isAxiosError(deleteError) && deleteError.response.data
+              ? deleteError.response.data
+              : deleteError?.message ?? "Erro desconhecido"
+          }`,
+        });
+      },
+    });
   }
 
   return (
