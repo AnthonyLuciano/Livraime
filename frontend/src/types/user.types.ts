@@ -37,5 +37,7 @@ export interface CreateUserDto {
   ativo: boolean;
   codigoVerificacao: string;
   emailVerificado: boolean;
-  roles: string[];
+  roles: UserRole[];
 }
+
+type UserRole = "USER";
