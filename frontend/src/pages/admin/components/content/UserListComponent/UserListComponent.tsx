@@ -1,36 +1,26 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { User } from "@/types/user.types";
+import { useGetAllUsers } from "@/hooks/tanstack/user/use-get-all-users";
+import { useToast } from "@/hooks/use-toast";
+import axios from "axios";
+import { useEffect } from "react";
 import UserRowComponent from "./UserRowComponent";
 
 export default function UserListComponent() {
-  const mockUsers: User[] = [
-    {
-      name: "Maria Silva",
-      contact: {
-        email: "maria@email.com",
-        phone: "",
-      },
-      address: "Av. Brasil, 123",
-      cpf: "123.456.789-00",
-      id: 0,
-      plan: "Premium",
-      registerDate: new Date(),
-      isActive: true,
-    },
-    {
-      name: "João Santos",
-      contact: {
-        email: "joao@email.com",
-        phone: "",
-      },
-      address: "Av. Brasil, 456",
-      cpf: "987.654.321-00",
-      id: 1,
-      plan: "Basico",
-      registerDate: new Date(),
-      isActive: false,
-    },
-  ];
+  const { data, isPending, error } = useGetAllUsers();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (error) {
+      toast({
+        title: "Erro na busca",
+        description: `Ocorreu um erro ao buscar os usuários: ${
+          axios.isAxiosError(error) && error.response ? error.response : error.message ?? "Erro desconhecido"
+        }`,
+      });
+    }
+  }, [error, toast]);
+
+  if (isPending) return <div className="text-center">Carregando...</div>;
 
   return (
     <div>
@@ -45,9 +35,7 @@ export default function UserListComponent() {
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {mockUsers.map((user, index) => (
-              <UserRowComponent key={index} user={user} index={index} />
-            ))}
+            {data?.map((user, index) => <UserRowComponent key={index} user={user} index={index} />) ?? []}
           </div>
         </CardContent>
       </Card>

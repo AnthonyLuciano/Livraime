@@ -23,3 +23,19 @@ export interface UserFromAPI {
   dataCadastro: string;
   ativo: boolean;
 }
+
+export interface CreateUserDto {
+  id: number;
+  nome: string;
+  email: string;
+  cpf: string;
+  senha: string;
+  endereco: string;
+  telefone: string;
+  plano: string;
+  dataCadastro: string;
+  ativo: boolean;
+  codigoVerificacao: string;
+  emailVerificado: boolean;
+  roles: string[];
+}
