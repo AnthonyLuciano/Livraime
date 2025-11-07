@@ -2,18 +2,18 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import AssinantePage from "@/pages/AssinantePage";
+import FAQPage from "@/pages/FAQPage";
+import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/login/LoginPage";
-import PagamentoPage from "@/pages/PagamentoPage";
+import NotFound from "@/pages/NotFound";
+import PagamentoPage from "@/pages/payment/PagamentoPage";
+import QuemSomosPage from "@/pages/QuemSomosPage";
+import SebosPage from "@/pages/SebosPage";
+import SobrePage from "@/pages/SobrePage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
 import AdminPage from "./pages/admin/AdminPage";
-import FAQPage from "./pages/FAQPage";
-import HomePage from "./pages/HomePage";
-import NotFound from "./pages/NotFound";
-import QuemSomosPage from "./pages/QuemSomosPage";
-import SebosPage from "./pages/SebosPage";
-import SobrePage from "./pages/SobrePage";
 
 const queryClient = new QueryClient();
 
