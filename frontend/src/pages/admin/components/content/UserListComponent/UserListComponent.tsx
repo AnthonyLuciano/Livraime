@@ -34,7 +34,7 @@ export default function UserListComponent() {
           </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-4">
+          <div className="space-y-4 max-h-96 overflow-y-auto">
             {data?.map((user, index) => <UserRowComponent key={index} user={user} index={index} />) ?? []}
           </div>
         </CardContent>
