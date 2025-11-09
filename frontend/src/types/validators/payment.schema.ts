@@ -20,7 +20,7 @@ export const paymentSchema = z.object({
     .string()
     .trim()
     .regex(/^\d{3,4}$/, "CVV inválido (3 ou 4 dígitos)"),
-  plan: z.enum(["basico", "familia", "transformador"], { required_error: "Selecione um plano" }),
+  plan: z.enum(["BASICO", "INTERMEDIARIO", "PREMIUM"], { required_error: "Selecione um plano" }),
 });
 
 export type PaymentFormData = z.infer<typeof paymentSchema>;

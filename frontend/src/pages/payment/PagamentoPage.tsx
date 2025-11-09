@@ -1,18 +1,11 @@
 import { toast } from "@/hooks/use-toast";
-import { PaymentFormData, paymentSchema } from "@/types/validators/payment.validator";
+import { PaymentFormData, paymentSchema } from "@/types/validators/payment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { PaymentForm } from "./form/PaymentForm";
 import { PaymentSuccess } from "./PaymentSuccess";
-import { PaymentSummary } from "./PaymentSummary";
-
-const plans = {
-  basico: { name: "Plano Básico", price: "R$ 15" },
-  familia: { name: "Plano Família", price: "R$ 35" },
-  transformador: { name: "Plano Transformador", price: "R$ 60,00" },
-};
 
 export default function PagamentoPage() {
   const [isProcessing, setIsProcessing] = useState(false);
@@ -36,7 +29,7 @@ export default function PagamentoPage() {
 
     toast({
       title: "Pagamento confirmado!",
-      description: `Assinatura ${plans[data.plan].name} ativada com sucesso.`,
+      description: `Plano "${data.plan.toLowerCase()}" ativado com sucesso.`,
     });
 
     // Redirecionar após 3 segundos
@@ -61,7 +54,7 @@ export default function PagamentoPage() {
           <FormProvider {...methods}>
             <PaymentForm onSubmit={methods.handleSubmit(onSubmit)} isProcessing={isProcessing} />
           </FormProvider>
-          <PaymentSummary selectedPlan={selectedPlan} />
+          {/* <PaymentSummary selectedPlan={selectedPlan} /> */}
         </div>
       </div>
     </div>
