@@ -1,12 +1,12 @@
 import { toast } from "@/hooks/use-toast";
+import { PaymentFormData, paymentSchema } from "@/types/validators/payment.validator";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { PaymentForm } from "./PaymentForm";
+import { PaymentForm } from "./form/PaymentForm";
 import { PaymentSuccess } from "./PaymentSuccess";
 import { PaymentSummary } from "./PaymentSummary";
-import { PaymentFormData, paymentSchema } from "@/types/validators/payment.validator";
 
 const plans = {
   basico: { name: "Plano Básico", price: "R$ 15" },

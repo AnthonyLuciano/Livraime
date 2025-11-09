@@ -5,7 +5,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { formatCPF, formatCardNumber, formatExpiryDate } from "./formatters";
+import { formatCPF, formatCardNumber, formatExpiryDate } from "../formatters";
 
 interface PaymentFormProps {
   onSubmit: (data: unknown) => void;
