@@ -18,7 +18,10 @@ export function PaymentForm({ onSubmit, isProcessing }: PaymentFormProps) {
     handleSubmit,
     formState: { errors },
     setValue,
+    watch,
   } = useFormContext();
+
+  console.log("👀 Valores atuais:", watch());
 
   return (
     <Card className="md:col-span-2 shadow-card animate-slide-up">
@@ -31,7 +34,7 @@ export function PaymentForm({ onSubmit, isProcessing }: PaymentFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <SelectPlan errors={errors} onValueChange={(value) => setValue("plan", value)} />
+          <SelectPlan errors={errors} />
 
           {/* Dados Pessoais */}
           <div className="border-t pt-6">

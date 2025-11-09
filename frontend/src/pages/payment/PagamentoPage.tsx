@@ -29,7 +29,7 @@ export default function PagamentoPage() {
 
     toast({
       title: "Pagamento confirmado!",
-      description: `Plano "${data.plan.toLowerCase()}" ativado com sucesso.`,
+      description: `Plano "${data.plan.nivel.toLowerCase()}" ativado com sucesso.`,
     });
 
     // Redirecionar após 3 segundos

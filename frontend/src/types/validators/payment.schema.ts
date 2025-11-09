@@ -1,3 +1,4 @@
+import { planSchema } from "@/types/validators/plan.schema";
 import z from "zod";
 
 export const paymentSchema = z.object({
@@ -20,7 +21,7 @@ export const paymentSchema = z.object({
     .string()
     .trim()
     .regex(/^\d{3,4}$/, "CVV inválido (3 ou 4 dígitos)"),
-  plan: z.enum(["BASICO", "INTERMEDIARIO", "PREMIUM"], { required_error: "Selecione um plano" }),
+  plan: planSchema,
 });
 
 export type PaymentFormData = z.infer<typeof paymentSchema>;

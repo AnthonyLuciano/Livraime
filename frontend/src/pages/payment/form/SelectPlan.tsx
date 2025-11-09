@@ -2,24 +2,35 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useGetAllPlans } from "@/hooks/tanstack-query/plan/useGetAllPlans";
 import { useSelectDisable } from "@/hooks/useSelectDisable";
 import { useSelectPlaceholder } from "@/hooks/useSelectPlaceholder";
+import { PlanFromAPI } from "@/types/plan.types";
 import { Label } from "@radix-ui/react-label";
+import { useState } from "react";
 import { FieldErrors, FieldValues } from "react-hook-form";
 
 interface SelectPlanProps {
   errors: FieldErrors<FieldValues>;
-  onValueChange: (value: string) => void;
 }
 
-export default function SelectPlan({ errors, onValueChange }: SelectPlanProps) {
+export default function SelectPlan({ errors }: SelectPlanProps) {
   const { data: plans, isLoading, error } = useGetAllPlans();
   const selectPlanPlaceholder = useSelectPlaceholder({ data: plans, isLoading, error });
+
+  const [selectedPlan, setSelectedPlan] = useState<PlanFromAPI | null>(null);
 
   return (
     <div className="space-y-2">
       <Label htmlFor="plan">
         Plano <span className="text-destructive">*</span>
       </Label>
-      <Select onValueChange={onValueChange} disabled={useSelectDisable({ isLoading, error })}>
+      <Select
+        onValueChange={(level) => {
+          const plan = plans.find((p) => p.nivel === level);
+          if (!plan) return;
+
+          setSelectedPlan(plan);
+        }}
+        disabled={useSelectDisable({ isLoading, error })}
+      >
         <SelectTrigger id="plan">
           <SelectValue placeholder={selectPlanPlaceholder} />
         </SelectTrigger>
