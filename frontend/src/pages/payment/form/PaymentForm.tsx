@@ -2,10 +2,10 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { formatCPF, formatCardNumber, formatExpiryDate } from "../formatters";
+import SelectPlan from "./SelectPlan";
 
 interface PaymentFormProps {
   onSubmit: (data: unknown) => void;
@@ -31,23 +31,7 @@ export function PaymentForm({ onSubmit, isProcessing }: PaymentFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Plano */}
-          <div className="space-y-2">
-            <Label htmlFor="plan">
-              Plano <span className="text-destructive">*</span>
-            </Label>
-            <Select onValueChange={(value) => setValue("plan", value)}>
-              <SelectTrigger id="plan">
-                <SelectValue placeholder="Selecione um plano" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="basico">Plano Básico - R$ 15,00/mês</SelectItem>
-                <SelectItem value="familia">Plano Familia - R$ 35,00/mês</SelectItem>
-                <SelectItem value="transformador">Plano Transformador - R$ 60,00/mês</SelectItem>
-              </SelectContent>
-            </Select>
-            {errors.plan && <p className="text-sm text-destructive">{errors.plan.message as string}</p>}
-          </div>
+          <SelectPlan errors={errors} onValueChange={(value) => setValue("plan", value)} />
 
           {/* Dados Pessoais */}
           <div className="border-t pt-6">
