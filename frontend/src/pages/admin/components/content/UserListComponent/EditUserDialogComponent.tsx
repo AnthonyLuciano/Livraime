@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { useDisableUser } from "@/hooks/tanstack/user/useDisableUser";
+import { useDisableUser } from "@/hooks/tanstack-query/user/useDisableUser";
 import { useToast } from "@/hooks/use-toast";
 import { User } from "@/types/user.types";
 import axios from "axios";

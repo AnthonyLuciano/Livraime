@@ -1,5 +1,5 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetAllUsers } from "@/hooks/tanstack/user/use-get-all-users";
+import { useGetAllUsers } from "@/hooks/tanstack-query/user/use-get-all-users";
 import { useToast } from "@/hooks/use-toast";
 import axios from "axios";
 import { useEffect } from "react";
