@@ -1,12 +1,12 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import PersonalData from "@/pages/payment/form/PersonalData";
 import { PlanFromAPI } from "@/types/plan.types";
 import { PaymentFormData } from "@/types/validators/payment.schema";
-import { CreditCard, Loader2, Lock } from "lucide-react";
+import { CreditCard } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import CardData from "./CardData";
 import SelectPlan from "./SelectPlan";
+import SubmitButton from "./SubmitButton";
 
 interface PaymentFormProps {
   onSubmit: (data: unknown) => void;
@@ -39,19 +39,7 @@ export function PaymentForm({ onSubmit, isProcessing, setSelectedPlan }: Payment
           <SelectPlan errors={errors} setFormValue={setValue} setSelectedPlan={setSelectedPlan} />
           <PersonalData register={register} errors={errors} />
           <CardData register={register} errors={errors} />
-
-          <Button type="submit" className="w-full shadow-button" disabled={isProcessing}>
-            {isProcessing ? (
-              <Loader2 className="w-4 h-4 mr-2 animate-spin"> Processando Pagamento... </Loader2>
-            ) : (
-              <Lock className="w-4 h-4 mr-2"> Confirmar Pagamento </Lock>
-            )}
-          </Button>
-
-          <p className="text-xs text-center text-muted-foreground">
-            <Lock className="w-3 h-3 inline mr-1" />
-            Pagamento seguro e criptografado
-          </p>
+          <SubmitButton isProcessing={isProcessing} />
         </form>
       </CardContent>
     </Card>
