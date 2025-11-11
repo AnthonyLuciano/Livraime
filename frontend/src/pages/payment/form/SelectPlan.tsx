@@ -1,10 +1,10 @@
+import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useGetAllPlans } from "@/hooks/tanstack-query/plan/useGetAllPlans";
 import { useSelectDisable } from "@/hooks/useSelectDisable";
 import { useSelectPlaceholder } from "@/hooks/useSelectPlaceholder";
 import { PlanFromAPI } from "@/types/plan.types";
 import { PaymentFormData } from "@/types/validators/payment.schema";
-import { Label } from "@radix-ui/react-label";
 import { FieldErrors, FieldValues, UseFormSetValue } from "react-hook-form";
 
 interface SelectPlanProps {

@@ -1,5 +1,14 @@
 {
   "javascript.preferences.importModuleSpecifier": "non-relative",
   "typescript.preferences.importModuleSpecifier": "non-relative",
-  "typescript.preferences.autoImportFileExcludePatterns": ["recharts", "@radix-ui/react-select", "sonner"]
+  "typescript.preferences.autoImportFileExcludePatterns": [
+    "recharts",
+    "@radix-ui/react-select",
+    "sonner",
+    "@radix-ui/react-label",
+    "@radix-ui/react-context-menu",
+    "@radix-ui/react-context-menu",
+    "@radix-ui/react-dropdown-menu",
+    "@radix-ui/react-menubar"
+  ]
 }

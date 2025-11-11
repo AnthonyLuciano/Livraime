@@ -2,11 +2,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import PersonalData from "@/pages/payment/form/PersonalData";
 import { PlanFromAPI } from "@/types/plan.types";
 import { PaymentFormData } from "@/types/validators/payment.schema";
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { formatCPF, formatCardNumber, formatExpiryDate } from "../formatters";
+import { formatCardNumber, formatExpiryDate } from "../formatters";
 import SelectPlan from "./SelectPlan";
 
 interface PaymentFormProps {
@@ -38,46 +39,7 @@ export function PaymentForm({ onSubmit, isProcessing, setSelectedPlan }: Payment
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <SelectPlan errors={errors} setFormValue={setValue} setSelectedPlan={setSelectedPlan} />
-
-          {/* Dados Pessoais */}
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold mb-4">Dados Pessoais</h3>
-            <div className="grid gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">
-                  Nome Completo <span className="text-destructive">*</span>
-                </Label>
-                <Input id="name" {...register("name")} placeholder="João da Silva" maxLength={100} />
-                {errors.name && <p className="text-sm text-destructive">{errors.name.message as string}</p>}
-              </div>
-
-              <div className="grid md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">
-                    Email <span className="text-destructive">*</span>
-                  </Label>
-                  <Input id="email" type="email" {...register("email")} placeholder="joao@email.com" maxLength={255} />
-                  {errors.email && <p className="text-sm text-destructive">{errors.email.message as string}</p>}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="cpf">
-                    CPF <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="cpf"
-                    {...register("cpf")}
-                    placeholder="000.000.000-00"
-                    maxLength={14}
-                    onChange={(e) => {
-                      e.target.value = formatCPF(e.target.value);
-                    }}
-                  />
-                  {errors.cpf && <p className="text-sm text-destructive">{errors.cpf.message as string}</p>}
-                </div>
-              </div>
-            </div>
-          </div>
+          <PersonalData register={register} errors={errors} />
 
           {/* Dados do Cartão */}
           <div className="border-t pt-6">
