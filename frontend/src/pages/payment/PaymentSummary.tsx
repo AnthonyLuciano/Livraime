@@ -29,7 +29,7 @@ export function PaymentSummary({ selectedPlan }: PaymentSummaryProps) {
             <div className="border-t pt-4">
               <div className="flex justify-between items-center">
                 <span className="font-semibold">Total:</span>
-                <span className="text-2xl font-bold text-primary">{selectedPlan.valor}</span>
+                <span className="text-2xl font-bold text-primary">R$ {selectedPlan.valor}</span>
               </div>
               <p className="text-xs text-muted-foreground mt-2">Cobrado mensalmente</p>
             </div>

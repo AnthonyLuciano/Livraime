@@ -1,4 +1,6 @@
 import { toast } from "@/hooks/use-toast";
+import { PaymentSummary } from "@/pages/payment/PaymentSummary";
+import { PlanFromAPI } from "@/types/plan.types";
 import { PaymentFormData, paymentSchema } from "@/types/validators/payment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useState } from "react";
@@ -10,13 +12,13 @@ import { PaymentSuccess } from "./PaymentSuccess";
 export default function PagamentoPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState<PlanFromAPI | null>(null);
+
   const navigate = useNavigate();
 
   const methods = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
   });
-
-  const selectedPlan = methods.watch("plan");
 
   const onSubmit = async (data: PaymentFormData) => {
     setIsProcessing(true);
@@ -52,9 +54,13 @@ export default function PagamentoPage() {
 
         <div className="grid md:grid-cols-3 gap-6">
           <FormProvider {...methods}>
-            <PaymentForm onSubmit={methods.handleSubmit(onSubmit)} isProcessing={isProcessing} />
+            <PaymentForm
+              onSubmit={methods.handleSubmit(onSubmit)}
+              isProcessing={isProcessing}
+              setSelectedPlan={setSelectedPlan}
+            />
           </FormProvider>
-          {/* <PaymentSummary selectedPlan={selectedPlan} /> */}
+          <PaymentSummary selectedPlan={selectedPlan} />
         </div>
       </div>
     </div>

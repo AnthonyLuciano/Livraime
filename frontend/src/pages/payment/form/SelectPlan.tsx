@@ -3,34 +3,39 @@ import { useGetAllPlans } from "@/hooks/tanstack-query/plan/useGetAllPlans";
 import { useSelectDisable } from "@/hooks/useSelectDisable";
 import { useSelectPlaceholder } from "@/hooks/useSelectPlaceholder";
 import { PlanFromAPI } from "@/types/plan.types";
+import { PaymentFormData } from "@/types/validators/payment.schema";
 import { Label } from "@radix-ui/react-label";
-import { useState } from "react";
-import { FieldErrors, FieldValues } from "react-hook-form";
+import { FieldErrors, FieldValues, UseFormSetValue } from "react-hook-form";
 
 interface SelectPlanProps {
+  setFormValue: UseFormSetValue<PaymentFormData>;
   errors: FieldErrors<FieldValues>;
+  setSelectedPlan: React.Dispatch<React.SetStateAction<PlanFromAPI>>;
 }
 
-export default function SelectPlan({ errors }: SelectPlanProps) {
+export default function SelectPlan({ errors, setFormValue, setSelectedPlan }: SelectPlanProps) {
   const { data: plans, isLoading, error } = useGetAllPlans();
   const selectPlanPlaceholder = useSelectPlaceholder({ data: plans, isLoading, error });
 
-  const [selectedPlan, setSelectedPlan] = useState<PlanFromAPI | null>(null);
+  function onSelectPlan(level: string) {
+    const plan = plans.find((p) => p.nivel === level);
+    if (!plan) return;
+
+    const normalizedPlan = {
+      ...plan,
+      nivel: plan.nivel.toUpperCase().trim() as "BASICO" | "INTERMEDIARIO" | "PREMIUM",
+    };
+
+    setSelectedPlan(normalizedPlan);
+    setFormValue("plan", normalizedPlan, { shouldValidate: true });
+  }
 
   return (
     <div className="space-y-2">
       <Label htmlFor="plan">
         Plano <span className="text-destructive">*</span>
       </Label>
-      <Select
-        onValueChange={(level) => {
-          const plan = plans.find((p) => p.nivel === level);
-          if (!plan) return;
-
-          setSelectedPlan(plan);
-        }}
-        disabled={useSelectDisable({ isLoading, error })}
-      >
+      <Select onValueChange={onSelectPlan} disabled={useSelectDisable({ isLoading, error })}>
         <SelectTrigger id="plan">
           <SelectValue placeholder={selectPlanPlaceholder} />
         </SelectTrigger>

@@ -2,6 +2,8 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { PlanFromAPI } from "@/types/plan.types";
+import { PaymentFormData } from "@/types/validators/payment.schema";
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { useFormContext } from "react-hook-form";
 import { formatCPF, formatCardNumber, formatExpiryDate } from "../formatters";
@@ -10,16 +12,17 @@ import SelectPlan from "./SelectPlan";
 interface PaymentFormProps {
   onSubmit: (data: unknown) => void;
   isProcessing: boolean;
+  setSelectedPlan: React.Dispatch<React.SetStateAction<PlanFromAPI>>;
 }
 
-export function PaymentForm({ onSubmit, isProcessing }: PaymentFormProps) {
+export function PaymentForm({ onSubmit, isProcessing, setSelectedPlan }: PaymentFormProps) {
   const {
     register,
     handleSubmit,
     formState: { errors },
     setValue,
     watch,
-  } = useFormContext();
+  } = useFormContext<PaymentFormData>();
 
   console.log("👀 Valores atuais:", watch());
 
@@ -34,7 +37,7 @@ export function PaymentForm({ onSubmit, isProcessing }: PaymentFormProps) {
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <SelectPlan errors={errors} />
+          <SelectPlan errors={errors} setFormValue={setValue} setSelectedPlan={setSelectedPlan} />
 
           {/* Dados Pessoais */}
           <div className="border-t pt-6">
@@ -142,13 +145,9 @@ export function PaymentForm({ onSubmit, isProcessing }: PaymentFormProps) {
 
           <Button type="submit" className="w-full shadow-button" disabled={isProcessing}>
             {isProcessing ? (
-              <>
-                <Loader2 className="w-4 h-4 mr-2 animate-spin" /> Processando Pagamento...
-              </>
+              <Loader2 className="w-4 h-4 mr-2 animate-spin"> Processando Pagamento... </Loader2>
             ) : (
-              <>
-                <Lock className="w-4 h-4 mr-2" /> Confirmar Pagamento
-              </>
+              <Lock className="w-4 h-4 mr-2"> Confirmar Pagamento </Lock>
             )}
           </Button>
 
