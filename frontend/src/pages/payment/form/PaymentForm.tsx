@@ -1,13 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import PersonalData from "@/pages/payment/form/PersonalData";
 import { PlanFromAPI } from "@/types/plan.types";
 import { PaymentFormData } from "@/types/validators/payment.schema";
 import { CreditCard, Loader2, Lock } from "lucide-react";
 import { useFormContext } from "react-hook-form";
-import { formatCardNumber, formatExpiryDate } from "../formatters";
+import CardData from "./CardData";
 import SelectPlan from "./SelectPlan";
 
 interface PaymentFormProps {
@@ -40,70 +38,7 @@ export function PaymentForm({ onSubmit, isProcessing, setSelectedPlan }: Payment
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
           <SelectPlan errors={errors} setFormValue={setValue} setSelectedPlan={setSelectedPlan} />
           <PersonalData register={register} errors={errors} />
-
-          {/* Dados do Cartão */}
-          <div className="border-t pt-6">
-            <h3 className="text-lg font-semibold mb-4">Dados do Cartão</h3>
-            <div className="grid gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="cardNumber">
-                  Número do Cartão <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="cardNumber"
-                  {...register("cardNumber")}
-                  placeholder="0000 0000 0000 0000"
-                  maxLength={19}
-                  onChange={(e) => {
-                    e.target.value = formatCardNumber(e.target.value);
-                  }}
-                />
-                {errors.cardNumber && <p className="text-sm text-destructive">{errors.cardNumber.message as string}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="cardName">
-                  Nome no Cartão <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="cardName"
-                  {...register("cardName")}
-                  placeholder="JOÃO DA SILVA"
-                  maxLength={100}
-                  style={{ textTransform: "uppercase" }}
-                />
-                {errors.cardName && <p className="text-sm text-destructive">{errors.cardName.message as string}</p>}
-              </div>
-
-              <div className="grid grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="expiryDate">
-                    Validade <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="expiryDate"
-                    {...register("expiryDate")}
-                    placeholder="MM/AA"
-                    maxLength={5}
-                    onChange={(e) => {
-                      e.target.value = formatExpiryDate(e.target.value);
-                    }}
-                  />
-                  {errors.expiryDate && (
-                    <p className="text-sm text-destructive">{errors.expiryDate.message as string}</p>
-                  )}
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="cvv">
-                    CVV <span className="text-destructive">*</span>
-                  </Label>
-                  <Input id="cvv" {...register("cvv")} placeholder="123" maxLength={4} type="password" />
-                  {errors.cvv && <p className="text-sm text-destructive">{errors.cvv.message as string}</p>}
-                </div>
-              </div>
-            </div>
-          </div>
+          <CardData register={register} errors={errors} />
 
           <Button type="submit" className="w-full shadow-button" disabled={isProcessing}>
             {isProcessing ? (
