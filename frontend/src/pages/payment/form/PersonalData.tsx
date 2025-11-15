@@ -30,22 +30,29 @@ export default function PersonalData({ register, errors }: PersonalDataProps) {
             <Input id="email" type="email" {...register("email")} placeholder="joao@email.com" maxLength={255} />
             {errors.email && <p className="text-sm text-destructive">{errors.email.message as string}</p>}
           </div>
-
           <div className="space-y-2">
-            <Label htmlFor="cpf">
-              CPF <span className="text-destructive">*</span>
+            <Label htmlFor="password">
+              Senha <span className="text-destructive">*</span>
             </Label>
-            <Input
-              id="cpf"
-              {...register("cpf")}
-              placeholder="000.000.000-00"
-              maxLength={14}
-              onChange={(e) => {
-                e.target.value = formatCPF(e.target.value);
-              }}
-            />
-            {errors.cpf && <p className="text-sm text-destructive">{errors.cpf.message as string}</p>}
+            <Input id="password" type="password" {...register("password")} placeholder="••••••••" />
+            {errors.password && <p className="text-sm text-destructive">{errors.password.message as string}</p>}
           </div>
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="cpf">
+            CPF <span className="text-destructive">*</span>
+          </Label>
+          <Input
+            id="cpf"
+            {...register("cpf")}
+            placeholder="000.000.000-00"
+            maxLength={14}
+            onChange={(e) => {
+              e.target.value = formatCPF(e.target.value);
+            }}
+          />
+          {errors.cpf && <p className="text-sm text-destructive">{errors.cpf.message as string}</p>}
         </div>
       </div>
     </div>
