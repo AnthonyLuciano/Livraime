@@ -1,19 +1,19 @@
-import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
+import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import AssinantePage from "@/pages/AssinantePage";
+import LoginPage from "@/pages/login/LoginPage";
+import PagamentoPage from "@/pages/PagamentoPage";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import AssinantePage from "./pages/AssinantePage";
-import PagamentoPage from "./pages/PagamentoPage";
-import SebosPage from "./pages/SebosPage";
 import AdminPage from "./pages/admin/AdminPage";
-import QuemSomosPage from "./pages/QuemSomosPage";
-import SobrePage from "./pages/SobrePage";
 import FAQPage from "./pages/FAQPage";
+import HomePage from "./pages/HomePage";
 import NotFound from "./pages/NotFound";
+import QuemSomosPage from "./pages/QuemSomosPage";
+import SebosPage from "./pages/SebosPage";
+import SobrePage from "./pages/SobrePage";
 
 const queryClient = new QueryClient();
 
