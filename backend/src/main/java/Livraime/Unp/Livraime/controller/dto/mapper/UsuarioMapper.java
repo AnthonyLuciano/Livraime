@@ -12,16 +12,14 @@ public final class UsuarioMapper {
     private UsuarioMapper() {
     }
 
-    public static Usuario createToEntity(CreateUserDTO dto, int listSize) {
+    public static Usuario createToEntity(CreateUserDTO dto) {
         return new Usuario(
-                listSize + 1,
                 dto.nome(),
                 dto.email(),
                 dto.cpf(),
                 dto.senha(),
                 dto.endereco(),
                 dto.telefone(),
-                dto.plano(),
                 "Verificacao",
                 true);
     }

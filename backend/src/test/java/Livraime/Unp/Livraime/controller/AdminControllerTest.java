@@ -26,7 +26,7 @@ import Livraime.Unp.Livraime.controller.dto.response.MetricDto;
 import Livraime.Unp.Livraime.modelo.Admin;
 import Livraime.Unp.Livraime.modelo.Endereco;
 import Livraime.Unp.Livraime.modelo.Parceiro;
-import Livraime.Unp.Livraime.modelo.Plano;
+import Livraime.Unp.Livraime.modelo.Phone;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.repositorio.DonationRepository;
 import Livraime.Unp.Livraime.repositorio.PartnerRepository;
@@ -106,12 +106,17 @@ class AdminControllerTest {
 
     @Test
     void editarUsuario_whenExists_shouldUpdateFields() {
-        Usuario u = new Usuario(1, "oldName", "old@email", "cpf", "pwd", new Endereco(), "0000", Plano.BASICO, "cod",
+        Usuario u = new Usuario("oldName", "old@email", "cpf", "pwd", new Endereco(), new Phone(),
+                "cod",
                 false);
         // 1, "oldName", "old@mail", "cpf", "pwd", new Endereco(), "0000", Plano.BASICO,
         // true, null, false
         when(usuarioRepository.findById(1)).thenReturn(Optional.of(u));
-        UsuarioEditRequest req = new UsuarioEditRequest("newName", "new@mail", new Endereco(), "9999");
+
+        var expectedAddress = new Endereco("Rua padilha", "15", null, "UNP Salgadinho", "Natal", "RN", null);
+        var expectedPhone = new Phone("84", "999999999");
+
+        UsuarioEditRequest req = new UsuarioEditRequest("newName", "new@mail", expectedAddress, expectedPhone);
 
         var resp = controller.editarUsuario(1, req);
         assertTrue(resp.getStatusCode().is2xxSuccessful());
@@ -119,23 +124,23 @@ class AdminControllerTest {
         assertNotNull(body);
         assertEquals("newName", body.getNome());
         assertEquals("new@mail", body.getEmail());
-        assertEquals("newAddr", body.getEndereco());
-        assertEquals("9999", body.getTelefone());
+        assertEquals(expectedAddress, body.getEndereco());
+        assertEquals(expectedPhone, body.getTelefone());
         verify(usuarioRepository).save(body);
     }
 
     @Test
     void editarUsuario_whenNotFound_shouldReturn404() {
         when(usuarioRepository.findById(99)).thenReturn(Optional.empty());
-        UsuarioEditRequest req = new UsuarioEditRequest("n", "n", new Endereco(), "n");
+        UsuarioEditRequest req = new UsuarioEditRequest("n", "n", new Endereco(), new Phone());
         var resp = controller.editarUsuario(99, req);
         assertEquals(404, resp.getStatusCode().value());
     }
 
     @Test
     void desabilitarUsuario_whenExists_shouldSetAtivoFalse() {
-        Usuario u = new Usuario(2, "x", "x@x", "cpf", "pwd", new Endereco(), "999", null, true,
-                false);
+        Usuario u = new Usuario("nome", "emial@guemei.com", "cepefi", "senia", new Endereco(), new Phone(), "cod",
+                true);
         when(usuarioRepository.findById(2)).thenReturn(Optional.of(u));
 
         var resp = controller.desabilitarUsuario(2);

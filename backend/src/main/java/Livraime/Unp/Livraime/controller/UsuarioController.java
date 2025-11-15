@@ -6,17 +6,13 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
-import Livraime.Unp.Livraime.controller.dto.request.user.CreateUserDTO;
 import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
 import Livraime.Unp.Livraime.modelo.Endereco;
 import Livraime.Unp.Livraime.modelo.Phone;
-import Livraime.Unp.Livraime.modelo.Plano;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -36,24 +32,10 @@ public class UsuarioController {
     @GetMapping
     @Operation(summary = "Listar todos os usuarios")
     public List<UsuarioResponseDTO> listarusuarios() {
-        usuarios.add(new Usuario(1, "joao", "joao@gmail.com",
+        usuarios.add(new Usuario("joao", "joao@gmail.com",
                 "99999999999",
-                "123123123", new Endereco(), new Phone("84", "9999999999"), Plano.BASICO, "133231", true));
+                "123123123", new Endereco(), new Phone("84", "9999999999"), "133231", true));
         return UsuarioMapper.toResponseList(usuarios);
-    }
-
-    /**
-     * Cadastra um novo usuário no sistema.
-     * 
-     * @param novousuario Dados do novo usuário a ser cadastrado
-     *                    -Anthony
-     */
-    @PostMapping
-    @Operation(summary = "Cadastrar novo usuario")
-    public ResponseEntity<Usuario> criarusuario(@RequestBody CreateUserDTO novousuario) {
-        Usuario entity = UsuarioMapper.createToEntity(novousuario, usuarios.size());
-        usuarios.add(entity);
-        return ResponseEntity.ok(entity);
     }
 
     /**

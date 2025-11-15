@@ -1,7 +1,8 @@
 package Livraime.Unp.Livraime.modelo;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -40,23 +41,22 @@ public class Usuario {
 
     @ElementCollection(fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
-    private Set<Role> roles;
+    private List<Role> roles = new ArrayList<>(
+            List.of(Role.USER));
 
     // Construtor padrão
     public Usuario() {
     }
 
     // Construtor completo
-    public Usuario(int id, String nome, String email, String cpf, String senha, Endereco endereco, Phone telefone,
-            Plano plano, String codigoVerificacao, boolean emailVerificado) {
-        this.id = id;
+    public Usuario(String nome, String email, String cpf, String senha, Endereco endereco, Phone telefone,
+           String codigoVerificacao, boolean emailVerificado) {
         this.nome = nome;
         this.email = email;
         this.cpf = cpf;
         this.senha = senha;
         this.endereco = endereco;
         this.telefone = telefone;
-        this.plano = plano;
         this.codigoVerificacao = codigoVerificacao;
         this.emailVerificado = emailVerificado;
     }
@@ -158,11 +158,11 @@ public class Usuario {
         this.cpf = cpf;
     }
 
-    public Set<Role> getRoles() {
+    public List<Role> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Role> roles) {
+    public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
 }
