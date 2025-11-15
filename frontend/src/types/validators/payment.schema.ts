@@ -4,6 +4,7 @@ import z from "zod";
 export const paymentSchema = z.object({
   name: z.string().trim().min(3, "Nome deve ter no mínimo 3 caracteres").max(100, "Nome muito longo"),
   email: z.string().trim().email("Email inválido").max(255, "Email muito longo"),
+  password: z.string().trim().min(8, "Senha deve ter no mínimo 8 caracteres").max(100, "Senha muito longa"),
   cpf: z
     .string()
     .trim()
@@ -21,7 +22,7 @@ export const paymentSchema = z.object({
     .string()
     .trim()
     .regex(/^\d{3,4}$/, "CVV inválido (3 ou 4 dígitos)"),
-  plan: planSchema,
+  plan: planSchema.optional().refine((value) => value !== undefined, { message: "Selecione um plano" }),
 });
 
 export type PaymentFormData = z.infer<typeof paymentSchema>;
