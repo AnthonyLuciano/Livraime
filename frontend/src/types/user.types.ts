@@ -1,3 +1,5 @@
+import { Plan } from "@/types/plan.types";
+
 export interface User {
   id: number;
   name: string;
@@ -25,19 +27,15 @@ export interface UserFromAPI {
 }
 
 export interface CreateUserDto {
-  id: number;
   nome: string;
   email: string;
   cpf: string;
   senha: string;
   endereco: string;
   telefone: string;
-  plano: string;
+  plano: Plan;
   dataCadastro: string;
-  ativo: boolean;
   codigoVerificacao: string;
-  emailVerificado: boolean;
-  roles: UserRole[];
 }
 
 type UserRole = "USER";
