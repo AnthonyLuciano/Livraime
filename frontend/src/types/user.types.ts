@@ -1,11 +1,12 @@
 import { Plan } from "@/types/plan.types";
+import { Address } from "@/types/validators/payment.schema";
 
 export interface User {
   id: number;
   name: string;
   cpf: string;
   isActive: boolean;
-  address: string;
+  address: Address;
   plan: string;
   registerDate: Date;
   contact: {
@@ -19,7 +20,7 @@ export interface UserFromAPI {
   nome: string;
   email: string;
   cpf: string;
-  endereco: string;
+  endereco: Address;
   telefone: string;
   plano: string;
   dataCadastro: string;
@@ -31,7 +32,7 @@ export interface CreateUserDto {
   email: string;
   cpf: string;
   senha: string;
-  endereco: string;
+  endereco: Address;
   telefone: string;
   plano: Plan;
   dataCadastro: string;

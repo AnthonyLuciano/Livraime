@@ -1,6 +1,6 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { formatCPF } from "@/pages/payment/formatters";
+import { formatCPF, formatPhone } from "@/pages/payment/formatters";
 import { PaymentFormData } from "@/types/validators/payment.schema";
 import { FieldErrors, UseFormRegister } from "react-hook-form";
 
@@ -39,20 +39,33 @@ export default function PersonalData({ register, errors }: PersonalDataProps) {
           </div>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="cpf">
-            CPF <span className="text-destructive">*</span>
-          </Label>
-          <Input
-            id="cpf"
-            {...register("cpf")}
-            placeholder="000.000.000-00"
-            maxLength={14}
-            onChange={(e) => {
-              e.target.value = formatCPF(e.target.value);
-            }}
-          />
-          {errors.cpf && <p className="text-sm text-destructive">{errors.cpf.message as string}</p>}
+        <div className="grid md:grid-cols-2 gap-4">
+          <div className="space-y-2">
+            <Label htmlFor="cpf">
+              CPF <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="cpf"
+              {...register("cpf")}
+              placeholder="000.000.000-00"
+              maxLength={14}
+              onChange={(e) => (e.target.value = formatCPF(e.target.value))}
+            />
+            {errors.cpf && <p className="text-sm text-destructive">{errors.cpf.message as string}</p>}
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="phone">
+              Telefone <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="phone"
+              {...register("phone")}
+              placeholder="(99) 99999-9999"
+              maxLength={15}
+              onChange={(e) => (e.target.value = formatPhone(e.target.value))}
+            />
+            {errors.phone && <p className="text-sm text-destructive">{errors.phone.message as string}</p>}
+          </div>
         </div>
       </div>
     </div>

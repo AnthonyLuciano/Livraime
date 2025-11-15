@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
 import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
+import Livraime.Unp.Livraime.modelo.Endereco;
 import Livraime.Unp.Livraime.modelo.Plano;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
@@ -43,14 +44,15 @@ public class UsuarioController {
     public List<UsuarioResponseDTO> listarusuarios() {
         usuarios.add(new Usuario(1, "joao", "joao@gmail.com",
                 "99999999999",
-                "123123123", "rua padilha", "9999999999", Plano.BASICO, LocalDateTime.now(), true, "133231", true));
+                "123123123", new Endereco(), "9999999999", Plano.BASICO, LocalDateTime.now(), true, "133231", true));
         return UsuarioMapper.toResponseList(usuarios);
     }
 
     /**
      * Cadastra um novo usuário no sistema.
+     * 
      * @param novousuario Dados do novo usuário a ser cadastrado
-     * -Anthony
+     *                    -Anthony
      */
     @PostMapping
     @Operation(summary = "Cadastrar novo usuario")
@@ -62,8 +64,9 @@ public class UsuarioController {
     /**
      * Busca um usuário específico pelo seu ID.
      * Retorna um DTO com informações não sensíveis.
+     * 
      * @param id ID do usuário a ser buscado
-     * -Anthony
+     *           -Anthony
      */
     @GetMapping("/{id}")
     @Operation(summary = "Buscar usuario por ID")

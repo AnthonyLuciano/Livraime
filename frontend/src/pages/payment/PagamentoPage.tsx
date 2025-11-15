@@ -30,13 +30,11 @@ export default function PagamentoPage() {
         email: data.email,
         cpf: data.cpf,
         senha: data.password,
-        // endereco: data.,
-        telefone: "",
+        endereco: data.address,
+        telefone: data.cardNumber,
         plano: data.plan.nivel,
         dataCadastro: "",
         codigoVerificacao: "",
-        endereco: "",
-        // senha: "",
       },
       {
         onSuccess: () => {

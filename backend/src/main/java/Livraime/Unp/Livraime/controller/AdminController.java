@@ -1,5 +1,26 @@
 package Livraime.Unp.Livraime.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.format.TextStyle;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
+
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import Livraime.Unp.Livraime.controller.dto.request.ParceiroEditRequest;
+import Livraime.Unp.Livraime.controller.dto.request.UsuarioEditRequest;
+
 /**
  * Controller responsável pela administração do sistema.
  * Gerencia administradores e fornece métricas importantes do sistema
@@ -9,31 +30,14 @@ package Livraime.Unp.Livraime.controller;
 
 import Livraime.Unp.Livraime.controller.dto.response.MetricDto;
 import Livraime.Unp.Livraime.modelo.Admin;
-import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
+import Livraime.Unp.Livraime.modelo.Parceiro;
+import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.repositorio.DonationRepository;
 import Livraime.Unp.Livraime.repositorio.PartnerRepository;
+import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
 import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
-import Livraime.Unp.Livraime.modelo.Usuario;
-import Livraime.Unp.Livraime.controller.dto.request.UsuarioEditRequest;
-import Livraime.Unp.Livraime.controller.dto.request.ParceiroEditRequest;
-import Livraime.Unp.Livraime.modelo.Parceiro;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-
-import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.format.TextStyle;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 
 @RestController
 @RequestMapping("/api/admins")
@@ -47,9 +51,9 @@ public class AdminController {
     private final UsuarioRepository usuarioRepository;
 
     public AdminController(SubscriptionRepository subscriptionRepository,
-                           DonationRepository donationRepository,
-                           PartnerRepository partnerRepository,
-                           UsuarioRepository usuarioRepository) {
+            DonationRepository donationRepository,
+            PartnerRepository partnerRepository,
+            UsuarioRepository usuarioRepository) {
         this.subscriptionRepository = subscriptionRepository;
         this.donationRepository = donationRepository;
         this.partnerRepository = partnerRepository;
@@ -70,8 +74,9 @@ public class AdminController {
 
     /**
      * Cadastra um novo administrador no sistema.
+     * 
      * @param novoAdmin Dados do novo administrador
-     * -Anthony
+     *                  -Anthony
      */
     @PostMapping
     @Operation(summary = "Criar novo administrador")
@@ -82,8 +87,9 @@ public class AdminController {
 
     /**
      * Busca um administrador específico pelo seu ID.
+     * 
      * @param id ID do administrador a ser buscado
-     * -Anthony
+     *           -Anthony
      */
     @GetMapping("/{id}")
     @Operation(summary = "Buscar administrador por ID")
@@ -131,13 +137,15 @@ public class AdminController {
     }
 
     private long countDonatedBooksBetween(LocalDateTime startInclusive, LocalDateTime endInclusive) {
-        // Caso você precise somar quantidade de livros doados, use o método do DonationRepository que retorna SUM
+        // Caso você precise somar quantidade de livros doados, use o método do
+        // DonationRepository que retorna SUM
         Long sum = donationRepository.sumBooksDonatedBetween(startInclusive, endInclusive);
         return sum == null ? 0L : sum;
     }
 
     private long countPartnersAtMonthEnd(LocalDateTime monthEndDateTime) {
-        // Conta parceiros ativos até a data (ex.: createdAt <= monthEndDateTime AND active = true)
+        // Conta parceiros ativos até a data (ex.: createdAt <= monthEndDateTime AND
+        // active = true)
         return partnerRepository.countActiveUntil(monthEndDateTime);
     }
 
@@ -148,19 +156,24 @@ public class AdminController {
      * - address -> endereco
      * - phone -> telefone
      * Essa rota será usada tanto pelo Painel ADM quanto pela Área do Assinante.
-     * @param id id do usuário a ser editado
+     * 
+     * @param id  id do usuário a ser editado
      * @param req payload contendo somente os campos editáveis
-     * -Anthony
+     *            -Anthony
      */
     @PatchMapping("/users/{id}")
     @Operation(summary = "Editar usuário (ADM / assinante)")
     public ResponseEntity<Usuario> editarUsuario(@PathVariable int id, @RequestBody UsuarioEditRequest req) {
         return usuarioRepository.findById(id)
                 .map(u -> {
-                    if (req.name() != null) u.setNome(req.name());
-                    if (req.email() != null) u.setEmail(req.email());
-                    if (req.address() != null) u.setEndereco(req.address());
-                    if (req.phone() != null) u.setTelefone(req.phone());
+                    if (req.name() != null)
+                        u.setNome(req.name());
+                    if (req.email() != null)
+                        u.setEmail(req.email());
+                    if (req.address() != null)
+                        u.setEndereco(req.address());
+                    if (req.phone() != null)
+                        u.setTelefone(req.phone());
                     usuarioRepository.save(u);
                     return ResponseEntity.ok(u);
                 })
@@ -170,8 +183,9 @@ public class AdminController {
     /**
      * Desabilita um usuário (marca como inativo).
      * Recebe o id do usuário via path variable.
+     * 
      * @param id id do usuário a ser desabilitado
-     * -Anthony
+     *           -Anthony
      */
     @PatchMapping("/users/{id}/disable")
     @Operation(summary = "Desabilitar usuário")
@@ -193,21 +207,28 @@ public class AdminController {
      * - telefone
      * - email
      * - descricaoServicos
-     * @param id id do parceiro a ser editado
+     * 
+     * @param id  id do parceiro a ser editado
      * @param req payload contendo os campos editáveis
-     * -Anthony
+     *            -Anthony
      */
     @PatchMapping("/partners/{id}")
     @Operation(summary = "Editar parceiro")
     public ResponseEntity<Parceiro> editarParceiro(@PathVariable Long id, @RequestBody ParceiroEditRequest req) {
         return partnerRepository.findById(id)
                 .map(p -> {
-                    if (req.nome() != null) p.setNome(req.nome());
-                    if (req.tipo() != null) p.setTipo(req.tipo());
-                    if (req.endereco() != null) p.setEndereco(req.endereco());
-                    if (req.telefone() != null) p.setTelefone(req.telefone());
-                    if (req.email() != null) p.setEmail(req.email());
-                    if (req.descricaoServicos() != null) p.setDescricaoServicos(req.descricaoServicos());
+                    if (req.nome() != null)
+                        p.setNome(req.nome());
+                    if (req.tipo() != null)
+                        p.setTipo(req.tipo());
+                    if (req.endereco() != null)
+                        p.setEndereco(req.endereco());
+                    if (req.telefone() != null)
+                        p.setTelefone(req.telefone());
+                    if (req.email() != null)
+                        p.setEmail(req.email());
+                    if (req.descricaoServicos() != null)
+                        p.setDescricaoServicos(req.descricaoServicos());
                     partnerRepository.save(p);
                     return ResponseEntity.ok(p);
                 })
@@ -217,8 +238,9 @@ public class AdminController {
     /**
      * Desativa um parceiro do sistema.
      * Marca como inativo e registra a data de deleção.
+     * 
      * @param id id do parceiro a ser desativado
-     * -Anthony
+     *           -Anthony
      */
     @PatchMapping("/partners/{id}/disable")
     @Operation(summary = "Desativar parceiro")

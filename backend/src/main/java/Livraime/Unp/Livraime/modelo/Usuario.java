@@ -4,10 +4,6 @@ import jakarta.persistence.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.Set;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 
 @Entity
 public class Usuario {
@@ -17,10 +13,12 @@ public class Usuario {
     private String nome;
     private String email;
     private String cpf;
-    
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String senha;
-    private String endereco;
+
+    @Embedded
+    private Endereco endereco;
     private String telefone;
     private Plano plano;
     private LocalDateTime dataCadastro = LocalDateTime.now();
@@ -33,10 +31,12 @@ public class Usuario {
     private Set<Role> roles;
 
     // Construtor padrão
-    public Usuario() {}
+    public Usuario() {
+    }
 
     // Construtor completo
-    public Usuario(int id, String nome, String email, String cpf, String senha, String endereco, String telefone, Plano plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
+    public Usuario(int id, String nome, String email, String cpf, String senha, Endereco endereco, String telefone,
+            Plano plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -52,42 +52,107 @@ public class Usuario {
     }
 
     // Getters e setters
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
+    public int getId() {
+        return id;
+    }
 
-    public String getNome() { return nome; }
-    public void setNome(String nome) { this.nome = nome; }
+    public void setId(int id) {
+        this.id = id;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public String getNome() {
+        return nome;
+    }
 
-    public String getSenha() { return senha; }
-    public void setSenha(String senha) { this.senha = senha; }
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-    public String getEndereco() { return endereco; }
-    public void setEndereco(String endereco) { this.endereco = endereco; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getTelefone() { return telefone; }
-    public void setTelefone(String telefone) { this.telefone = telefone; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public Plano getPlano() { return plano; }
-    public void setPlano(Plano plano) { this.plano = plano; }
+    public String getSenha() {
+        return senha;
+    }
 
-    public LocalDateTime getDataCadastro() { return dataCadastro; }
-    public void setDataCadastro(LocalDateTime dataCadastro) { this.dataCadastro = dataCadastro; }
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 
-    public boolean isAtivo() { return ativo; }
-    public void setAtivo(boolean ativo) { this.ativo = ativo; }
+    public Endereco getEndereco() {
+        return endereco;
+    }
 
-    public String getCodigoVerificacao() { return codigoVerificacao; }
-    public void setCodigoVerificacao(String codigo) { this.codigoVerificacao = codigo; }
+    public void setEndereco(Endereco endereco) {
+        this.endereco = endereco;
+    }
 
-    public boolean isEmailVerificado() { return emailVerificado; }
-    public void setEmailVerificado(boolean emailVerificado) { this.emailVerificado = emailVerificado; }
+    public String getTelefone() {
+        return telefone;
+    }
 
-    public String getCpf() {return cpf;}
-    public void setCpf(String cpf) {this.cpf = cpf;}
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
 
-    public Set<Role> getRoles() {return roles;}
-    public void setRoles(Set<Role> roles) {this.roles = roles;}
+    public Plano getPlano() {
+        return plano;
+    }
+
+    public void setPlano(Plano plano) {
+        this.plano = plano;
+    }
+
+    public LocalDateTime getDataCadastro() {
+        return dataCadastro;
+    }
+
+    public void setDataCadastro(LocalDateTime dataCadastro) {
+        this.dataCadastro = dataCadastro;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
+
+    public String getCodigoVerificacao() {
+        return codigoVerificacao;
+    }
+
+    public void setCodigoVerificacao(String codigo) {
+        this.codigoVerificacao = codigo;
+    }
+
+    public boolean isEmailVerificado() {
+        return emailVerificado;
+    }
+
+    public void setEmailVerificado(boolean emailVerificado) {
+        this.emailVerificado = emailVerificado;
+    }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
+    }
 }
