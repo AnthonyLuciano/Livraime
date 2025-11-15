@@ -1,6 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RegisterFormData } from "@/pages/access/register/register.schema";
+import { formatCEP } from "@/pages/payment/formatters";
+import { ChangeEvent } from "react";
 import { FieldErrors, useFormContext } from "react-hook-form";
 
 interface RegisterAddressDataProps {
@@ -17,7 +19,16 @@ export function RegisterAddressData({ errors }: RegisterAddressDataProps) {
         <Label htmlFor="endereco.zipCode">
           CEP <span className="text-destructive">*</span>
         </Label>
-        <Input id="endereco.zipCode" {...register("endereco.zipCode")} placeholder="00000-000" maxLength={9} />
+        <Input
+          id="endereco.zipCode"
+          {...register("endereco.zipCode", {
+            onChange: (e: ChangeEvent<HTMLInputElement>) => {
+              e.target.value = formatCEP(e.target.value);
+            },
+          })}
+          placeholder="00000-000"
+          maxLength={9}
+        />
         {errors.endereco?.zipCode && <p className="text-sm text-destructive">{errors.endereco.zipCode.message}</p>}
       </div>
 

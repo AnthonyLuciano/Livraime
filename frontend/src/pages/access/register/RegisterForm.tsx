@@ -1,11 +1,11 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RegisterPersonalData } from "@/pages/access/register/personal-data/RegisterPersonalData";
+import { RegisterFormData, registerSchema } from "@/pages/access/register/register.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { RegisterAddressData } from "./RegisterAddressData";
-import { RegisterFormData, registerSchema } from "@/pages/access/register/register.schema";
-import { RegisterPersonalData } from "@/pages/access/register/RegisterPersonalData";
 
 export function RegisterForm() {
   const methods = useForm<RegisterFormData>({

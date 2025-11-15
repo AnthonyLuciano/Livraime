@@ -1,7 +1,8 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import InputCPF from "@/pages/access/register/personal-data/InputCPF";
 import { RegisterFormData } from "@/pages/access/register/register.schema";
-import { formatCPF, formatPhone } from "@/pages/payment/formatters";
+import { formatPhone } from "@/pages/payment/formatters";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 import { FieldErrors, useFormContext } from "react-hook-form";
@@ -33,23 +34,7 @@ export function RegisterPersonalData({ errors }: RegisterPersonalDataProps) {
           <Input id="email" type="email" {...register("email")} placeholder="seu@email.com" />
           {errors.email && <p className="text-sm text-destructive">{errors.email.message}</p>}
         </div>
-        <div className="space-y-2">
-          <Label htmlFor="cpf">
-            CPF <span className="text-destructive">*</span>
-          </Label>
-          <Input
-            id="cpf"
-            {...(register("cpf"),
-            {
-              onChange: (e) => {
-                formatCPF(e.target.value);
-              },
-            })}
-            placeholder="000.000.000-00"
-            maxLength={14}
-          />
-          {errors.cpf && <p className="text-sm text-destructive">{errors.cpf.message}</p>}
-        </div>
+        <InputCPF register={register} errors={errors} />
       </div>
 
       <div className="grid md:grid-cols-2 gap-4">
@@ -59,10 +44,9 @@ export function RegisterPersonalData({ errors }: RegisterPersonalDataProps) {
           </Label>
           <Input
             id="telefone"
-            {...(register("telefone"),
-            {
+            {...register("telefone", {
               onChange: (e) => {
-                formatPhone(e.target.value);
+                e.target.value = formatPhone(e.target.value);
               },
             })}
             placeholder="(99) 99999-9999"

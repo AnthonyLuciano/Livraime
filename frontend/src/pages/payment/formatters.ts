@@ -49,21 +49,17 @@ export const formatExpiryDate = (value: string) => {
 };
 
 export function formatPhone(value: string): string {
-  if (!value) return "";
+  const cleanValue = value.replace(/\D/g, "");
+  const formattedValue = cleanValue
+    .replace(/(\d{2})(\d)/, "($1) $2")
+    .replace(/(\d{4,5})(\d)/, "$1-$2")
+    .slice(0, 15);
+  return formattedValue;
+}
 
-  // Remove tudo que não for número
-  const digits = value.replace(/\D/g, "");
-
-  // (99
-  if (digits.length <= 2) {
-    return `(${digits}`;
-  }
-
-  // (99) 9
-  if (digits.length <= 7) {
-    return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
-  }
-
-  // (99) 99999-9
-  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+export function formatCEP(value: string): string {
+  // 00000-000
+  const cleanValue = value.replace(/\D/g, "");
+  const formattedValue = cleanValue.replace(/(\d{5})(\d)/, "$1-$2").slice(0, 9);
+  return formattedValue;
 }

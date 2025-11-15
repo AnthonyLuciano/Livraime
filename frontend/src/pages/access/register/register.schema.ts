@@ -11,7 +11,7 @@ export const registerSchema = z.object({
   telefone: z
     .string()
     .trim()
-    .regex(/^\(\d{2}\)\s\d{5}-\d{4}$/, "Telefone inválido (formato: (00) 00000-0000)"),
+    .regex(/^(\(\d{2}\))\s(\d{4,5})-(\d{4})$/, "Telefone inválido (formato: (00) 00000-0000)"),
   endereco: z.object({
     street: z.string().trim().min(3, "Rua deve ter no mínimo 3 caracteres").max(100, "Rua muito longa"),
     number: z.string().trim().min(1, "Número deve ter no mínimo 1 caractere").max(10, "Número muito longo"),
