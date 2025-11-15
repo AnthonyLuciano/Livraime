@@ -26,16 +26,17 @@ export default function PagamentoPage() {
   const onSubmit = async (data: PaymentFormData) => {
     createUser(
       {
-        
         nome: data.name,
         email: data.email,
         cpf: data.cpf,
         // senha: data.,
         // endereco: data.,
-        telefone: data.,
+        telefone: "",
         plano: data.plan.nivel,
         dataCadastro: "",
         codigoVerificacao: "",
+        endereco: "",
+        senha: "",
       },
       {
         onSuccess: () => {
