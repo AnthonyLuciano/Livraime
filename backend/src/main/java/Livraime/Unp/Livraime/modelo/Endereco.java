@@ -1,11 +1,13 @@
 package Livraime.Unp.Livraime.modelo;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class Endereco {
     private String street; // Rua
-    private String number; // Número
+    @Column(name = "endereco_numero")
+    private String number;
     private String complement; // Complemento (opcional)
     private String neighborhood; // Bairro
     private String city; // Cidade

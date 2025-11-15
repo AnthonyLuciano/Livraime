@@ -21,7 +21,7 @@ export interface UserFromAPI {
   email: string;
   cpf: string;
   endereco: Address;
-  telefone: string;
+  telefone: Phone;
   plano: string;
   dataCadastro: string;
   ativo: boolean;
@@ -33,10 +33,13 @@ export interface CreateUserDto {
   cpf: string;
   senha: string;
   endereco: Address;
-  telefone: string;
+  telefone: Phone;
   plano: Plan;
-  dataCadastro: string;
-  codigoVerificacao: string;
 }
 
-type UserRole = "USER";
+export interface Phone {
+  areaCode: string;
+  number: string;
+}
+
+// type UserRole = "USER";

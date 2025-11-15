@@ -1,3 +1,5 @@
+import { Phone } from "@/types/user.types";
+
 /**
  * Formata um valor de string para o formato de CPF (000.000.000-00).
  * @param value A string a ser formatada.
@@ -13,20 +15,24 @@ export const formatCPF = (value: string): string => {
 };
 
 /**
- * Formata um valor de string para o formato de telefone (XX) XXXXX-XXXX.
- * @param value A string a ser formatada.
- * @returns A string formatada como telefone.
+ * Extrai o DDD (areaCode) e o número (number) de uma string de telefone.
+ * Aceita qualquer formato e limpa automaticamente caracteres não numéricos.
+ *
+ * @param value String com um telefone (ex: "(11) 98888-7777").
+ * @returns Objeto { areaCode: string, number: string }
  */
-export const formatPhone = (value: string): string => {
-  const digitsOnly = value.replace(/\D/g, "");
+export const extractPhone = (value: string): Phone => {
+  const digits = value.replace(/\D/g, ""); // mantém só os números
 
-  if (digitsOnly.length <= 10) {
-    return digitsOnly
-      .replace(/(\d{2})(\d)/, "($1) $2")
-      .replace(/(\d{4})(\d)/, "$1-$2")
-      .slice(0, 14); // (XX) XXXX-XXXX
+  // Se não houver números suficientes, retorna vazio
+  if (digits.length < 3) {
+    return { areaCode: "", number: "" };
   }
-  return digitsOnly.replace(/(\d{2})(\d{5})(\d{4})/, "($1) $2-$3").slice(0, 15); // (XX) XXXXX-XXXX
+
+  const areaCode = digits.substring(0, 2);
+  const number = digits.substring(2); // resto
+
+  return { areaCode, number };
 };
 
 export const formatCardNumber = (value: string) => {

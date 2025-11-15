@@ -1,7 +1,9 @@
 import { useCreateUser } from "@/hooks/tanstack-query/user/useCreateUser";
 import { toast } from "@/hooks/use-toast";
+import { extractPhone } from "@/pages/payment/formatters";
 import { PaymentSummary } from "@/pages/payment/PaymentSummary";
 import { PlanFromAPI } from "@/types/plan.types";
+import { CreateUserDto } from "@/types/user.types";
 import { PaymentFormData, paymentSchema } from "@/types/validators/payment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -24,41 +26,29 @@ export default function PagamentoPage() {
   });
 
   const onSubmit = async (data: PaymentFormData) => {
-    createUser(
-      {
-        nome: data.name,
-        email: data.email,
-        cpf: data.cpf,
-        senha: data.password,
-        endereco: data.address,
-        telefone: data.cardNumber,
-        plano: data.plan.nivel,
-        dataCadastro: "",
-        codigoVerificacao: "",
+    createUser(createUserDTO(data), {
+      onSuccess: () => {
+        setPaymentSuccess(true);
+
+        toast({
+          title: "Pagamento confirmado!",
+          description: `Plano "${data.plan.nivel.toLowerCase()}" ativado com sucesso.`,
+        });
+
+        // Redirecionar após 3 segundos
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       },
-      {
-        onSuccess: () => {
-          setPaymentSuccess(true);
 
-          toast({
-            title: "Pagamento confirmado!",
-            description: `Plano "${data.plan.nivel.toLowerCase()}" ativado com sucesso.`,
-          });
-
-          // Redirecionar após 3 segundos
-          setTimeout(() => {
-            navigate("/assinante");
-          }, 3000);
-        },
-        onError: (error) => {
-          console.error("Erro ao criar usuário:", error);
-          toast({
-            title: "Erro ao criar usuário",
-            description: axios.isAxiosError(error) ? error.response.data : error.message,
-          });
-        },
-      }
-    );
+      onError: (error) => {
+        console.error("Erro ao criar usuário:", error);
+        toast({
+          title: "Erro ao criar usuário",
+          description: axios.isAxiosError(error) ? error.response.data : error.message,
+        });
+      },
+    });
   };
 
   if (paymentSuccess) return <PaymentSuccess />;
@@ -84,4 +74,20 @@ export default function PagamentoPage() {
       </div>
     </div>
   );
+}
+function createUserDTO(data: PaymentFormData): CreateUserDto {
+  const { areaCode, number } = extractPhone(data.phone);
+
+  return {
+    nome: data.name,
+    email: data.email,
+    cpf: data.cpf,
+    senha: data.password,
+    endereco: data.address,
+    telefone: {
+      areaCode,
+      number,
+    },
+    plano: data.plan.nivel,
+  };
 }

@@ -57,9 +57,40 @@ export default function AddressData({ register, errors }: AddressDataProps) {
           </div>
         </div>
 
-        {/* Bairro, Cidade e Estado podem ser adicionados aqui seguindo o mesmo padrão */}
-        {/* Exemplo: Bairro */}
-        {/* ... */}
+        <div className="grid md:grid-cols-5 gap-4">
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="address.neighborhood">
+              Bairro <span className="text-destructive">*</span>
+            </Label>
+            <Input
+              id="address.neighborhood"
+              {...register("address.neighborhood")}
+              placeholder="Centro"
+              maxLength={100}
+            />
+            {errors.address?.neighborhood && (
+              <p className="text-sm text-destructive">{errors.address.neighborhood.message as string}</p>
+            )}
+          </div>
+          <div className="space-y-2 md:col-span-2">
+            <Label htmlFor="address.city">
+              Cidade <span className="text-destructive">*</span>
+            </Label>
+            <Input id="address.city" {...register("address.city")} placeholder="São Paulo" maxLength={100} />
+            {errors.address?.city && (
+              <p className="text-sm text-destructive">{errors.address.city.message as string}</p>
+            )}
+          </div>
+          <div className="space-y-2 md:col-span-1">
+            <Label htmlFor="address.state">
+              Estado <span className="text-destructive">*</span>
+            </Label>
+            <Input id="address.state" {...register("address.state")} placeholder="SP" maxLength={2} />
+            {errors.address?.state && (
+              <p className="text-sm text-destructive">{errors.address.state.message as string}</p>
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -1,15 +1,18 @@
 package Livraime.Unp.Livraime.controller;
 
-import Livraime.Unp.Livraime.controller.dto.request.UsuarioEditRequest;
-import Livraime.Unp.Livraime.controller.dto.request.ParceiroEditRequest;
-import Livraime.Unp.Livraime.controller.dto.response.MetricDto;
-import Livraime.Unp.Livraime.modelo.Admin;
-import Livraime.Unp.Livraime.modelo.Usuario;
-import Livraime.Unp.Livraime.modelo.Parceiro;
-import Livraime.Unp.Livraime.repositorio.DonationRepository;
-import Livraime.Unp.Livraime.repositorio.PartnerRepository;
-import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
-import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,12 +20,18 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
+import Livraime.Unp.Livraime.controller.dto.request.ParceiroEditRequest;
+import Livraime.Unp.Livraime.controller.dto.request.UsuarioEditRequest;
+import Livraime.Unp.Livraime.controller.dto.response.MetricDto;
+import Livraime.Unp.Livraime.modelo.Admin;
+import Livraime.Unp.Livraime.modelo.Endereco;
+import Livraime.Unp.Livraime.modelo.Parceiro;
+import Livraime.Unp.Livraime.modelo.Plano;
+import Livraime.Unp.Livraime.modelo.Usuario;
+import Livraime.Unp.Livraime.repositorio.DonationRepository;
+import Livraime.Unp.Livraime.repositorio.PartnerRepository;
+import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
+import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
 
 @ExtendWith(MockitoExtension.class)
 class AdminControllerTest {
@@ -43,7 +52,8 @@ class AdminControllerTest {
 
     @BeforeEach
     void setUp() {
-        controller = new AdminController(subscriptionRepository, donationRepository, partnerRepository, usuarioRepository);
+        controller = new AdminController(subscriptionRepository, donationRepository, partnerRepository,
+                usuarioRepository);
     }
 
     @Test
@@ -67,9 +77,11 @@ class AdminControllerTest {
 
     @Test
     void buscarMetricasUltimos6Meses_shouldReturnSixItemsWithRepoValues() {
-        when(subscriptionRepository.countByCreatedAtBetween(ArgumentMatchers.any(LocalDateTime.class), ArgumentMatchers.any(LocalDateTime.class)))
+        when(subscriptionRepository.countByCreatedAtBetween(ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class)))
                 .thenReturn(10L);
-        when(donationRepository.sumBooksDonatedBetween(ArgumentMatchers.any(LocalDateTime.class), ArgumentMatchers.any(LocalDateTime.class)))
+        when(donationRepository.sumBooksDonatedBetween(ArgumentMatchers.any(LocalDateTime.class),
+                ArgumentMatchers.any(LocalDateTime.class)))
                 .thenReturn(20L);
         when(partnerRepository.countActiveUntil(ArgumentMatchers.any(LocalDateTime.class)))
                 .thenReturn(3L);
@@ -85,16 +97,21 @@ class AdminControllerTest {
             assertNotNull(m.getMes());
         }
 
-        verify(subscriptionRepository, atLeastOnce()).countByCreatedAtBetween(any(LocalDateTime.class), any(LocalDateTime.class));
-        verify(donationRepository, atLeastOnce()).sumBooksDonatedBetween(any(LocalDateTime.class), any(LocalDateTime.class));
+        verify(subscriptionRepository, atLeastOnce()).countByCreatedAtBetween(any(LocalDateTime.class),
+                any(LocalDateTime.class));
+        verify(donationRepository, atLeastOnce()).sumBooksDonatedBetween(any(LocalDateTime.class),
+                any(LocalDateTime.class));
         verify(partnerRepository, atLeastOnce()).countActiveUntil(any(LocalDateTime.class));
     }
 
     @Test
     void editarUsuario_whenExists_shouldUpdateFields() {
-        Usuario u = new Usuario(1, "oldName", "old@mail", "cpf", "pwd", "oldAddr", "0000", null, LocalDateTime.now(), true, null, false);
+        Usuario u = new Usuario(1, "oldName", "old@email", "cpf", "pwd", new Endereco(), "0000", Plano.BASICO, "cod",
+                false);
+        // 1, "oldName", "old@mail", "cpf", "pwd", new Endereco(), "0000", Plano.BASICO,
+        // true, null, false
         when(usuarioRepository.findById(1)).thenReturn(Optional.of(u));
-        UsuarioEditRequest req = new UsuarioEditRequest("newName", "new@mail", "newAddr", "9999");
+        UsuarioEditRequest req = new UsuarioEditRequest("newName", "new@mail", new Endereco(), "9999");
 
         var resp = controller.editarUsuario(1, req);
         assertTrue(resp.getStatusCode().is2xxSuccessful());
@@ -110,14 +127,15 @@ class AdminControllerTest {
     @Test
     void editarUsuario_whenNotFound_shouldReturn404() {
         when(usuarioRepository.findById(99)).thenReturn(Optional.empty());
-        UsuarioEditRequest req = new UsuarioEditRequest("n","n","n","n");
+        UsuarioEditRequest req = new UsuarioEditRequest("n", "n", new Endereco(), "n");
         var resp = controller.editarUsuario(99, req);
-    assertEquals(404, resp.getStatusCode().value());
+        assertEquals(404, resp.getStatusCode().value());
     }
 
     @Test
     void desabilitarUsuario_whenExists_shouldSetAtivoFalse() {
-        Usuario u = new Usuario(2, "x", "x@x", "cpf", "pwd", "addr", "999", null, LocalDateTime.now(), true, null, false);
+        Usuario u = new Usuario(2, "x", "x@x", "cpf", "pwd", new Endereco(), "999", null, true,
+                false);
         when(usuarioRepository.findById(2)).thenReturn(Optional.of(u));
 
         var resp = controller.desabilitarUsuario(2);
@@ -138,14 +156,13 @@ class AdminControllerTest {
     void editarParceiro_whenExists_shouldUpdateFields() {
         Parceiro p = new Parceiro(1L, "oldName", "sebo", "oldAddr", "0000", "old@mail", "desc", true);
         when(partnerRepository.findById(1L)).thenReturn(Optional.of(p));
-        
+
         ParceiroEditRequest req = new ParceiroEditRequest(
-            "newName", "autor_independente", "newAddr", "9999", "new@mail", "nova desc"
-        );
+                "newName", "autor_independente", "newAddr", "9999", "new@mail", "nova desc");
 
         var resp = controller.editarParceiro(1L, req);
         assertTrue(resp.getStatusCode().is2xxSuccessful());
-        
+
         Parceiro body = resp.getBody();
         assertNotNull(body);
         assertEquals("newName", body.getNome());
@@ -160,7 +177,7 @@ class AdminControllerTest {
     @Test
     void editarParceiro_whenNotFound_shouldReturn404() {
         when(partnerRepository.findById(99L)).thenReturn(Optional.empty());
-        ParceiroEditRequest req = new ParceiroEditRequest("n","n","n","n","n","n");
+        ParceiroEditRequest req = new ParceiroEditRequest("n", "n", "n", "n", "n", "n");
         var resp = controller.editarParceiro(99L, req);
         assertEquals(404, resp.getStatusCode().value());
     }

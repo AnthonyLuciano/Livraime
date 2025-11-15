@@ -1,9 +1,19 @@
 package Livraime.Unp.Livraime.modelo;
 
-import jakarta.persistence.*;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 @Entity
 public class Usuario {
@@ -19,7 +29,9 @@ public class Usuario {
 
     @Embedded
     private Endereco endereco;
-    private String telefone;
+
+    @Embedded
+    private Phone telefone;
     private Plano plano;
     private LocalDateTime dataCadastro = LocalDateTime.now();
     private boolean ativo = true;
@@ -35,8 +47,8 @@ public class Usuario {
     }
 
     // Construtor completo
-    public Usuario(int id, String nome, String email, String cpf, String senha, Endereco endereco, String telefone,
-            Plano plano, LocalDateTime dataCadastro, boolean ativo, String codigoVerificacao, boolean emailVerificado) {
+    public Usuario(int id, String nome, String email, String cpf, String senha, Endereco endereco, Phone telefone,
+            Plano plano, String codigoVerificacao, boolean emailVerificado) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -45,8 +57,6 @@ public class Usuario {
         this.endereco = endereco;
         this.telefone = telefone;
         this.plano = plano;
-        this.dataCadastro = dataCadastro;
-        this.ativo = ativo;
         this.codigoVerificacao = codigoVerificacao;
         this.emailVerificado = emailVerificado;
     }
@@ -92,11 +102,11 @@ public class Usuario {
         this.endereco = endereco;
     }
 
-    public String getTelefone() {
+    public Phone getTelefone() {
         return telefone;
     }
 
-    public void setTelefone(String telefone) {
+    public void setTelefone(Phone telefone) {
         this.telefone = telefone;
     }
 

@@ -1,13 +1,5 @@
 package Livraime.Unp.Livraime.controller;
 
-/**
- * Controller responsável pelo gerenciamento de usuários assinantes.
- * Permite listar, cadastrar e buscar usuários do sistema.
- * Gerencia informações básicas dos assinantes e suas assinaturas.
- * -Anthony
- */
-
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,8 +12,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
+import Livraime.Unp.Livraime.controller.dto.request.user.CreateUserDTO;
 import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
 import Livraime.Unp.Livraime.modelo.Endereco;
+import Livraime.Unp.Livraime.modelo.Phone;
 import Livraime.Unp.Livraime.modelo.Plano;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,7 +23,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@Tag(name = "usuarios", description = "Gerenciamento de usuarios assinantes")
+@Tag(name = "Usuario", description = "Gerenciamento de usuarios assinantes")
 public class UsuarioController {
 
     private List<Usuario> usuarios = new ArrayList<>();
@@ -44,7 +38,7 @@ public class UsuarioController {
     public List<UsuarioResponseDTO> listarusuarios() {
         usuarios.add(new Usuario(1, "joao", "joao@gmail.com",
                 "99999999999",
-                "123123123", new Endereco(), "9999999999", Plano.BASICO, LocalDateTime.now(), true, "133231", true));
+                "123123123", new Endereco(), new Phone("84", "9999999999"), Plano.BASICO, "133231", true));
         return UsuarioMapper.toResponseList(usuarios);
     }
 
@@ -56,9 +50,10 @@ public class UsuarioController {
      */
     @PostMapping
     @Operation(summary = "Cadastrar novo usuario")
-    public ResponseEntity<Usuario> criarusuario(@RequestBody Usuario novousuario) {
-        usuarios.add(novousuario);
-        return ResponseEntity.ok(novousuario);
+    public ResponseEntity<Usuario> criarusuario(@RequestBody CreateUserDTO novousuario) {
+        Usuario entity = UsuarioMapper.createToEntity(novousuario, usuarios.size());
+        usuarios.add(entity);
+        return ResponseEntity.ok(entity);
     }
 
     /**
