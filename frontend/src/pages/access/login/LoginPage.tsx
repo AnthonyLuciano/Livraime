@@ -1,5 +1,5 @@
-import { DemoAccessCard } from "@/pages/login/DemoAccessCard";
-import { LoginForm } from "@/pages/login/LoginForm";
+import { DemoAccessCard } from "@/pages/access/login/DemoAccessCard";
+import { LoginForm } from "@/pages/access/login/LoginForm";
 import { LoginHeader } from "./LoginHeader";
 
 const LoginPage = () => {

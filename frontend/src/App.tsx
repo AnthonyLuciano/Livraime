@@ -1,10 +1,11 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import LoginPage from "@/pages/access/login/LoginPage";
+import RegisterPage from "@/pages/access/register/RegisterPage";
 import AssinantePage from "@/pages/AssinantePage";
 import FAQPage from "@/pages/FAQPage";
 import HomePage from "@/pages/HomePage";
-import LoginPage from "@/pages/login/LoginPage";
 import NotFound from "@/pages/NotFound";
 import PagamentoPage from "@/pages/payment/PagamentoPage";
 import QuemSomosPage from "@/pages/QuemSomosPage";
@@ -27,6 +28,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/cadastro" element={<RegisterPage />} />
             <Route path="/assinante" element={<AssinantePage />} />
             <Route path="/pagamento" element={<PagamentoPage />} />
             <Route path="/sebos" element={<SebosPage />} />

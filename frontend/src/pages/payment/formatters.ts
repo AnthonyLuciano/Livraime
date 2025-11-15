@@ -47,3 +47,23 @@ export const formatExpiryDate = (value: string) => {
   }
   return numbers;
 };
+
+export function formatPhone(value: string): string {
+  if (!value) return "";
+
+  // Remove tudo que não for número
+  const digits = value.replace(/\D/g, "");
+
+  // (99
+  if (digits.length <= 2) {
+    return `(${digits}`;
+  }
+
+  // (99) 9
+  if (digits.length <= 7) {
+    return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  }
+
+  // (99) 99999-9
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7, 11)}`;
+}

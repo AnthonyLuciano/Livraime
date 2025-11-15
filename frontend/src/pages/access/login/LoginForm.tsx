@@ -75,8 +75,8 @@ export function LoginForm() {
         <div className="mt-6 text-center">
           <p className="text-sm text-muted-foreground">
             Ainda não tem conta?{" "}
-            <Link to="/assinante" className="text-primary hover:underline font-medium">
-              Assine agora
+            <Link to="/cadastro" className="text-primary hover:underline font-medium">
+              Cadastre-se agora
             </Link>
           </p>
         </div>
