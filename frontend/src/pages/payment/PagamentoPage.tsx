@@ -29,14 +29,14 @@ export default function PagamentoPage() {
         nome: data.name,
         email: data.email,
         cpf: data.cpf,
-        // senha: data.,
+        senha: data.password,
         // endereco: data.,
         telefone: "",
         plano: data.plan.nivel,
         dataCadastro: "",
         codigoVerificacao: "",
         endereco: "",
-        senha: "",
+        // senha: "",
       },
       {
         onSuccess: () => {
@@ -63,9 +63,7 @@ export default function PagamentoPage() {
     );
   };
 
-  if (paymentSuccess) {
-    return <PaymentSuccess />;
-  }
+  if (paymentSuccess) return <PaymentSuccess />;
 
   return (
     <div className="min-h-screen bg-gradient-soft py-12 px-4">
