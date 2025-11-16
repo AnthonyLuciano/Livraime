@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
+import Livraime.Unp.Livraime.controller.dto.request.ConfirmEmailRequestDTO;
 
 /**
  * Controller responsável pelo gerenciamento de autenticação de usuários.
@@ -62,7 +63,8 @@ public class AuthController {
         Usuario entity = UsuarioMapper.createToEntity(novoUsuario);
         try {
             userService.createUser(entity);
-            return ResponseEntity.ok("Usuário cadastrado. Verifique seu e-mail para confirmar.");
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body("Usuário cadastrado. Verifique seu e-mail para confirmar.");
         } catch (BadRequestException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
         } catch (ConflictException e) {
@@ -110,15 +112,15 @@ public class AuthController {
     /**
      * Confirma o email do usuário através do código enviado.
      * 
-     * @param email  Email do usuário
-     * @param codigo Código de verificação recebido
-     *               -Anthony
+     * @param email Email do usuário
+     * @param code  Código de verificação recebido
+     *              -Anthony
      */
     @PostMapping("/confirmar-email")
     @Operation(summary = "Confirmar e-mail do usuário")
-    public ResponseEntity<?> confirmarEmail(@RequestParam String email, @RequestParam String codigo) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
-        if (usuarioOpt.isPresent() && codigo.equals(usuarioOpt.get().getCodigoVerificacao())) {
+    public ResponseEntity<String> confirmarEmail(@RequestBody ConfirmEmailRequestDTO request) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.email());
+        if (usuarioOpt.isPresent() && request.code().equals(usuarioOpt.get().getCodigoVerificacao())) {
             Usuario usuario = usuarioOpt.get();
             usuario.setEmailVerificado(true);
             usuario.setCodigoVerificacao(null);

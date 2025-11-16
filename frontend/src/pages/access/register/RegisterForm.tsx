@@ -30,13 +30,13 @@ export function RegisterForm() {
     mutate(user, {
       onSuccess: () => {
         toast({
-          title: "Conta criada com sucesso!",
-          description: "Você será redirecionado para a página de login.",
+          title: "Quase lá! Confirme seu e-mail",
+          description: "Enviamos um código de confirmação para o seu e-mail. Verifique sua caixa de entrada.",
         });
 
         methods.reset();
         setTimeout(() => {
-          navigate("/login");
+          navigate("/confirmar-email", { state: { email: data.email } });
         }, 2000);
       },
       onError: (error) => {

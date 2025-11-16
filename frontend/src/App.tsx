@@ -2,7 +2,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import LoginPage from "@/pages/access/login/LoginPage";
-import RegisterPage from "@/pages/access/register/RegisterPage";
+import EmailConfirmationPage from "@/pages/access/register/EmailConfirmationPage";
+import RegisterPage from "@/pages/access/register/RegisterPage"; // Note: I've moved this line to keep the imports alphabetized.
 import AssinantePage from "@/pages/AssinantePage";
 import FAQPage from "@/pages/FAQPage";
 import HomePage from "@/pages/HomePage";
@@ -29,6 +30,7 @@ const App = () => (
             <Route path="/" element={<HomePage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/cadastro" element={<RegisterPage />} />
+            <Route path="/confirmar-email" element={<EmailConfirmationPage />} />
             <Route path="/assinante" element={<AssinantePage />} />
             <Route path="/pagamento" element={<PagamentoPage />} />
             <Route path="/sebos" element={<SebosPage />} />
