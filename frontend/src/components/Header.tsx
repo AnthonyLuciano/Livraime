@@ -1,17 +1,17 @@
-import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
-import { Menu, X, BookOpen, Heart } from 'lucide-react';
+import { Button } from "@/components/ui/button";
+import { BookOpen, Heart, Menu, X } from "lucide-react";
+import { useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
   const navItems = [
-    { label: 'Home', path: '/' },
-    { label: 'Quem Somos', path: '/quem-somos' },
-    { label: 'Sobre o Projeto', path: '/sobre' },
-    { label: 'FAQ', path: '/faq' },
+    { label: "Home", path: "/" },
+    { label: "Quem Somos", path: "/quem-somos" },
+    { label: "Sobre o Projeto", path: "/sobre" },
+    { label: "FAQ", path: "/faq" },
   ];
 
   const isActive = (path: string) => location.pathname === path;
@@ -25,9 +25,7 @@ const Header = () => {
             <div className="p-2 bg-gradient-hero rounded-lg shadow-button group-hover:scale-105 transition-transform">
               <BookOpen className="h-6 w-6 text-white" />
             </div>
-            <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">
-              Livrai-me
-            </span>
+            <span className="text-xl font-bold bg-gradient-hero bg-clip-text text-transparent">Livrai-me</span>
           </Link>
 
           {/* Desktop Navigation */}
@@ -37,9 +35,7 @@ const Header = () => {
                 key={item.path}
                 to={item.path}
                 className={`font-medium transition-colors hover:text-primary ${
-                  isActive(item.path) 
-                    ? 'text-primary border-b-2 border-primary pb-1' 
-                    : 'text-muted-foreground'
+                  isActive(item.path) ? "text-primary border-b-2 border-primary pb-1" : "text-muted-foreground"
                 }`}
               >
                 {item.label}
@@ -52,6 +48,11 @@ const Header = () => {
             <Link to="/login">
               <Button variant="ghost" size="sm">
                 Login
+              </Button>
+            </Link>
+            <Link to="/cadastro">
+              <Button variant="outline" size="sm">
+                Cadastre-se
               </Button>
             </Link>
             <Link to="/assinante">
@@ -81,9 +82,7 @@ const Header = () => {
                   to={item.path}
                   onClick={() => setIsMenuOpen(false)}
                   className={`font-medium transition-colors hover:text-primary px-4 py-2 ${
-                    isActive(item.path) 
-                      ? 'text-primary bg-accent/50 rounded-lg' 
-                      : 'text-muted-foreground'
+                    isActive(item.path) ? "text-primary bg-accent/50 rounded-lg" : "text-muted-foreground"
                   }`}
                 >
                   {item.label}
@@ -93,6 +92,11 @@ const Header = () => {
                 <Link to="/login" onClick={() => setIsMenuOpen(false)}>
                   <Button variant="ghost" size="sm" className="w-full">
                     Login
+                  </Button>
+                </Link>
+                <Link to="/cadastro" onClick={() => setIsMenuOpen(false)}>
+                  <Button variant="outline" size="sm" className="w-full">
+                    Cadastre-se
                   </Button>
                 </Link>
                 <Link to="/assinante" onClick={() => setIsMenuOpen(false)}>
