@@ -7,6 +7,7 @@
 ## Gestão de usuário
 
 - [x] Listar
-- [] Criar
+- [x] Criar
+- [] Vincular a algum plano
 - [] Editar
 - [] Deletar

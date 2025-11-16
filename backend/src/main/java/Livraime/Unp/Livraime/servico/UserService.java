@@ -1,5 +1,6 @@
 package Livraime.Unp.Livraime.servico;
 
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,14 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    public Usuario getById(int id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public List<Usuario> getAll() {
+        return repository.findAll();
+    }
 
     public Usuario createUser(Usuario user) throws Exception {
         if (user == null)

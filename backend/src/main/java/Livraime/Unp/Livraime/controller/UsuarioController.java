@@ -1,8 +1,9 @@
 package Livraime.Unp.Livraime.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -11,9 +12,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import Livraime.Unp.Livraime.controller.dto.mapper.UsuarioMapper;
 import Livraime.Unp.Livraime.controller.dto.response.UsuarioResponseDTO;
-import Livraime.Unp.Livraime.modelo.Endereco;
-import Livraime.Unp.Livraime.modelo.Phone;
 import Livraime.Unp.Livraime.modelo.Usuario;
+import Livraime.Unp.Livraime.servico.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
@@ -22,7 +22,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 @Tag(name = "Usuario", description = "Gerenciamento de usuarios assinantes")
 public class UsuarioController {
 
-    private List<Usuario> usuarios = new ArrayList<>();
+    @Autowired
+    private UserService service;
 
     /**
      * Lista todos os usuários cadastrados no sistema.
@@ -31,11 +32,14 @@ public class UsuarioController {
      */
     @GetMapping
     @Operation(summary = "Listar todos os usuarios")
-    public List<UsuarioResponseDTO> listarusuarios() {
-        usuarios.add(new Usuario("joao", "joao@gmail.com",
-                "99999999999",
-                "123123123", new Endereco(), new Phone("84", "9999999999"), "133231", true));
-        return UsuarioMapper.toResponseList(usuarios);
+    public ResponseEntity<?> listarusuarios() {
+        try {
+            List<Usuario> usuarios = service.getAll();
+            List<UsuarioResponseDTO> usuariosDTO = UsuarioMapper.toResponseList(usuarios);
+            return ResponseEntity.ok(usuariosDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 
     /**
@@ -47,12 +51,13 @@ public class UsuarioController {
      */
     @GetMapping("/{id}")
     @Operation(summary = "Buscar usuario por ID")
-    public ResponseEntity<UsuarioResponseDTO> buscarPorId(@PathVariable int id) {
-        return usuarios.stream()
-                .filter(c -> c.getId() == id)
-                .findFirst()
-                .map(UsuarioMapper::toResponse)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<?> buscarPorId(@PathVariable int id) {
+        try {
+            var usuario = service.getById(id);
+            var usuarioResponseDTO = UsuarioMapper.toResponse(usuario);
+            return ResponseEntity.ok(usuarioResponseDTO);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
 }
