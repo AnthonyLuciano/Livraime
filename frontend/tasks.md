@@ -24,7 +24,7 @@
   - [x] confirmar email
   - [x] reenviar cógigo
 
-- [ ] feat: elaborar página de "Reenviar código" -[ ] refactor: enviar logica de reenvio para service
+- [ ] feat: elaborar requisição de "Reenviar código"
 
 - [] Corrigir: Mensagem de erro no input de telefone
 - [] Corrigir: Verificar CPF antes de criar usuário

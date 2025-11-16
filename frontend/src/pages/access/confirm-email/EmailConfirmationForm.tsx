@@ -4,9 +4,9 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel } fr
 import { Input } from "@/components/ui/input";
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 import { toast } from "@/hooks/use-toast";
-import { emailConfirmationSchema } from "@/pages/access/register/email-confirmation.schema";
 import { authService } from "@/services/auth.service";
 import { EmailConfirmationFormData } from "@/types/auth.type";
+import { emailConfirmationSchema } from "@/types/validators/email-confirmation.schema";
 import { createErrorMessage } from "@/utils/factories/error.factory";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
