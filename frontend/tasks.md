@@ -8,7 +8,9 @@
 
 - [x] Listar
 - [x] Criar
+
   - [x] Botão de cadastro no "header"
+
 - [x] Tela de confirmação de email
 
   - [x] Nova rota
@@ -16,12 +18,18 @@
   - [x] Inserir email do usuário cadastrado por baixo dos panos
   - [x] Integrar com API
 
-- [] feat: elaborar página de "Reenviar código"
+- [x] refactor: separar responsabilidades entre camadas no "UserController" e "UserService"
+
+  - [x] login usuário
+  - [x] confirmar email
+  - [x] reenviar cógigo
+
+- [ ] feat: elaborar página de "Reenviar código" -[ ] refactor: enviar logica de reenvio para service
 
 - [] Corrigir: Mensagem de erro no input de telefone
 - [] Corrigir: Verificar CPF antes de criar usuário
 - [] Feat: Implementar flag "email ativo" no adm
 
-- [] Vincular a algum plano
+- [] Vincular usuário a algum plano
 - [] Editar
 - [] Deletar
