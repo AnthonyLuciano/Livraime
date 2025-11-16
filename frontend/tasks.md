@@ -24,12 +24,21 @@
   - [x] confirmar email
   - [x] reenviar cógigo
 
-- [ ] feat: elaborar requisição de "Reenviar código"
+- [x] feat: elaborar requisição de "Reenviar código"
 
+- [ ] Editar
+- [ ] Deletar
+- [ ] Vincular usuário a algum plano
+
+  - [ ] Remover campos de usuário na página de planos
+  - [ ] Elaborar recurso visual para exibir o plano vinculado
+
+- [ ] Elaborar login de usuário
+
+  - [ ] Integrar api de login de usuário
+  - [ ] Persistir credenciais de usuário na sessão do usuáio
+  - [ ] Inserir botão de logout caso usuário esteja logado
+
+- [] Feat: Implementar flag "email ativo" no adm
 - [] Corrigir: Mensagem de erro no input de telefone
 - [] Corrigir: Verificar CPF antes de criar usuário
-- [] Feat: Implementar flag "email ativo" no adm
-
-- [] Vincular usuário a algum plano
-- [] Editar
-- [] Deletar

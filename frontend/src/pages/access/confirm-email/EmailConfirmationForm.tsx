@@ -13,6 +13,7 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router-dom";
+import { ResendCode } from "./ResendCode";
 
 export function EmailConfirmationForm() {
   const [isPending, setIsPending] = useState(false);
@@ -79,8 +80,11 @@ export function EmailConfirmationForm() {
                 <FormItem>
                   <FormLabel>E-mail</FormLabel>
                   <FormControl>
-                    <Input {...field} readOnly placeholder="seu@email.com" />
+                    <Input {...field} placeholder="seu@email.com" />
                   </FormControl>
+                  {form.formState.errors.email && (
+                    <p className="text-sm text-destructive">{form.formState.errors.email.message}</p>
+                  )}
                 </FormItem>
               )}
             />
@@ -114,11 +118,7 @@ export function EmailConfirmationForm() {
             </Button>
           </form>
         </Form>
-        <div className="mt-6 text-left text-sm">
-          <p className="text-muted-foreground">
-            Não recebeu o código? <button className="text-primary hover:underline font-medium">Reenviar código</button>
-          </p>
-        </div>
+        <ResendCode form={form} />
       </CardContent>
     </Card>
   );
