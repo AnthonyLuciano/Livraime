@@ -1,4 +1,3 @@
-import { Plan } from "@/types/plan.types";
 import { Address } from "@/types/validators/payment.schema";
 
 export interface User {
@@ -34,7 +33,6 @@ export interface CreateUserDto {
   senha: string;
   endereco: Address;
   telefone: Phone;
-  plano: Plan;
 }
 
 export interface Phone {
