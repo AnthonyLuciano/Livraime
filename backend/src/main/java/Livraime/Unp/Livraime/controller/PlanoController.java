@@ -14,6 +14,7 @@ import Livraime.Unp.Livraime.servico.PlanoService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,12 +27,8 @@ import java.util.stream.Collectors;
 @Tag(name = "Planos", description = "Planos de assinatura disponíveis")
 public class PlanoController {
 
-    private final PlanoService planoService;
-
-    public PlanoController(PlanoService planoService) {
-        this.planoService = planoService;
-    }
-    
+    @Autowired
+    private PlanoService planoService;
 
     /**
      * Lista todos os planos de assinatura disponíveis.
@@ -66,10 +63,14 @@ public class PlanoController {
     @Operation(summary = "Vincular plano a um usuário pelo CPF")
     public ResponseEntity<String> vincularPlano(@RequestBody VincularPlanoRequest request){
         try{
-            planoService.vincularPlanoAUsuario(request.getCpf(), request.getPlano());
+            planoService.vincularPlanoAUsuario(request.cpf(), request.Plano());
             return ResponseEntity.ok("Plano vinculado com sucesso.");
         } catch (RuntimeException e){
-            return ResponseEntity.badRequest().body(e.getMessage());
+           if (e.getMessage().contains("Usuario não encontrado")){
+                return ResponseEntity.status(404).body(e.getMessage())
+           }
+           return ResponseEntity.badRequest().body(e.getMessage());
         }
+         
     }
 }
