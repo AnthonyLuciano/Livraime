@@ -3,40 +3,36 @@ package Livraime.Unp.Livraime.servico;
 import Livraime.Unp.Livraime.modelo.Usuario;
 import Livraime.Unp.Livraime.modelo.Plano;
 import Livraime.Unp.Livraime.modelo.Subscription;
+import Livraime.Unp.Livraime.exceptions.ResourceNotFoundException;
 import Livraime.Unp.Livraime.modelo.Beneficiado;
 import Livraime.Unp.Livraime.modelo.Donation;
 import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
 import Livraime.Unp.Livraime.repositorio.BeneficiadoRepository;
 import Livraime.Unp.Livraime.repositorio.SubscriptionRepository;
 import Livraime.Unp.Livraime.repositorio.DonationRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Random;
 
 @Service
 public class PlanoService {
+    @Autowired
+    private UsuarioRepository usuarioRepository;
+    @Autowired
+    private BeneficiadoRepository beneficiadoRepository;
+    @Autowired
+    private SubscriptionRepository subscriptionRepository;
+    @Autowired
+    private DonationRepository donationRepository;
 
-    private final UsuarioRepository usuarioRepository;
-    private final BeneficiadoRepository beneficiadoRepository;
-    private final SubscriptionRepository subscriptionRepository;
-    private final DonationRepository donationRepository;
-
-    public PlanoService(UsuarioRepository usuarioRepository, 
-                       BeneficiadoRepository beneficiadoRepository,
-                       SubscriptionRepository subscriptionRepository,
-                       DonationRepository donationRepository) {
-        this.usuarioRepository = usuarioRepository;
-        this.beneficiadoRepository = beneficiadoRepository;
-        this.subscriptionRepository = subscriptionRepository;
-        this.donationRepository = donationRepository;
-    }
 
     public void vincularPlanoAUsuario(String cpf, String planoInput) {
         Usuario usuario = usuarioRepository.findByCpf(cpf)
-                .orElseThrow(() -> new RuntimeException("Usuário não encontrado com CPF: " + cpf));
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado com CPF: " + cpf));
         Plano plano = Plano.fromInput(planoInput);
         usuario.setPlano(plano);
         usuarioRepository.save(usuario);
