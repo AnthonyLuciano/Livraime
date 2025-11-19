@@ -110,7 +110,8 @@ public class AdminController {
         List<MetricDto> resultado = new ArrayList<>();
         LocalDate hoje = LocalDate.now();
 
-        for (int i = 5; i >= 0; i--) {
+    // Alteração: incluir do mês atual até 5 meses atrás
+    for (int i = 0; i < 6; i++) {
             LocalDate dataDoMes = hoje.minusMonths(i);
             LocalDate inicioDoMes = dataDoMes.withDayOfMonth(1);
             LocalDate fimDoMes = dataDoMes.withDayOfMonth(dataDoMes.lengthOfMonth());
@@ -125,7 +126,7 @@ public class AdminController {
             long donatedBooks = countDonatedBooksBetween(inicio, fim);
             long partners = countPartnersAtMonthEnd(fim);
 
-            resultado.add(new MetricDto(mes, subscriptions, donatedBooks, partners));
+        resultado.add(0, new MetricDto(mes, subscriptions, donatedBooks, partners)); // Inserir no início
         }
 
         return resultado;
