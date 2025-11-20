@@ -40,6 +40,15 @@ export default function CreatePartnerDialogComponent({ onCreate }: CreatePartner
     active: true,
   });
 
+  const [emailError, setEmailError] = useState<string | null>(null);
+
+  function validateEmail(email: string) {
+    //Regex de email
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+  }
+  
+  const [open, setOpen] = useState(false); //Fecha o dialog após clicar em "CADASTRAR"
+
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -48,12 +57,14 @@ export default function CreatePartnerDialogComponent({ onCreate }: CreatePartner
   function handleSave() {
     const newPartner: Partner = { ...formData, id: Date.now() };
     onCreate(newPartner);
+    setOpen(false); //Fecha o dialog após clicar em "CADASTRAR"
   }
 
   return (
-    <Dialog>
+    
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button size="sm">
+        <Button size="sm" onClick={() => setOpen(true)}>
           <Plus className="h-4 w-4 mr-2" /> Novo Parceiro
         </Button>
       </DialogTrigger>
@@ -95,13 +106,30 @@ export default function CreatePartnerDialogComponent({ onCreate }: CreatePartner
               id="email"
               name="contact.email"
               value={formData.contact.email}
-              onChange={(e) =>
+              onChange={(e) => {
+                const value = e.target.value;
                 setFormData((prev) => ({
                   ...prev,
-                  contact: { ...prev.contact, email: e.target.value },
-                }))
-              }
+                  contact: { ...prev.contact, email: value },
+                }));
+                setEmailError(null); // Retira mensagem de erro enquanto digita
+              }}
+              onBlur={(e) => {
+                const value = e.target.value.trim().toLowerCase();
+                setFormData((prev) => ({
+                  ...prev,
+                  contact: { ...prev.contact, email: value },
+                }));
+                if (!validateEmail(value)) {
+                  setEmailError("E-mail inválido");
+                }
+              }}
+              type="email"
+              autoComplete="email"
             />
+            {emailError && ( //Se o email for inválido, aparece um erro. Caso for válido, não aparece nada (fica implícito)
+              <span style={{ color: "red", fontSize: 12 }}>{emailError}</span>
+            )}
           </div>
 
           <div className="grid gap-2">
