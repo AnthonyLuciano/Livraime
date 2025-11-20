@@ -43,6 +43,10 @@ public class UserService {
         if (repository.findByEmail(user.getEmail()).isPresent())
             throw new ConflictException("Não foi possível prosseguir com o cadastro, pois email já sendo utilizado.");
 
+        // Verificar se cpf está em uso ou não
+        if (repository.findByCpf(user.getCpf()).isPresent())
+            throw new ConflictException("Não foi possível prosseguir com o cadastro, pois CPF já está sendo utilizado.");
+
         String codigoVerificacao = String.format("%06d", new Random().nextInt(999999));
         user.setCodigoVerificacao(codigoVerificacao);
 
