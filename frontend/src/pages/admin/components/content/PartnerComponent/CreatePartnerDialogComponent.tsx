@@ -16,6 +16,16 @@ import { Partner } from "@/types/partner.types";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 
+function formatPhone(value: string) {
+
+  const digits = value.replace(/\D/g, '').slice(0, 11); //Regex para aceitar apenas números
+  //Máscara do padrão "(11) 01234-5678"
+  if (digits.length <= 2) return `(${digits}`;
+  if (digits.length <= 7)
+    return `(${digits.slice(0, 2)}) ${digits.slice(2)}`;
+  return `(${digits.slice(0, 2)}) ${digits.slice(2, 7)}-${digits.slice(7)}`;
+}
+
 interface CreatePartnerDialogProps {
   onCreate: (partner: Partner) => void;
 }
@@ -68,7 +78,12 @@ export default function CreatePartnerDialogComponent({ onCreate }: CreatePartner
               id="serviceDescription"
               name="serviceDescription"
               value={formData.serviceDescription}
-            //   onChange={handleChange}
+              onChange={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                serviceDescription: e.target.value,
+              }))
+            }
             />
           </div>
 
@@ -97,12 +112,16 @@ export default function CreatePartnerDialogComponent({ onCreate }: CreatePartner
               id="phone"
               name="contact.phone"
               value={formData.contact.phone}
-              onChange={(e) =>
+              inputMode="numeric"
+              pattern="[0-9]*" //Significa: "0 ou mais digitos" para ser consideraddo válido
+              maxLength={16} // Contabiliza desde os sinais até os números
+              onChange={(e) => {
+                const formatted = formatPhone(e.target.value);
                 setFormData((prev) => ({
                   ...prev,
-                  contact: { ...prev.contact, phone: e.target.value },
-                }))
-              }
+                  contact: { ...prev.contact, phone: formatted },
+                }));
+              }}
             />
           </div>
 
