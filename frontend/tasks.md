@@ -26,6 +26,7 @@
 
 - [x] feat: elaborar requisição de "Reenviar código"
 
+- [ ] Login de usuário
 - [ ] Editar
 - [ ] Deletar
 - [ ] Vincular usuário a algum plano
