@@ -2,27 +2,51 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { LoginFormData } from "@/types/login.type";
+import { useLogin } from "@/hooks/tanstack-query/auth/useLogin";
+import { useToast } from "@/hooks/use-toast";
+import { LoginFormData, LoginResponse } from "@/types/login.type";
 import { loginSchema } from "@/types/validators/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import axios from "axios";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
+  const { login, isPending } = useLogin();
+
+  const navigate = useNavigate();
+  const { toast } = useToast();
 
   const form = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
-      password: "",
+      senha: "",
     },
   });
 
   const onSubmit = (data: LoginFormData) => {
-    console.log("Simulando envio de login com os dados:", data);
+    login(data, {
+      onSuccess: () => {
+        toast({
+          title: "Login realizado com sucesso!",
+          description: "Você será redirecionado para a página principal.",
+        });
+        navigate("/");
+      },
+      onError: (error) => {
+        console.log("Erro:", error);
+
+        toast({
+          title: "Erro ao realizar login",
+          description: axios.isAxiosError(error) ? (error.response.data as LoginResponse).message : "Erro desconhecido",
+          variant: "destructive",
+        });
+      },
+    });
   };
 
   return (
@@ -56,7 +80,7 @@ export function LoginForm() {
 
             <FormField
               control={form.control}
-              name="password"
+              name="senha"
               render={({ field }) => (
                 <FormItem>
                   <FormLabel>Senha</FormLabel>
@@ -90,10 +114,10 @@ export function LoginForm() {
 
             <Button
               type="submit"
-              disabled={form.formState.isSubmitting}
+              disabled={isPending}
               className="w-full bg-gradient-hero hover:opacity-90 shadow-button"
             >
-              {form.formState.isSubmitting ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Entrar"}
+              {isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : "Entrar"}
             </Button>
           </form>
         </Form>
