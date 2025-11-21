@@ -29,7 +29,6 @@ public final class UsuarioMapper {
             return null;
         String planoNome = null;
         if (u.getPlano() != null) {
-            // usa getNivel() para manter consistência com representação dos planos
             planoNome = u.getPlano().getNivel();
         }
         return new UsuarioResponseDTO(
@@ -41,7 +40,8 @@ public final class UsuarioMapper {
                 u.getTelefone(),
                 planoNome,
                 u.getDataCadastro(),
-                u.isAtivo());
+                u.isAtivo(),
+                u.getRoles());
     }
 
     public static List<UsuarioResponseDTO> toResponseList(List<Usuario> usuarios) {
