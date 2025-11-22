@@ -1,5 +1,7 @@
 package Livraime.Unp.Livraime.controller.dto.response;
 
+import java.util.List;
+import Livraime.Unp.Livraime.modelo.Role;
 import java.time.LocalDateTime;
 
 import Livraime.Unp.Livraime.modelo.Endereco;
@@ -14,5 +16,6 @@ public record UsuarioResponseDTO(
                 Phone telefone,
                 String plano,
                 LocalDateTime dataCadastro,
-                boolean ativo) {
+                boolean ativo,
+                List<Role> roles) {
 }

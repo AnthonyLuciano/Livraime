@@ -8,12 +8,17 @@ package Livraime.Unp.Livraime.controller;
  */
 
 import Livraime.Unp.Livraime.modelo.Parceiro;
+import Livraime.Unp.Livraime.controller.dto.request.SolicitacaoParceiriaRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
 
 @RestController
 @RequestMapping("/api/parceiros")
@@ -22,6 +27,21 @@ public class ParceiroController {
 
     private List<Parceiro> parceirosList = new ArrayList<>();
 
+    @PostMapping("/solicitar")
+    public ResponseEntity<String> postMethodName(@RequestBody SolicitacaoParceiriaRequest request) {
+        try{
+            //logging only:
+            System.out.println("Nova solicitação de parceiro recebida:");
+            System.out.println("Nome: " + request.nome());
+            System.out.println("Email: " + request.email());
+            System.out.println("Tipo: " + request.tipo());
+
+            return ResponseEntity.ok("Solicitação de parceria enviada com sucesso! Entraremos em contato em até 48 horas.");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Erro ao processar solicitação: " + e.getMessage());
+        }
+    }
+    
     /**
      * Lista todos os parceiros cadastrados no sistema.
      * Inclui sebos e autores independentes.
@@ -34,18 +54,6 @@ public class ParceiroController {
     }
 
     /**
-     * Cadastra um novo parceiro no sistema.
-     * @param novoParceiro Dados do novo parceiro a ser cadastrado
-     * -Anthony
-     */
-    @PostMapping
-    @Operation(summary = "Cadastrar novo parceiro")
-    public Parceiro criarParceiro(@RequestBody Parceiro novoParceiro) {
-        parceirosList.add(novoParceiro);
-        return novoParceiro;
-    }
-
-    /**
      * Busca um parceiro específico pelo seu ID.
      * @param id ID do parceiro a ser buscado
      * -Anthony
@@ -55,4 +63,5 @@ public class ParceiroController {
     public Parceiro buscarPorId(@PathVariable int id) {
         return parceirosList.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
     }
+
 }

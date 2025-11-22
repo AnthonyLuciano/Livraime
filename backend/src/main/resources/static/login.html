@@ -57,10 +57,15 @@ document.getElementById("cadastroForm").onsubmit = async function(e) {
 
 document.getElementById("loginForm").onsubmit = async function(e) {
     e.preventDefault();
-    const params = new URLSearchParams();
-    params.append("email", document.getElementById("loginEmail").value);
-    params.append("senha", document.getElementById("loginSenha").value);
-    const resp = await fetch(api + "/login?" + params, { method: "POST" });
+    const loginData = {
+        email: document.getElementById("loginEmail").value,
+        senha: document.getElementById("loginSenha").value
+    };
+    const resp = await fetch(api + "/login", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(loginData)
+    });
     document.getElementById("loginMsg").innerText = await resp.text();
 };
 
@@ -69,15 +74,22 @@ document.getElementById("confirmarForm").onsubmit = async function(e) {
     const params = new URLSearchParams();
     params.append("email", document.getElementById("confEmail").value);
     params.append("codigo", document.getElementById("confCodigo").value);
-    const resp = await fetch(api + "/confirmar-email?" + params, { method: "POST" });
+    const resp = await fetch(api + "/confirmar-email?" + params, { 
+        method: "POST" 
+    });
     document.getElementById("confMsg").innerText = await resp.text();
 };
 
 document.getElementById("reenviarForm").onsubmit = async function(e) {
     e.preventDefault();
-    const params = new URLSearchParams();
-    params.append("email", document.getElementById("reenviarEmail").value);
-    const resp = await fetch(api + "/reenviar-codigo?" + params, { method: "POST" });
+    const reenviarData = {
+        email: document.getElementById("reenviarEmail").value
+    };
+    const resp = await fetch(api + "/reenviar-codigo", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify(reenviarData)
+    });
     document.getElementById("reenviarMsg").innerText = await resp.text();
 };
 </script>
