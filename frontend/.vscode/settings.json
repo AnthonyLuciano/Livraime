@@ -12,7 +12,8 @@
     "@radix-ui/react-menubar",
     "cluster",
     "react-day-picker",
-    "@radix-ui/react-popover"
+    "@radix-ui/react-popover",
+    "vm"
   ],
   "cSpell.language": "en,pt,pt-BR"
 }

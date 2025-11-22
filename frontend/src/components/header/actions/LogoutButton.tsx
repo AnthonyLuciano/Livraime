@@ -1,12 +1,15 @@
-import { auth } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { AuthContext } from "@/contexts/AuthContext";
 import { PopoverClose } from "@radix-ui/react-popover";
 import { LogOut } from "lucide-react";
+import { useContext } from "react";
 
 function LogoutButton() {
+  const { logout } = useContext(AuthContext);
+
   function handleSignOut() {
-    auth.removeUser();
+    logout();
     window.location.reload();
   }
 

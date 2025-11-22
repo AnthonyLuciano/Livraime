@@ -1,6 +1,7 @@
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { AuthProvider } from "@/contexts/AuthProvider";
 import EmailConfirmationPage from "@/pages/access/confirm-email/EmailConfirmationPage";
 import LoginPage from "@/pages/access/login/LoginPage";
 import RegisterPage from "@/pages/access/register/RegisterPage"; // Note: I've moved this line to keep the imports alphabetized.
@@ -25,22 +26,24 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/cadastro" element={<RegisterPage />} />
-            <Route path="/confirmar-email" element={<EmailConfirmationPage />} />
-            <Route path="/assinante" element={<AssinantePage />} />
-            <Route path="/pagamento" element={<PagamentoPage />} />
-            <Route path="/sebos" element={<SebosPage />} />
-            <Route path="/admin" element={<AdminPage />} />
-            <Route path="/quem-somos" element={<QuemSomosPage />} />
-            <Route path="/sobre" element={<SobrePage />} />
-            <Route path="/faq" element={<FAQPage />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+        <AuthProvider>
+          <Layout>
+            <Routes>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/cadastro" element={<RegisterPage />} />
+              <Route path="/confirmar-email" element={<EmailConfirmationPage />} />
+              <Route path="/assinante" element={<AssinantePage />} />
+              <Route path="/pagamento" element={<PagamentoPage />} />
+              <Route path="/sebos" element={<SebosPage />} />
+              <Route path="/admin" element={<AdminPage />} />
+              <Route path="/quem-somos" element={<QuemSomosPage />} />
+              <Route path="/sobre" element={<SobrePage />} />
+              <Route path="/faq" element={<FAQPage />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Layout>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

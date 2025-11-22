@@ -1,12 +1,14 @@
-import { auth } from "@/auth/auth";
 import AuthButtons from "@/components/header/actions/AuthButtons";
 import LogoutButton from "@/components/header/actions/LogoutButton";
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/contexts/AuthContext";
 import { Heart } from "lucide-react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 export default function HeaderActions() {
-  const hasUser = !!auth.getUser();
+  const { user } = useContext(AuthContext);
+  const hasUser = !!user;
 
   return (
     <div className="hidden md:flex items-center space-x-4">

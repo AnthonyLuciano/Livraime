@@ -1,8 +1,8 @@
-import { auth } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { AuthContext } from "@/contexts/AuthContext";
 import { useLogin } from "@/hooks/tanstack-query/auth/useLogin";
 import { useToast } from "@/hooks/use-toast";
 import { LoginFormData, LoginResponse } from "@/types/login.type";
@@ -10,13 +10,14 @@ import { loginSchema } from "@/types/validators/login.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 export function LoginForm() {
   const [showPassword, setShowPassword] = useState(false);
   const { login, isPending } = useLogin();
+  const { login: storeUser } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -32,7 +33,7 @@ export function LoginForm() {
   const onSubmit = (data: LoginFormData) => {
     login(data, {
       onSuccess: (response) => {
-        auth.storeUser(response.user);
+        storeUser(response.user);
 
         toast({
           title: "Login realizado com sucesso!",
