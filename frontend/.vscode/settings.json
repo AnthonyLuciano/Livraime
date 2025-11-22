@@ -10,6 +10,9 @@
     "@radix-ui/react-context-menu",
     "@radix-ui/react-dropdown-menu",
     "@radix-ui/react-menubar",
-    "cluster"
-  ]
+    "cluster",
+    "react-day-picker",
+    "@radix-ui/react-popover"
+  ],
+  "cSpell.language": "en,pt,pt-BR"
 }

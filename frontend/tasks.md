@@ -22,14 +22,15 @@
 
   - [x] login usuário
   - [x] confirmar email
-  - [x] reenviar cógigo
+  - [x] reenviar código
 
 - [x] feat: elaborar requisição de "Reenviar código"
 
 - [x] Login de usuário
-  - [ ] Persistir em storage
-    - [ ] Mudar ações no header do sistema
+  - [x] Persistir em storage
+    - [x] Mudar ações no header do sistema
   - [ ] Ação de "logout"
+  - [ ] Efetuar permissionamento baseado na role do usuário
 - [ ] Editar
 - [ ] Deletar
 - [ ] Vincular usuário a algum plano
@@ -40,7 +41,7 @@
 - [ ] Elaborar login de usuário
 
   - [ ] Integrar api de login de usuário
-  - [ ] Persistir credenciais de usuário na sessão do usuáio
+  - [ ] Persistir credenciais de usuário na sessão do usuário
   - [ ] Inserir botão de logout caso usuário esteja logado
 
 - [] Feat: Implementar flag "email ativo" no adm
