@@ -1,3 +1,4 @@
+import { auth } from "@/auth/auth";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
@@ -30,7 +31,9 @@ export function LoginForm() {
 
   const onSubmit = (data: LoginFormData) => {
     login(data, {
-      onSuccess: () => {
+      onSuccess: (response) => {
+        auth.storeUser(response.user);
+
         toast({
           title: "Login realizado com sucesso!",
           description: "Você será redirecionado para a página principal.",

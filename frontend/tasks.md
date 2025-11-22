@@ -27,6 +27,9 @@
 - [x] feat: elaborar requisição de "Reenviar código"
 
 - [x] Login de usuário
+  - [ ] Persistir em storage
+    - [ ] Mudar ações no header do sistema
+  - [ ] Ação de "logout"
 - [ ] Editar
 - [ ] Deletar
 - [ ] Vincular usuário a algum plano
