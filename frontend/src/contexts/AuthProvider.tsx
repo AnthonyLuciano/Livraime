@@ -4,10 +4,15 @@ import { useEffect, useState } from "react";
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState<UserFromAPI | null>(null);
+  const [loading, setLoading] = useState(true); // <<< aqui
 
   useEffect(() => {
     const saved = localStorage.getItem("user");
-    if (saved) setUser(JSON.parse(saved));
+    if (saved) {
+      setUser(JSON.parse(saved));
+    }
+
+    setLoading(false);
   }, []);
 
   function login(user: UserFromAPI) {
@@ -20,5 +25,5 @@ export function AuthProvider({ children }) {
     setUser(null);
   }
 
-  return <AuthContext.Provider value={{ user, login, logout }}>{children}</AuthContext.Provider>;
+  return <AuthContext.Provider value={{ user, login, logout, isLoading: loading }}>{children}</AuthContext.Provider>;
 }

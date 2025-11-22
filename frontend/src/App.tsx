@@ -5,18 +5,19 @@ import { AuthProvider } from "@/contexts/AuthProvider";
 import EmailConfirmationPage from "@/pages/access/confirm-email/EmailConfirmationPage";
 import LoginPage from "@/pages/access/login/LoginPage";
 import RegisterPage from "@/pages/access/register/RegisterPage"; // Note: I've moved this line to keep the imports alphabetized.
-import AssinantePage from "@/pages/AssinantePage";
+import AdminPage from "@/pages/admin/AdminPage";
 import FAQPage from "@/pages/FAQPage";
 import HomePage from "@/pages/HomePage";
 import NotFound from "@/pages/NotFound";
-import PagamentoPage from "@/pages/payment/PagamentoPage";
+import PaymentPage from "@/pages/payment/PaymentPage";
 import QuemSomosPage from "@/pages/QuemSomosPage";
 import SebosPage from "@/pages/SebosPage";
 import SobrePage from "@/pages/SobrePage";
+import AssinantePage from "@/pages/subscriber/SubscriberPage";
+import ProtectedAdminRoutes from "@/utils/router-guards/protected-admin-routes/ProtectedAdminRoutes";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
-import AdminPage from "./pages/admin/AdminPage";
 
 const queryClient = new QueryClient();
 
@@ -34,9 +35,11 @@ const App = () => (
               <Route path="/cadastro" element={<RegisterPage />} />
               <Route path="/confirmar-email" element={<EmailConfirmationPage />} />
               <Route path="/assinante" element={<AssinantePage />} />
-              <Route path="/pagamento" element={<PagamentoPage />} />
+              <Route path="/pagamento" element={<PaymentPage />} />
               <Route path="/sebos" element={<SebosPage />} />
-              <Route path="/admin" element={<AdminPage />} />
+              <Route element={<ProtectedAdminRoutes />}>
+                <Route path="/admin" element={<AdminPage />} />
+              </Route>
               <Route path="/quem-somos" element={<QuemSomosPage />} />
               <Route path="/sobre" element={<SobrePage />} />
               <Route path="/faq" element={<FAQPage />} />

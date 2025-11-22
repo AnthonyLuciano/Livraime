@@ -13,7 +13,8 @@
     "cluster",
     "react-day-picker",
     "@radix-ui/react-popover",
-    "vm"
+    "vm",
+    "@radix-ui/react-tabs"
   ],
   "cSpell.language": "en,pt,pt-BR"
 }

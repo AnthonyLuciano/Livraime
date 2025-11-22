@@ -3,6 +3,7 @@ import { createContext } from "react";
 
 interface AuthContextType {
   user: UserFromAPI | null;
+  isLoading: boolean;
   login: (user: UserFromAPI) => void;
   logout: () => void;
 }

@@ -1,3 +1,3 @@
-export const userRoles = ["USER"] as const;
+export const userRoles = ["USER", "ADMIN", "PARTNER", "AUTHOR"] as const;
 
 export type UserRole = (typeof userRoles)[number];

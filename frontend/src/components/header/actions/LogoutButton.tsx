@@ -15,7 +15,7 @@ function LogoutButton() {
 
   return (
     <Popover>
-      <PopoverTrigger>
+      <PopoverTrigger asChild>
         <Button variant="ghost" size="sm">
           <LogOut className="h-4 w-4 mr-2" />
           Sair

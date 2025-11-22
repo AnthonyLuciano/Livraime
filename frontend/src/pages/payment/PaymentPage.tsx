@@ -1,5 +1,6 @@
 import { useCreateUser } from "@/hooks/tanstack-query/user/useCreateUser";
 import { toast } from "@/hooks/use-toast";
+import { useHasUser } from "@/hooks/useHasUser";
 import { extractPhone } from "@/pages/payment/formatters";
 import { PaymentSummary } from "@/pages/payment/PaymentSummary";
 import { PlanFromAPI } from "@/types/plan.types";
@@ -7,15 +8,15 @@ import { CreateUserDto } from "@/types/user.types";
 import { PaymentFormData, paymentSchema } from "@/types/validators/payment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { PaymentForm } from "./form/PaymentForm";
 import { PaymentSuccess } from "./PaymentSuccess";
 
-export default function PagamentoPage() {
+export default function PaymentPage() {
   const navigate = useNavigate();
-
+  const { hasUser } = useHasUser();
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PlanFromAPI | null>(null);
 
@@ -51,6 +52,22 @@ export default function PagamentoPage() {
     });
   };
 
+  useEffect(() => {
+    if (!hasUser)
+      setTimeout(
+        () => {
+          navigate("/login", { replace: true });
+          toast({
+            title: "Redirecionado para página de login",
+            description: "É necessário efetuar login para acessar essa página.",
+            duration: 5000,
+          });
+        },
+
+        1000
+      );
+  }, [hasUser, navigate]);
+
   if (paymentSuccess) return <PaymentSuccess />;
 
   return (
@@ -75,6 +92,7 @@ export default function PagamentoPage() {
     </div>
   );
 }
+
 function createUserDTO(data: PaymentFormData): CreateUserDto {
   const { areaCode, number } = extractPhone(data.phone);
 
@@ -88,6 +106,5 @@ function createUserDTO(data: PaymentFormData): CreateUserDto {
       areaCode,
       number,
     },
-    plano: data.plan.nivel,
   };
 }
