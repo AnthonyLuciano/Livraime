@@ -22,11 +22,22 @@
 
   - [x] login usuário
   - [x] confirmar email
-  - [x] reenviar cógigo
+  - [x] reenviar código
 
 - [x] feat: elaborar requisição de "Reenviar código"
 
 - [x] Login de usuário
+
+  - [x] Persistir em storage
+
+    - [x] Mudar ações no header do sistema
+    - [x] Ação de "logout"
+    - [x] Somente exibir "página de usuário" caso haja sessão
+    - [x] Redirecionar para login ao tentar assinar plano e não haja sessão
+
+  - [x] Efetuar autorização baseado na role do usuário
+        -> Página adm
+
 - [ ] Editar
 - [ ] Deletar
 - [ ] Vincular usuário a algum plano
@@ -34,12 +45,8 @@
   - [ ] Remover campos de usuário na página de planos
   - [ ] Elaborar recurso visual para exibir o plano vinculado
 
-- [ ] Elaborar login de usuário
-
-  - [ ] Integrar api de login de usuário
-  - [ ] Persistir credenciais de usuário na sessão do usuáio
-  - [ ] Inserir botão de logout caso usuário esteja logado
-
+- [ ] Integrar api de planos
+- [ ] integrar api de exibir beneficiados
 - [] Feat: Implementar flag "email ativo" no adm
 - [] Corrigir: Mensagem de erro no input de telefone
 - [] Corrigir: Verificar CPF antes de criar usuário

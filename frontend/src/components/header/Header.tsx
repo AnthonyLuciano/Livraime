@@ -1,9 +1,10 @@
+import HeaderActions from "@/components/header/actions/HeaderActions";
 import { Button } from "@/components/ui/button";
 import { BookOpen, Heart, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 
-const Header = () => {
+function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const location = useLocation();
 
@@ -43,25 +44,7 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Actions */}
-          <div className="hidden md:flex items-center space-x-4">
-            <Link to="/login">
-              <Button variant="ghost" size="sm">
-                Login
-              </Button>
-            </Link>
-            <Link to="/cadastro">
-              <Button variant="outline" size="sm">
-                Cadastre-se
-              </Button>
-            </Link>
-            <Link to="/assinante">
-              <Button size="sm" className="bg-gradient-secondary hover:opacity-90 shadow-button">
-                <Heart className="h-4 w-4 mr-2" />
-                Assine Agora
-              </Button>
-            </Link>
-          </div>
+          <HeaderActions />
 
           {/* Mobile Menu Button */}
           <button
@@ -112,6 +95,6 @@ const Header = () => {
       </div>
     </header>
   );
-};
+}
 
 export default Header;

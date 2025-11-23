@@ -1,13 +1,16 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BookOpen, CheckCircle, CreditCard, Heart, Star, User } from "lucide-react";
+import { Tabs, TabsContent } from "@/components/ui/tabs";
+import { useHasUser } from "@/hooks/useHasUser";
+import { TabOptions } from "@/pages/subscriber/SubscriberOptions";
+import { BookOpen, CheckCircle, Heart, Star, User } from "lucide-react";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom"
+import { useNavigate } from "react-router-dom";
 
 const AssinantePage = () => {
-  const [selectedPlan, setSelectedPlan] = useState("basico");
+  const { hasUser } = useHasUser();
+  const [selectedPlan, setSelectedPlan] = useState("básico");
   const navigate = useNavigate();
 
   const plans = [
@@ -88,24 +91,7 @@ const AssinantePage = () => {
         </div>
 
         <Tabs defaultValue="planos" className="space-y-8">
-          <TabsList className="grid w-full grid-cols-3 lg:w-fit lg:mx-auto">
-            <TabsTrigger value="planos" className="flex items-center space-x-2">
-              <CreditCard className="h-4 w-4" />
-              <span className="hidden sm:inline">Planos</span>
-            </TabsTrigger>
-            <TabsTrigger value="beneficiarios" className="flex items-center space-x-2">
-              <Heart className="h-4 w-4" />
-              <span className="hidden sm:inline">Beneficiários</span>
-            </TabsTrigger>
-            {/* <TabsTrigger value="historico" className="flex items-center space-x-2">
-              <History className="h-4 w-4" />
-              <span className="hidden sm:inline">Histórico</span>
-            </TabsTrigger> */}
-            <TabsTrigger value="perfil" className="flex items-center space-x-2">
-              <User className="h-4 w-4" />
-              <span className="hidden sm:inline">Perfil</span>
-            </TabsTrigger>
-          </TabsList>
+          {hasUser && <TabOptions />}
 
           {/* Planos */}
           <TabsContent value="planos">
