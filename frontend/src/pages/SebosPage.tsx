@@ -15,6 +15,7 @@ import {
   CheckCircle,
   Sparkles
 } from 'lucide-react';
+import { api } from '@/config/api';
 
 const SebosPage = () => {
   const [formData, setFormData] = useState({
@@ -26,10 +27,43 @@ const SebosPage = () => {
     mensagem: ''
   });
 
+  const [sending, setSending] = useState(false);
+  const [success, setSuccess] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Formulário enviado:', formData);
-    // Implementar envio do formulário
+    // Reset messages
+    setSuccess(null);
+    setError(null);
+
+    // Send to backend
+    const submit = async () => {
+      try {
+        setSending(true);
+        const payload = {
+          nome: formData.nome,
+          email: formData.email,
+          telefone: formData.telefone,
+          tipo: formData.tipo,
+          endereco: formData.endereco,
+          mensagem: formData.mensagem,
+        };
+
+        const resp = await api.post('/api/parceiros/solicitar', payload);
+        setSuccess('Solicitação enviada com sucesso! Aguardaremos seu contato.');
+        setFormData({ nome: '', email: '', telefone: '', tipo: '', endereco: '', mensagem: '' });
+        return resp;
+      } catch (err: any) {
+        console.error('Erro ao enviar solicitação de parceiro:', err);
+        const msg = err?.response?.data || err.message || 'Erro desconhecido';
+        setError(String(msg));
+      } finally {
+        setSending(false);
+      }
+    };
+
+    void submit();
   };
 
   const handleInputChange = (field: string, value: string) => {
@@ -236,10 +270,19 @@ const SebosPage = () => {
                   />
                 </div>
                 
-                <Button type="submit" className="w-full bg-gradient-hero hover:opacity-90 shadow-button">
+                <Button type="submit" disabled={sending} className="w-full bg-gradient-hero hover:opacity-90 shadow-button">
                   <Users className="h-4 w-4 mr-2" />
                   Enviar Solicitação
                 </Button>
+                {sending && (
+                  <p className="text-sm text-muted-foreground text-center">Enviando...</p>
+                )}
+                {success && (
+                  <p className="text-sm text-green-600 text-center">{success}</p>
+                )}
+                {error && (
+                  <p className="text-sm text-red-600 text-center">Erro: {error}</p>
+                )}
                 
                 <p className="text-xs text-muted-foreground text-center">
                   Ao enviar, você concorda em ser contatado pela nossa equipe

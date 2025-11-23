@@ -86,3 +86,4 @@ public class UsuarioController {
                                .body("Erro interno do servidor");
         }
     }
+}

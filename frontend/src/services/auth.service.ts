@@ -16,4 +16,11 @@ export const authService = {
   async resendEmailConfirmationCode(email: string) {
     return await api.post<void>("/auth/reenviar-codigo", null, { params: { email } });
   },
+  async forgotPassword(email: string) {
+    return await api.post("/auth/forgot-password", null, { params: { email } });
+  },
+
+  async resetPassword(data: { email: string; code: string; newPassword: string }) {
+    return await api.post("/auth/reset-password", data);
+  },
 } as const;

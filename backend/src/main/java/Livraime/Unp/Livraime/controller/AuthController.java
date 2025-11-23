@@ -141,4 +141,30 @@ public class AuthController {
             return ResponseEntity.internalServerError().body(new ResendEmailResponseDTO(true, e.getMessage()));
         }
     }
+
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Solicitar código de redefinição de senha")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        try {
+            userService.requestPasswordReset(email);
+            return ResponseEntity.ok("Código de redefinição enviado por email.");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Redefinir senha usando código enviado por email")
+    public ResponseEntity<String> resetPassword(@RequestBody Livraime.Unp.Livraime.controller.dto.request.ResetPasswordRequestDTO request) {
+        try {
+            userService.resetPassword(request.email(), request.code(), request.newPassword());
+            return ResponseEntity.ok("Senha redefinida com sucesso.");
+        } catch (ResourceNotFoundException | BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
 }
