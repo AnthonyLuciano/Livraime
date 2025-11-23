@@ -77,8 +77,6 @@ public class PlanoService {
             beneficiado.setNome(nomes.get(random.nextInt(nomes.size())));
             beneficiado.setIdade(8 + random.nextInt(8)); // Idade entre 8-15 anos
             beneficiado.setDataNascimento(LocalDateTime.now().minusYears(beneficiado.getIdade()).toLocalDate());
-            beneficiado.setEndereco("Endereço fictício " + (i + 1));
-            beneficiado.setCidade("Cidade Exemplo");
             beneficiado.setEstado("SP");
             beneficiado.setDescricaoNecessidades(mensagens.get(random.nextInt(mensagens.size())));
             beneficiado.setAtivo(true);
