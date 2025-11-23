@@ -68,12 +68,21 @@ public class UsuarioController {
     @Operation(summary = "Buscar beneficiados por ID do usuário")
     public ResponseEntity<?> getBeneficiadosByUser(@PathVariable Long usuarioId) {
         try {
-            // Agora o controller apenas chama o service e trata a resposta
+            if (usuarioId == null || usuarioId <= 0) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                                   .body("ID do usuário inválido");
+            }
             BeneficiadosPorUsuarioResponseDTO response = beneficiadoService.buscarBeneficiadosCompletosPorUsuario(usuarioId);
+            // Se não encontrou beneficiados, retorna 200 com lista vazia (mais semântico)
+            if (response.getBeneficiados().isEmpty()) {
+                return ResponseEntity.ok(response); // Retorna { "beneficiados": [] }
+            }
             return ResponseEntity.ok(response);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                               .body("Parâmetro inválido: " + e.getMessage());
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                               .body("Erro interno do servidor: " + e.getMessage());
+                               .body("Erro interno do servidor");
         }
     }
-}
