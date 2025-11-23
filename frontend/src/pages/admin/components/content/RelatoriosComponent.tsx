@@ -2,37 +2,65 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { TabsContent } from "@radix-ui/react-tabs";
 import { BarChart3, BookOpen, CreditCard } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import { useEffect, useState } from "react";
+import { api } from "@/config/api";
+
+type Metric = {
+  mes: string;
+  inscricoes: number;
+  livrosDoados: number;
+  parceiros: number;
+};
 
 export default function RelatoriosComponent() {
+  const [metrics, setMetrics] = useState<Metric[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    fetchMetrics();
+  }, []);
+
+  async function fetchMetrics() {
+    try {
+      setLoading(true);
+      const resp = await api.get<Metric[]>('/admins/metrics');
+      setMetrics(resp.data || []);
+    } catch (err: any) {
+      console.error('Erro ao buscar métricas', err);
+      setError(err?.response?.data || err.message || 'Erro ao buscar métricas');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // Totais (soma dos últimos 6 meses)
+  const totalAssinaturas = metrics.reduce((s, m) => s + (m.inscricoes || 0), 0);
+  const totalLivros = metrics.reduce((s, m) => s + (m.livrosDoados || 0), 0);
+  const totalParceiros = metrics.reduce((s, m) => s + (m.parceiros || 0), 0);
+
   const stats = [
     {
-      label: "Assinaturas Ativas",
-      value: 89,
+      label: "Assinaturas (6 meses)",
+      value: totalAssinaturas,
       icon: CreditCard,
       color: "text-primary",
     },
     {
-      label: "Livros Doados",
-      value: 2347,
+      label: "Livros Doados (6 meses)",
+      value: totalLivros,
       icon: BarChart3,
       color: "text-secondary",
     },
     {
-      label: "Parceiros",
-      value: 25,
+      label: "Parceiros (6 meses)",
+      value: totalParceiros,
       icon: BookOpen,
       color: "text-primary",
     },
   ];
 
-  const chartData = [
-    { mes: "Jan", assinaturas: 120, livros: 350 },
-    { mes: "Fev", assinaturas: 135, livros: 420 },
-    { mes: "Mar", assinaturas: 142, livros: 470 },
-    { mes: "Abr", assinaturas: 150, livros: 490 },
-    { mes: "Mai", assinaturas: 158, livros: 520 },
-    { mes: "Jun", assinaturas: 162, livros: 580 },
-  ];
+  const chartData = metrics.map((m) => ({ mes: m.mes, assinaturas: m.inscricoes, livros: m.livrosDoados }));
 
   return (
     <TabsContent value="relatorios">
@@ -45,6 +73,9 @@ export default function RelatoriosComponent() {
           </div>
           <BarChart3 className="h-8 w-8 text-primary" />
         </div>
+
+        {loading && <p>Carregando métricas...</p>}
+        {error && <p className="text-red-600">Erro: {error}</p>}
 
         {/* Cards de estatísticas */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
