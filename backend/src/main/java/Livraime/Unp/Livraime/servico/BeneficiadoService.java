@@ -94,7 +94,7 @@ public class BeneficiadoService {
         BeneficiaryDataDTO beneficiaryData = new BeneficiaryDataDTO(
             beneficiado.getNome(),
             beneficiado.getIdade(),
-            "UNP " + beneficiado.getEstado()
+            beneficiado.getEstado()
         );
 
         // Agora com dados dinâmicos baseados na idade e perfil

@@ -74,7 +74,7 @@ public class UsuarioController {
             }
             BeneficiadosPorUsuarioResponseDTO response = beneficiadoService.buscarBeneficiadosCompletosPorUsuario(usuarioId);
             // Se não encontrou beneficiados, retorna 200 com lista vazia (mais semântico)
-            if (response.getBeneficiados().isEmpty()) {
+            if (response.beneficiados().isEmpty()) {
                 return ResponseEntity.ok(response); // Retorna { "beneficiados": [] }
             }
             return ResponseEntity.ok(response);

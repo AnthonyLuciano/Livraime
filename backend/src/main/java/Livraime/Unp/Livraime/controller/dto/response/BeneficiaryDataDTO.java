@@ -1,8 +1,8 @@
 package Livraime.Unp.Livraime.controller.dto.response;
 
-public record BeneficiadoCompletoDTO(
-    BeneficiaryDataDTO beneficiaryData,
-    String lastBook,
-    String message,
-    String progress
+public record BeneficiaryDataDTO(
+    String name,
+    int age,
+    String locale
 ) {}
+
