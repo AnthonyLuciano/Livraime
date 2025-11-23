@@ -51,6 +51,10 @@
 - [x] Integrar api de beneficiados
 - [x] Editar usuário
 
-- [x] Integrar api de parceiros
+- [ ] Integrar api de parceiros
 - [x] Integrar api de métricas
-- [ ] integrar api de exibir beneficiados
+
+### Página do assinante
+
+- [x] integrar api de exibir beneficiados
+- [] Editar usuário

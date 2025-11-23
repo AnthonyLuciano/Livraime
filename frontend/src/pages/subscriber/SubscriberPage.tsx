@@ -3,8 +3,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent } from "@/components/ui/tabs";
 import { useHasUser } from "@/hooks/useHasUser";
+import BeneficiadosContent from "@/pages/subscriber/content/BeneficiadosContent";
 import { TabOptions } from "@/pages/subscriber/SubscriberOptions";
-import { BookOpen, CheckCircle, Heart, Star, User } from "lucide-react";
+import { CheckCircle, Heart, Star, User } from "lucide-react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -55,25 +56,6 @@ const AssinantePage = () => {
         "Relatórios personalizados",
         "Suporte VIP",
       ],
-    },
-  ];
-
-  const beneficiaries = [
-    {
-      id: 1,
-      name: "Ana Julia Santos",
-      age: 8,
-      community: "Comunidade A",
-      lastBook: "Pequeno Príncipe",
-      progress: "Leu 5 livros este ano",
-    },
-    {
-      id: 2,
-      name: "Miguel Oliveira",
-      age: 10,
-      community: "Comunidade B",
-      lastBook: "Harry Potter - Pedra Filosofal",
-      progress: "Melhorou as notas em português",
     },
   ];
 
@@ -155,95 +137,8 @@ const AssinantePage = () => {
 
           {/* Beneficiários */}
           <TabsContent value="beneficiarios">
-            <div className="space-y-6">
-              <div className="text-center mb-8">
-                <h2 className="text-2xl font-bold mb-2">Seus Beneficiários</h2>
-                <p className="text-muted-foreground">
-                  Conheça as crianças que estão sendo impactadas pela sua generosidade
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {beneficiaries.map((beneficiary) => (
-                  <Card key={beneficiary.id} className="hover:shadow-soft transition-shadow">
-                    <CardHeader>
-                      <div className="flex items-start space-x-4">
-                        <div className="w-16 h-16 bg-gradient-hero rounded-full flex items-center justify-center text-white font-bold text-xl">
-                          {beneficiary.name.charAt(0)}
-                        </div>
-                        <div className="flex-1">
-                          <CardTitle className="text-lg">{beneficiary.name}</CardTitle>
-                          <CardDescription>
-                            {beneficiary.age} anos • {beneficiary.community}
-                          </CardDescription>
-                        </div>
-                      </div>
-                    </CardHeader>
-
-                    <CardContent>
-                      <div className="space-y-3">
-                        <div className="flex items-center space-x-2">
-                          <BookOpen className="h-4 w-4 text-primary" />
-                          <span className="text-sm">
-                            <strong>Último livro:</strong> {beneficiary.lastBook}
-                          </span>
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Star className="h-4 w-4 text-secondary" />
-                          <span className="text-sm">
-                            <strong>Progresso:</strong> {beneficiary.progress}
-                          </span>
-                        </div>
-                      </div>
-
-                      <div className="mt-4 p-3 bg-accent/30 rounded-lg">
-                        <p className="text-sm text-accent-foreground italic">
-                          "Muito obrigada pelo livro! Eu adorei a história do Pequeno Príncipe. Já li 3 vezes!" - Ana
-                          Julia
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
+            <BeneficiadosContent />
           </TabsContent>
-
-          {/* Histórico
-          <TabsContent value="historico">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center space-x-2">
-                  <Gift className="h-5 w-5 text-secondary" />
-                  <span>Histórico de Doações</span>
-                </CardTitle>
-                <CardDescription>
-                  Acompanhe todas as suas contribuições e o impacto gerado
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {[
-                    { date: '10/10/2025', book: 'Pequeno Príncipe', beneficiary: 'Ana Julia Santos', status: 'Entregue' },
-                    { date: '09/10/2025', book: 'Harry Potter', beneficiary: 'Miguel Oliveira', status: 'Entregue' },
-                    { date: '21/05/2025', book: 'Turma da Mônica', beneficiary: 'Ana Julia Santos', status: 'Entregue' }
-                  ].map((donation, index) => (
-                    <div key={index} className="flex items-center justify-between p-4 border border-border rounded-lg">
-                      <div className="space-y-1">
-                        <div className="font-medium">{donation.book}</div>
-                        <div className="text-sm text-muted-foreground">
-                          Para: {donation.beneficiary} • {donation.date}
-                        </div>
-                      </div>
-                      <Badge variant="secondary" className="bg-green-100 text-green-700 border-green-200">
-                        {donation.status}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent> */}
 
           {/* Perfil */}
           <TabsContent value="perfil">
