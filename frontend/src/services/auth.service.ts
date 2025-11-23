@@ -4,15 +4,17 @@ import { LoginFormData, LoginResponse } from "@/types/login.type";
 
 export const authService = {
   async login(request: LoginFormData): Promise<LoginResponse> {
-    return await api.post("/auth/login", request);
+    const response = await api.post<LoginResponse>("/auth/login", request);
+    return response.data;
   },
 
   async confirmEmail(data: EmailConfirmationFormData): Promise<string> {
-    return await api.post("/auth/confirmar-email", data);
+    const response = await api.post<string>("/auth/confirmar-email", data);
+    return response.data;
   },
 
   async resendEmailConfirmationCode(email: string) {
-    return await api.post("/auth/reenviar-codigo", null, { params: { email } });
+    return await api.post<void>("/auth/reenviar-codigo", null, { params: { email } });
   },
   async forgotPassword(email: string) {
     return await api.post("/auth/forgot-password", null, { params: { email } });
