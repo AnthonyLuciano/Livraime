@@ -18,6 +18,7 @@ import ProtectedAdminRoutes from "@/utils/router-guards/protected-admin-routes/P
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Layout from "./components/Layout";
+import ForgotPassword from "./pages/access/login/ForgotPassword";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />
               <Route path="/cadastro" element={<RegisterPage />} />
+              <Route path="/recuperar-senha" element={<ForgotPassword/>} />
               <Route path="/confirmar-email" element={<EmailConfirmationPage />} />
               <Route path="/assinante" element={<AssinantePage />} />
               <Route path="/pagamento" element={<PaymentPage />} />
