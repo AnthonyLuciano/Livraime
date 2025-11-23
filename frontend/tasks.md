@@ -42,10 +42,13 @@
 - [x] Deletar
 - [ ] Vincular usuário a algum plano
 
+- [ ] Integrar api de planos
+
   - [ ] Remover campos de usuário na página de planos
   - [ ] Elaborar recurso visual para exibir o plano vinculado
 
-- [ ] Integrar api de planos
+- [ ] Integrar api de parceiros
+- [ ] Integrar api de métricas
 - [ ] integrar api de exibir beneficiados
 - [] Feat: Implementar flag "email ativo" no adm
 - [] Corrigir: Mensagem de erro no input de telefone

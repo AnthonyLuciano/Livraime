@@ -16,6 +16,7 @@ import { useDisableUser } from "@/hooks/tanstack-query/user/useDisableUser";
 import { useEnableUser } from "@/hooks/tanstack-query/user/useEnableUser";
 import { useToast } from "@/hooks/use-toast";
 import { EditUserFormData, editUserSchema } from "@/pages/admin/components/content/UserListComponent/edit-user.schema";
+import { formatCEP } from "@/pages/payment/formatters";
 import { UserFromAPI } from "@/types/user.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -38,7 +39,10 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
     defaultValues: {
       name: user.nome,
       email: user.email,
-      address: user.endereco,
+      address: {
+        ...user.endereco,
+        zipCode: user.endereco?.zipCode ? formatCEP(user.endereco.zipCode) : "",
+      },
       phone: user.telefone,
     },
   });
@@ -211,7 +215,13 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
                       <FormItem>
                         <FormLabel>CEP *</FormLabel>
                         <FormControl>
-                          <Input {...field} value={field.value ?? ""} />
+                          <Input
+                            {...field}
+                            value={field.value ?? ""}
+                            onChange={(e) => {
+                              field.onChange(formatCEP(e.target.value));
+                            }}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
