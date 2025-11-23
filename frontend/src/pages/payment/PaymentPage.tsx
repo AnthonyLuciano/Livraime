@@ -1,14 +1,13 @@
-import { useCreateUser } from "@/hooks/tanstack-query/user/useCreateUser";
+import { AuthContext } from "@/contexts/AuthContext";
+import { useLinkUserToPlan } from "@/hooks/tanstack-query/user/useLinkUserToPlan";
 import { toast } from "@/hooks/use-toast";
-import { useHasUser } from "@/hooks/useHasUser";
-import { extractPhone } from "@/pages/payment/formatters";
 import { PaymentSummary } from "@/pages/payment/PaymentSummary";
 import { PlanFromAPI } from "@/types/plan.types";
-import { CreateUserDto } from "@/types/user.types";
+import { LinkUserToPlan } from "@/types/user.types";
 import { PaymentFormData, paymentSchema } from "@/types/validators/payment.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { PaymentForm } from "./form/PaymentForm";
@@ -16,18 +15,20 @@ import { PaymentSuccess } from "./PaymentSuccess";
 
 export default function PaymentPage() {
   const navigate = useNavigate();
-  const { hasUser } = useHasUser();
-  const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<PlanFromAPI | null>(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
 
-  const { mutate: createUser, isPending: isProcessing } = useCreateUser();
+  const { user, isLoading } = useContext(AuthContext);
+  const hasUser = !!user;
+
+  const { mutate: linkUserToPlan, isPending: isProcessing } = useLinkUserToPlan();
 
   const methods = useForm<PaymentFormData>({
     resolver: zodResolver(paymentSchema),
   });
 
   const onSubmit = async (data: PaymentFormData) => {
-    createUser(createUserDTO(data), {
+    linkUserToPlan(createLinkDto(user.cpf, data), {
       onSuccess: () => {
         setPaymentSuccess(true);
 
@@ -43,9 +44,9 @@ export default function PaymentPage() {
       },
 
       onError: (error) => {
-        console.error("Erro ao criar usuário:", error);
+        // console.error("Erro ao vincular usuário a plano:", error);
         toast({
-          title: "Erro ao criar usuário",
+          title: "Erro ao vincular usuário a plano",
           description: axios.isAxiosError(error) ? error.response.data : error.message,
         });
       },
@@ -53,13 +54,15 @@ export default function PaymentPage() {
   };
 
   useEffect(() => {
-    if (!hasUser) navigate("/login", { replace: true });
-    toast({
-      title: "Redirecionado para página de login",
-      description: "É necessário efetuar login para acessar essa página.",
-      duration: 5000,
-    });
-  }, [hasUser, navigate]);
+    if (!isLoading && !hasUser) {
+      navigate("/login", { replace: true });
+      toast({
+        title: "Redirecionado para página de login",
+        description: "É necessário efetuar login para acessar essa página.",
+        duration: 5000,
+      });
+    }
+  }, [isLoading, hasUser, navigate]);
 
   if (paymentSuccess) return <PaymentSuccess />;
 
@@ -86,18 +89,9 @@ export default function PaymentPage() {
   );
 }
 
-function createUserDTO(data: PaymentFormData): CreateUserDto {
-  const { areaCode, number } = extractPhone(data.phone);
-
+function createLinkDto(userCPF: string, data: PaymentFormData): LinkUserToPlan {
   return {
-    nome: data.name,
-    email: data.email,
-    cpf: data.cpf,
-    senha: data.password,
-    endereco: data.address,
-    telefone: {
-      areaCode,
-      number,
-    },
+    cpf: userCPF,
+    Plano: data.plan.nivel,
   };
 }

@@ -1,5 +1,5 @@
 import { UserRole } from "@/types/role.types";
-import { Address } from "@/types/validators/payment.schema";
+import { Address } from "./address.type";
 
 /**
  * @deprecated use o "UserFromAPI ao invés"
@@ -43,4 +43,9 @@ export interface CreateUserDto {
 export interface Phone {
   areaCode: string;
   number: string;
+}
+
+export interface LinkUserToPlan {
+  cpf: string;
+  Plano: string;
 }

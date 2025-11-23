@@ -1,12 +1,13 @@
 import { api } from "@/config/api";
 import { EditUserFormData } from "@/pages/admin/components/content/UserListComponent/edit-user.schema";
-import { CreateUserDto, UserFromAPI } from "@/types/user.types";
+import { CreateUserDto, LinkUserToPlan, UserFromAPI } from "@/types/user.types";
 
 const userRoutes = {
   get: "/usuarios",
   create: "/auth/cadastro",
   update: "/admins/users",
   delete: "/admins/users",
+  linkToPlan: "/planos/vincular",
 } as const;
 
 const userService = {
@@ -32,6 +33,11 @@ const userService = {
   async enable(id: number): Promise<void> {
     await api.patch(`${userRoutes.delete}/${id}/enable`);
   },
-} as const;
+
+  async linkPlan(request: LinkUserToPlan): Promise<string> {
+    const response = await api.post<string>(userRoutes.linkToPlan, request);
+    return response.data;
+  },
+};
 
 export default userService;

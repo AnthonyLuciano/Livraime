@@ -43,10 +43,13 @@
 - [x] Habilitar novamente
 - [ ] Vincular usuário a algum plano
 
-- [ ] Integrar api de planos
+- [x] Integrar api de planos
 
-  - [ ] Remover campos de usuário na página de planos
-  - [ ] Elaborar recurso visual para exibir o plano vinculado
+  - [x] Remover campos de usuário na página de planos
+  - [x] Elaborar recurso visual para exibir o plano vinculado
+
+- [ ] Integrar api de beneficiados
+- [ ] Editar usuário
 
 - [ ] Integrar api de parceiros
 - [ ] Integrar api de métricas
