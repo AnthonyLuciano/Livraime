@@ -53,19 +53,12 @@ export default function PaymentPage() {
   };
 
   useEffect(() => {
-    if (!hasUser)
-      setTimeout(
-        () => {
-          navigate("/login", { replace: true });
-          toast({
-            title: "Redirecionado para página de login",
-            description: "É necessário efetuar login para acessar essa página.",
-            duration: 5000,
-          });
-        },
-
-        1000
-      );
+    if (!hasUser) navigate("/login", { replace: true });
+    toast({
+      title: "Redirecionado para página de login",
+      description: "É necessário efetuar login para acessar essa página.",
+      duration: 5000,
+    });
   }, [hasUser, navigate]);
 
   if (paymentSuccess) return <PaymentSuccess />;
