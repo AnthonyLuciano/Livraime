@@ -101,4 +101,37 @@ public class UserService {
         repository.save(usuario);
         servicoEmail.enviarCodigoVerificacao(usuario.getEmail(), novoCodigo);
     }
+
+    /**
+     * Solicita reset de senha: gera um código e envia por email.
+     */
+    public void requestPasswordReset(String email) {
+        Optional<Usuario> usuarioOpt = repository.findByEmail(email);
+        if (usuarioOpt.isEmpty())
+            throw new ResourceNotFoundException("Usuário não encontrado.");
+
+        Usuario usuario = usuarioOpt.get();
+        String codigo = String.format("%06d", new Random().nextInt(999999));
+        usuario.setCodigoVerificacao(codigo);
+        repository.save(usuario);
+        // Re-use ServicoEmail method for sending the code
+        servicoEmail.enviarCodigoVerificacao(usuario.getEmail(), codigo);
+    }
+
+    /**
+     * Realiza o reset de senha usando o código enviado por email.
+     */
+    public void resetPassword(String email, String code, String newPassword) {
+        Optional<Usuario> usuarioOpt = repository.findByEmail(email);
+        if (usuarioOpt.isEmpty())
+            throw new ResourceNotFoundException("Usuário não encontrado.");
+
+        Usuario usuario = usuarioOpt.get();
+        if (usuario.getCodigoVerificacao() == null || !usuario.getCodigoVerificacao().equals(code))
+            throw new BadRequestException("Código inválido para redefinição de senha.");
+
+        usuario.setSenha(passwordEncoder.encode(newPassword));
+        usuario.setCodigoVerificacao(null);
+        repository.save(usuario);
+    }
 }
