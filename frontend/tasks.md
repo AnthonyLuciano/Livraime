@@ -56,5 +56,6 @@
 
 ### Página do assinante
 
+- [ ] integrar api de planos
 - [x] integrar api de exibir beneficiados
 - [] Editar usuário
