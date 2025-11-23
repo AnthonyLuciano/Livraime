@@ -1,4 +1,5 @@
 import { api } from "@/config/api";
+import { EditUserFormData } from "@/pages/admin/components/content/UserListComponent/edit-user.schema";
 import { CreateUserDto, UserFromAPI } from "@/types/user.types";
 
 const userRoutes = {
@@ -19,7 +20,7 @@ const userService = {
     return response.data;
   },
 
-  async update(id: number, data: Partial<CreateUserDto>): Promise<UserFromAPI> {
+  async update(id: number, data: Partial<EditUserFormData>): Promise<UserFromAPI> {
     const response = await api.patch<UserFromAPI>(`${userRoutes.update}/${id}`, data);
     return response.data;
   },

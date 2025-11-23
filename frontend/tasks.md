@@ -38,8 +38,9 @@
   - [x] Efetuar autorização baseado na role do usuário
         -> Página adm
 
-- [ ] Editar
+- [x] Editar
 - [x] Deletar
+- [x] Habilitar novamente
 - [ ] Vincular usuário a algum plano
 
 - [ ] Integrar api de planos

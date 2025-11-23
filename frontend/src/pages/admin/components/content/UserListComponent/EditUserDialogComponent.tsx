@@ -14,13 +14,14 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useDisableUser } from "@/hooks/tanstack-query/user/useDisableUser";
 import { useEnableUser } from "@/hooks/tanstack-query/user/useEnableUser";
+import { useUpdateUser } from "@/hooks/tanstack-query/user/useUpdateUser";
 import { useToast } from "@/hooks/use-toast";
 import { EditUserFormData, editUserSchema } from "@/pages/admin/components/content/UserListComponent/edit-user.schema";
 import { formatCEP } from "@/pages/payment/formatters";
 import { UserFromAPI } from "@/types/user.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { RefreshCw, Settings, Trash2 } from "lucide-react";
+import { Loader2, RefreshCw, Settings, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 
@@ -31,8 +32,9 @@ interface EditUserDialogProps {
 export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
   const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
-  const { mutate: deleteUser, error: deleteError } = useDisableUser();
-  const { mutate: enableUser, error: enableError } = useEnableUser();
+  const { mutate: deleteUser, error: deleteError, isPending: isDeleting } = useDisableUser();
+  const { mutate: enableUser, error: enableError, isPending: isEnabling } = useEnableUser();
+  const { mutate: updateUser, error: updateError, isPending: isUpdating } = useUpdateUser();
 
   const form = useForm<EditUserFormData>({
     resolver: zodResolver(editUserSchema),
@@ -48,8 +50,28 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
   });
 
   function handleSave(data: EditUserFormData) {
-    // TODO: Implementar a lógica de atualização do usuário
-    console.log("Salvar alterações:", data);
+    updateUser(
+      { id: user.id, data },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Usuário atualizado com sucesso",
+            description: "Os dados do usuário foram atualizados.",
+          });
+          setIsOpen(false);
+        },
+        onError: () => {
+          toast({
+            title: "Erro ao atualizar usuário",
+            description: `Ocorreu um erro ao atualizar o usuário: ${
+              axios.isAxiosError(updateError) && updateError.response?.data
+                ? updateError.response.data
+                : updateError?.message ?? "Erro desconhecido"
+            }`,
+          });
+        },
+      }
+    );
   }
 
   function handleDisableUser() {
@@ -282,7 +304,8 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
                         <Button variant="outline" size="sm">
                           Cancelar
                         </Button>
-                        <Button variant="destructive" size="sm" onClick={handleDisableUser}>
+                        <Button variant="destructive" size="sm" onClick={handleDisableUser} disabled={isDeleting}>
+                          {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           Confirmar
                         </Button>
                       </div>
@@ -312,7 +335,9 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
                           size="sm"
                           onClick={handleEnableUser}
                           className="bg-green-600 hover:bg-green-700"
+                          disabled={isEnabling}
                         >
+                          {isEnabling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                           Confirmar
                         </Button>
                       </div>
@@ -320,8 +345,9 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
                   </Popover>
                 )}
 
-                <Button type="submit" className="bg-gradient-hero hover:opacity-90 shadow-button">
-                  Salvar Alterações
+                <Button type="submit" className="bg-gradient-hero hover:opacity-90 shadow-button" disabled={isUpdating}>
+                  {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isUpdating ? "Salvando..." : "Salvar Alterações"}
                 </Button>
               </DialogFooter>
             </Card>
