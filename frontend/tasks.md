@@ -48,12 +48,9 @@
   - [x] Remover campos de usuário na página de planos
   - [x] Elaborar recurso visual para exibir o plano vinculado
 
-- [ ] Integrar api de beneficiados
-- [ ] Editar usuário
+- [x] Integrar api de beneficiados
+- [x] Editar usuário
 
-- [ ] Integrar api de parceiros
-- [ ] Integrar api de métricas
+- [x] Integrar api de parceiros
+- [x] Integrar api de métricas
 - [ ] integrar api de exibir beneficiados
-- [] Feat: Implementar flag "email ativo" no adm
-- [] Corrigir: Mensagem de erro no input de telefone
-- [] Corrigir: Verificar CPF antes de criar usuário
