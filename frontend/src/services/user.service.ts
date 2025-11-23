@@ -3,7 +3,7 @@ import { api } from "@/config/api";
 import { CreateUserDto, User, UserFromAPI } from "@/types/user.types";
 
 const userRoutes = {
-  get: "/api/usuarios",
+  get: "/usuarios",
   create: "/auth/cadastro",
   update: "/admins/users",
   delete: "/admins/users",
