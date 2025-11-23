@@ -1,7 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@radix-ui/react-tabs";
 import { BookOpen, FileText, Users } from "lucide-react";
 import PartnerComponent from "./PartnerComponent/PartnerComponent";
-import PartnerRequestsList from "./PartnerResquestComponent/PartnerRequestsList";
 import RelatoriosComponent from "./RelatoriosComponent";
 import UserListComponent from "./UserListComponent/UserListComponent";
 
@@ -19,10 +18,7 @@ export default function AdminPageContent() {
             <BookOpen className="h-4 w-4" />
             <span>Parceiros</span>
           </TabsTrigger>
-          <TabsTrigger value="solicitacoes" className="flex items-center space-x-2">
-            <BookOpen className="h-4 w-4" />
-            <span>Solicitações</span>
-          </TabsTrigger>
+
           <TabsTrigger value="relatorios" className="flex items-center space-x-2">
             <FileText className="h-4 w-4" />
             <span>Relatórios</span>

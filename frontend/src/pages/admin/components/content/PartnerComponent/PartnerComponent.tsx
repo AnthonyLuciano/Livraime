@@ -18,7 +18,7 @@ export default function PartnerComponent() {
   async function fetchPartners() {
     try {
       setLoading(true);
-      const resp = await api.get<PartnerResponseDTO[]>("/api/parceiros");
+      const resp = await api.get<PartnerResponseDTO[]>("/parceiros");
       const data = resp.data;
       const mapped: Partner[] = data.map((p) => ({
         id: p.id,

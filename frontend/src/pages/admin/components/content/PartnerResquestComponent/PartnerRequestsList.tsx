@@ -14,7 +14,7 @@ export default function PartnerRequestsList() {
   async function fetchRequests() {
     try {
       setLoading(true);
-      const resp = await api.get("/api/parceiros");
+      const resp = await api.get("/parceiros");
       const data = resp.data as any[];
       // map backend Parceiro -> PartnerRequest
       const mapped: PartnerRequest[] = data.map((p) => ({
@@ -43,7 +43,7 @@ export default function PartnerRequestsList() {
   async function handleUpdate(updated: PartnerRequest) {
     try {
       const status = updated.status; // aprovado | rejeitado
-      await api.put(`/api/parceiros/${updated.id}/status`, { status });
+      await api.put(`/parceiros/${updated.id}/status`, { status });
       // refresh list
       fetchRequests();
     } catch (err) {
