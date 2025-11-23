@@ -1,6 +1,9 @@
 import { UserRole } from "@/types/role.types";
 import { Address } from "@/types/validators/payment.schema";
 
+/**
+ * @deprecated use o "UserFromAPI ao invés"
+ */
 export interface User {
   id: number;
   name: string;

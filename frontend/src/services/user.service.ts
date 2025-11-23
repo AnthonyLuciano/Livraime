@@ -1,6 +1,5 @@
-import { userAdapter } from "@/adapters/user.adapter";
 import { api } from "@/config/api";
-import { CreateUserDto, User, UserFromAPI } from "@/types/user.types";
+import { CreateUserDto, UserFromAPI } from "@/types/user.types";
 
 const userRoutes = {
   get: "/usuarios",
@@ -10,9 +9,9 @@ const userRoutes = {
 } as const;
 
 const userService = {
-  async getAll(): Promise<User[]> {
+  async getAll(): Promise<UserFromAPI[]> {
     const response = await api.get<UserFromAPI[]>(userRoutes.get);
-    return response.data.map((user) => userAdapter.toEntity(user));
+    return response.data;
   },
 
   async create(data: CreateUserDto): Promise<UserFromAPI> {
