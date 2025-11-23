@@ -27,6 +27,10 @@ const userService = {
   async disable(id: number): Promise<void> {
     await api.patch(`${userRoutes.delete}/${id}/disable`);
   },
+
+  async enable(id: number): Promise<void> {
+    await api.patch(`${userRoutes.delete}/${id}/enable`);
+  },
 } as const;
 
 export default userService;

@@ -13,12 +13,14 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useDisableUser } from "@/hooks/tanstack-query/user/useDisableUser";
+import { useEnableUser } from "@/hooks/tanstack-query/user/useEnableUser";
 import { useToast } from "@/hooks/use-toast";
 import { EditUserFormData, editUserSchema } from "@/pages/admin/components/content/UserListComponent/edit-user.schema";
 import { UserFromAPI } from "@/types/user.types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Settings, Trash2 } from "lucide-react";
+import { RefreshCw, Settings, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 interface EditUserDialogProps {
@@ -26,8 +28,10 @@ interface EditUserDialogProps {
 }
 
 export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
   const { mutate: deleteUser, error: deleteError } = useDisableUser();
+  const { mutate: enableUser, error: enableError } = useEnableUser();
 
   const form = useForm<EditUserFormData>({
     resolver: zodResolver(editUserSchema),
@@ -51,6 +55,7 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
           title: "Usuário desativado com sucesso",
           description: "O usuário foi desativado com sucesso.",
         });
+        setIsOpen(false);
       },
       onError: () => {
         toast({
@@ -65,8 +70,30 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
     });
   }
 
+  function handleEnableUser() {
+    enableUser(user.id, {
+      onSuccess: () => {
+        toast({
+          title: "Usuário reativado com sucesso",
+          description: "O usuário foi reativado com sucesso.",
+        });
+        setIsOpen(false);
+      },
+      onError: () => {
+        toast({
+          title: "Erro ao reativar usuário",
+          description: `Ocorreu um erro ao reativar o usuário: ${
+            axios.isAxiosError(enableError) && enableError.response?.data
+              ? enableError.response.data
+              : enableError?.message ?? "Erro desconhecido"
+          }`,
+        });
+      },
+    });
+  }
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm">
           <Settings className="h-4 w-4" />
@@ -231,25 +258,57 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
               </CardContent>
 
               <DialogFooter className="flex justify-between items-center px-6 py-4 border-t">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button variant="destructive" size="sm" type="button">
-                      <Trash2 className="h-4 w-4 mr-2" /> Desativar Usuário
-                    </Button>
-                  </PopoverTrigger>
+                {user.ativo ? (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="destructive" size="sm" type="button">
+                        <Trash2 className="h-4 w-4 mr-2" /> Desativar Usuário
+                      </Button>
+                    </PopoverTrigger>
 
-                  <PopoverContent className="w-64">
-                    <p className="text-sm mb-3">Tem certeza que deseja desativar este usuário?</p>
-                    <div className="flex justify-end space-x-2">
-                      <Button variant="outline" size="sm">
-                        Cancelar
+                    <PopoverContent className="w-64">
+                      <p className="text-sm mb-3">Tem certeza que deseja desativar este usuário?</p>
+                      <div className="flex justify-end space-x-2">
+                        <Button variant="outline" size="sm">
+                          Cancelar
+                        </Button>
+                        <Button variant="destructive" size="sm" onClick={handleDisableUser}>
+                          Confirmar
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        type="button"
+                        className="text-green-600 border-green-600 hover:bg-green-50 hover:text-green-700"
+                      >
+                        <RefreshCw className="h-4 w-4 mr-2" /> Reativar Usuário
                       </Button>
-                      <Button variant="destructive" size="sm" onClick={handleDisableUser}>
-                        Confirmar
-                      </Button>
-                    </div>
-                  </PopoverContent>
-                </Popover>
+                    </PopoverTrigger>
+
+                    <PopoverContent className="w-64">
+                      <p className="text-sm mb-3">Tem certeza que deseja reativar este usuário?</p>
+                      <div className="flex justify-end space-x-2">
+                        <Button variant="outline" size="sm">
+                          Cancelar
+                        </Button>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={handleEnableUser}
+                          className="bg-green-600 hover:bg-green-700"
+                        >
+                          Confirmar
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )}
 
                 <Button type="submit" className="bg-gradient-hero hover:opacity-90 shadow-button">
                   Salvar Alterações

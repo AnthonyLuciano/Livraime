@@ -39,7 +39,7 @@
         -> Página adm
 
 - [ ] Editar
-- [ ] Deletar
+- [x] Deletar
 - [ ] Vincular usuário a algum plano
 
   - [ ] Remover campos de usuário na página de planos
