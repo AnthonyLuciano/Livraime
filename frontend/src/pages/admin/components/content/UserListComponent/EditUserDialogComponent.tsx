@@ -42,8 +42,8 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
       name: user.nome,
       email: user.email,
       address: {
-        ...(user.endereco?.address ?? {}),
-        zipCode: user.endereco?.address?.zipCode ? formatCEP(user.endereco.address.zipCode) : "",
+        ...(user.endereco ?? {}),
+        zipCode: user.endereco?.zipCode ? formatCEP(user.endereco.zipCode) : "",
       },
       phone: user.telefone,
     },
