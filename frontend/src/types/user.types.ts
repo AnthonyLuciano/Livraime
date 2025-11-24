@@ -1,5 +1,9 @@
-import { Address } from "@/types/validators/payment.schema";
+import { UserRole } from "@/types/role.types";
+import { Address } from "./address.type";
 
+/**
+ * @deprecated use o "UserFromAPI ao invés"
+ */
 export interface User {
   id: number;
   name: string;
@@ -21,9 +25,10 @@ export interface UserFromAPI {
   cpf: string;
   endereco: Address;
   telefone: Phone;
-  plano: string;
+  plano: string | null;
   dataCadastro: string;
   ativo: boolean;
+  roles: UserRole[];
 }
 
 export interface CreateUserDto {
@@ -40,4 +45,7 @@ export interface Phone {
   number: string;
 }
 
-// type UserRole = "USER";
+export interface LinkUserToPlan {
+  cpf: string;
+  Plano: string;
+}

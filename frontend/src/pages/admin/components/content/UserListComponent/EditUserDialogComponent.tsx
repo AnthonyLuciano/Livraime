@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -8,39 +9,69 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useDisableUser } from "@/hooks/tanstack-query/user/useDisableUser";
+import { useEnableUser } from "@/hooks/tanstack-query/user/useEnableUser";
+import { useUpdateUser } from "@/hooks/tanstack-query/user/useUpdateUser";
 import { useToast } from "@/hooks/use-toast";
-import { User } from "@/types/user.types";
+import { EditUserFormData, editUserSchema } from "@/pages/admin/components/content/UserListComponent/edit-user.schema";
+import { formatCEP } from "@/pages/payment/formatters";
+import { UserFromAPI } from "@/types/user.types";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { Settings, Trash2 } from "lucide-react";
+import { Loader2, RefreshCw, Settings, Trash2 } from "lucide-react";
 import { useState } from "react";
+import { useForm } from "react-hook-form";
 
 interface EditUserDialogProps {
-  user: User;
+  user: UserFromAPI;
 }
 
 export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
+  const [isOpen, setIsOpen] = useState(false);
   const { toast } = useToast();
-  const { mutate: deleteUser, error: deleteError } = useDisableUser();
+  const { mutate: deleteUser, error: deleteError, isPending: isDeleting } = useDisableUser();
+  const { mutate: enableUser, error: enableError, isPending: isEnabling } = useEnableUser();
+  const { mutate: updateUser, error: updateError, isPending: isUpdating } = useUpdateUser();
 
-  const [formData, setFormData] = useState({
-    nome: user.name,
-    email: user.contact.email,
-    endereco: user.address,
-    telefone: user.contact.phone,
+  const form = useForm<EditUserFormData>({
+    resolver: zodResolver(editUserSchema),
+    defaultValues: {
+      name: user.nome,
+      email: user.email,
+      address: {
+        ...(user.endereco?.address ?? {}),
+        zipCode: user.endereco?.address?.zipCode ? formatCEP(user.endereco.address.zipCode) : "",
+      },
+      phone: user.telefone,
+    },
   });
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  }
-
-  function handleSave() {
-    console.log("Salvar alterações:", formData);
-    // Aqui você chamaria a API PUT/PATCH
+  function handleSave(data: EditUserFormData) {
+    updateUser(
+      { id: user.id, data },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Usuário atualizado com sucesso",
+            description: "Os dados do usuário foram atualizados.",
+          });
+          setIsOpen(false);
+        },
+        onError: () => {
+          toast({
+            title: "Erro ao atualizar usuário",
+            description: `Ocorreu um erro ao atualizar o usuário: ${
+              axios.isAxiosError(updateError) && updateError.response?.data
+                ? updateError.response.data
+                : updateError?.message ?? "Erro desconhecido"
+            }`,
+          });
+        },
+      }
+    );
   }
 
   function handleDisableUser() {
@@ -50,12 +81,13 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
           title: "Usuário desativado com sucesso",
           description: "O usuário foi desativado com sucesso.",
         });
+        setIsOpen(false);
       },
       onError: () => {
         toast({
           title: "Erro ao desativar usuário",
           description: `Ocorreu um erro ao desativar o usuário: ${
-            axios.isAxiosError(deleteError) && deleteError.response.data
+            axios.isAxiosError(deleteError) && deleteError.response?.data
               ? deleteError.response.data
               : deleteError?.message ?? "Erro desconhecido"
           }`,
@@ -64,100 +96,263 @@ export default function EditUserDialogComponent({ user }: EditUserDialogProps) {
     });
   }
 
+  function handleEnableUser() {
+    enableUser(user.id, {
+      onSuccess: () => {
+        toast({
+          title: "Usuário reativado com sucesso",
+          description: "O usuário foi reativado com sucesso.",
+        });
+        setIsOpen(false);
+      },
+      onError: () => {
+        toast({
+          title: "Erro ao reativar usuário",
+          description: `Ocorreu um erro ao reativar o usuário: ${
+            axios.isAxiosError(enableError) && enableError.response?.data
+              ? enableError.response.data
+              : enableError?.message ?? "Erro desconhecido"
+          }`,
+        });
+      },
+    });
+  }
+
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <Button variant="ghost" size="sm">
           <Settings className="h-4 w-4" />
         </Button>
       </DialogTrigger>
 
-      <DialogContent className="max-w-lg">
+      <DialogContent className="max-w-xl overflow-hidden">
         <DialogHeader>
           <DialogTitle>Editar Usuário</DialogTitle>
-          <DialogDescription>Atualize as informações do usuário abaixo.</DialogDescription>
+          <DialogDescription>Atualize as informações abaixo</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 py-2">
-          {/* Campos editáveis */}
-          <div className="grid gap-2">
-            <Label htmlFor="nome">
-              Nome <span className="text-red-300">*</span>
-            </Label>
-            <Input id="nome" name="nome" value={formData.nome} onChange={handleChange} />
-          </div>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(handleSave)}>
+            <Card className="border-none shadow-none">
+              <CardContent className="max-h-[65vh] overflow-y-auto px-6 space-y-4">
+                <FormField
+                  control={form.control}
+                  name="name"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Nome *</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <div className="grid gap-2">
-            <Label htmlFor="email">
-              E-mail <span className="text-red-300">*</span>
-            </Label>
-            <Input id="email" name="email" value={formData.email} onChange={handleChange} />
-          </div>
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>E-mail *</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
 
-          <div className="grid gap-2">
-            <Label htmlFor="endereco">
-              Endereço <span className="text-red-300">*</span>
-            </Label>
-            <Input id="endereco" name="endereco" value={formData.endereco} onChange={handleChange} />
-          </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="address.street"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Rua *</FormLabel>
+                        <FormControl>
+                          <Input {...field} value={field.value ?? ""} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="address.number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Número *</FormLabel>
+                        <FormControl>
+                          <Input {...field} value={field.value ?? ""} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="address.complement"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Complemento</FormLabel>
+                        <FormControl>
+                          <Input {...field} value={field.value ?? ""} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="address.neighborhood"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Bairro *</FormLabel>
+                        <FormControl>
+                          <Input {...field} value={field.value ?? ""} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="address.city"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Cidade *</FormLabel>
+                        <FormControl>
+                          <Input {...field} value={field.value ?? ""} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="address.zipCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>CEP *</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            value={field.value ?? ""}
+                            onChange={(e) => {
+                              field.onChange(formatCEP(e.target.value));
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-          <div className="grid gap-2">
-            <Label htmlFor="telefone">
-              Telefone <span className="text-red-300">*</span>
-            </Label>
-            <Input id="telefone" name="telefone" value={formData.telefone} onChange={handleChange} />
-          </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <FormField
+                    control={form.control}
+                    name="phone.areaCode"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>DDD *</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="phone.number"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Número *</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
 
-          {/* Campos somente leitura */}
-          <div className="grid gap-2">
-            <Label htmlFor="cpf">CPF</Label>
-            <Input id="cpf" value={user.cpf} disabled className="bg-zinc-400" />
-          </div>
+                {/* Somente leitura */}
+                <div className="grid md:grid-cols-2 gap-4 pt-4 border-t">
+                  <Input disabled value={user.cpf} />
+                  <Input disabled value={user.plano ?? "Sem plano"} />
+                  <Input disabled value={new Date(user.dataCadastro).toLocaleDateString("pt-BR")} />
+                  <Input disabled value={user.ativo ? "Ativo" : "Inativo"} className="bg-muted" />
+                </div>
+              </CardContent>
 
-          <div className="grid gap-2">
-            <Label htmlFor="plano">Plano</Label>
-            <Input id="plano" value={user.plan} disabled className="bg-zinc-400" />
-          </div>
+              <DialogFooter className="flex justify-between items-center px-6 py-4 border-t">
+                {user.ativo ? (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button variant="destructive" size="sm" type="button">
+                        <Trash2 className="h-4 w-4 mr-2" /> Desativar Usuário
+                      </Button>
+                    </PopoverTrigger>
 
-          <div className="grid gap-2">
-            <Label htmlFor="dataCadastro">Data de Cadastro</Label>
-            <Input
-              id="dataCadastro"
-              value={user.registerDate.toLocaleDateString("pt-BR")}
-              disabled
-              className="bg-zinc-400"
-            />
-          </div>
+                    <PopoverContent className="w-64">
+                      <p className="text-sm mb-3">Tem certeza que deseja desativar este usuário?</p>
+                      <div className="flex justify-end space-x-2">
+                        <Button variant="outline" size="sm">
+                          Cancelar
+                        </Button>
+                        <Button variant="destructive" size="sm" onClick={handleDisableUser} disabled={isDeleting}>
+                          {isDeleting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                          Confirmar
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                ) : (
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        type="button"
+                        className="text-green-600 border-green-600 hover:bg-green-50 hover:text-green-700"
+                      >
+                        <RefreshCw className="h-4 w-4 mr-2" /> Reativar Usuário
+                      </Button>
+                    </PopoverTrigger>
 
-          <div className="grid gap-2">
-            <Label htmlFor="ativo">Status</Label>
-            <Input id="ativo" value={user.isActive ? "Ativo" : "Inativo"} disabled className="bg-zinc-400" />
-          </div>
-        </div>
+                    <PopoverContent className="w-64">
+                      <p className="text-sm mb-3">Tem certeza que deseja reativar este usuário?</p>
+                      <div className="flex justify-end space-x-2">
+                        <Button variant="outline" size="sm">
+                          Cancelar
+                        </Button>
+                        <Button
+                          variant="default"
+                          size="sm"
+                          onClick={handleEnableUser}
+                          className="bg-green-600 hover:bg-green-700"
+                          disabled={isEnabling}
+                        >
+                          {isEnabling && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                          Confirmar
+                        </Button>
+                      </div>
+                    </PopoverContent>
+                  </Popover>
+                )}
 
-        <DialogFooter className="flex justify-between items-center">
-          {/* Popover de confirmação */}
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button variant="destructive" size="sm">
-                <Trash2 className="h-4 w-4 mr-2" /> Desativar Usuário
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-64">
-              <p className="text-sm mb-3">Tem certeza que deseja desativar este usuário?</p>
-              <div className="flex justify-end space-x-2">
-                <Button variant="outline" size="sm">
-                  Cancelar
+                <Button type="submit" className="bg-gradient-hero hover:opacity-90 shadow-button" disabled={isUpdating}>
+                  {isUpdating && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                  {isUpdating ? "Salvando..." : "Salvar Alterações"}
                 </Button>
-                <Button variant="destructive" size="sm" onClick={handleDisableUser}>
-                  Confirmar
-                </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
-
-          <Button onClick={handleSave}>Salvar Alterações</Button>
-        </DialogFooter>
+              </DialogFooter>
+            </Card>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

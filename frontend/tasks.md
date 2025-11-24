@@ -8,7 +8,9 @@
 
 - [x] Listar
 - [x] Criar
+
   - [x] Botão de cadastro no "header"
+
 - [x] Tela de confirmação de email
 
   - [x] Nova rota
@@ -16,12 +18,44 @@
   - [x] Inserir email do usuário cadastrado por baixo dos panos
   - [x] Integrar com API
 
-- [] feat: elaborar página de "Reenviar código"
+- [x] refactor: separar responsabilidades entre camadas no "UserController" e "UserService"
 
-- [] Corrigir: Mensagem de erro no input de telefone
-- [] Corrigir: Verificar CPF antes de criar usuário
-- [] Feat: Implementar flag "email ativo" no adm
+  - [x] login usuário
+  - [x] confirmar email
+  - [x] reenviar código
 
-- [] Vincular a algum plano
-- [] Editar
-- [] Deletar
+- [x] feat: elaborar requisição de "Reenviar código"
+
+- [x] Login de usuário
+
+  - [x] Persistir em storage
+
+    - [x] Mudar ações no header do sistema
+    - [x] Ação de "logout"
+    - [x] Somente exibir "página de usuário" caso haja sessão
+    - [x] Redirecionar para login ao tentar assinar plano e não haja sessão
+
+  - [x] Efetuar autorização baseado na role do usuário
+        -> Página adm
+
+- [x] Editar
+- [x] Deletar
+- [x] Habilitar novamente
+- [ ] Vincular usuário a algum plano
+
+- [x] Integrar api de planos
+
+  - [x] Remover campos de usuário na página de planos
+  - [x] Elaborar recurso visual para exibir o plano vinculado
+
+- [x] Integrar api de beneficiados
+- [x] Editar usuário
+
+- [ ] Integrar api de parceiros
+- [x] Integrar api de métricas
+
+### Página do assinante
+
+- [ ] integrar api de planos
+- [x] integrar api de exibir beneficiados
+- [] Editar usuário

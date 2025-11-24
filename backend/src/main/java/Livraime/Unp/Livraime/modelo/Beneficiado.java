@@ -20,12 +20,6 @@ public class Beneficiado {
     private LocalDate dataNascimento;
     
     @Column(nullable = false)
-    private String endereco;
-    
-    @Column(nullable = false)
-    private String cidade;
-    
-    @Column(nullable = false)
     private String estado;
     
     @Column(name = "descricao_necessidades", columnDefinition = "TEXT")
@@ -40,15 +34,12 @@ public class Beneficiado {
     // Construtores
     public Beneficiado() {}
     
-    public Beneficiado(Long id, String nome, int idade, LocalDate dataNascimento, 
-                      String endereco, String cidade, String estado, 
+    public Beneficiado(Long id, String nome, int idade, LocalDate dataNascimento, String estado, 
                       String descricaoNecessidades, boolean ativo, Long clienteAssinanteId) {
         this.id = id;
         this.nome = nome;
         this.idade = idade;
         this.dataNascimento = dataNascimento;
-        this.endereco = endereco;
-        this.cidade = cidade;
         this.estado = estado;
         this.descricaoNecessidades = descricaoNecessidades;
         this.ativo = ativo;
@@ -67,12 +58,6 @@ public class Beneficiado {
     
     public LocalDate getDataNascimento() { return dataNascimento; }
     public void setDataNascimento(LocalDate dataNascimento) { this.dataNascimento = dataNascimento; }
-    
-    public String getEndereco() { return endereco; }
-    public void setEndereco(String endereco) { this.endereco = endereco; }
-    
-    public String getCidade() { return cidade; }
-    public void setCidade(String cidade) { this.cidade = cidade; }
     
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }

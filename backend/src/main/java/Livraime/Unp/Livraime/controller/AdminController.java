@@ -110,7 +110,8 @@ public class AdminController {
         List<MetricDto> resultado = new ArrayList<>();
         LocalDate hoje = LocalDate.now();
 
-        for (int i = 5; i >= 0; i--) {
+    // Alteração: incluir do mês atual até 5 meses atrás
+    for (int i = 0; i < 6; i++) {
             LocalDate dataDoMes = hoje.minusMonths(i);
             LocalDate inicioDoMes = dataDoMes.withDayOfMonth(1);
             LocalDate fimDoMes = dataDoMes.withDayOfMonth(dataDoMes.lengthOfMonth());
@@ -125,7 +126,7 @@ public class AdminController {
             long donatedBooks = countDonatedBooksBetween(inicio, fim);
             long partners = countPartnersAtMonthEnd(fim);
 
-            resultado.add(new MetricDto(mes, subscriptions, donatedBooks, partners));
+        resultado.add(0, new MetricDto(mes, subscriptions, donatedBooks, partners)); // Inserir no início
         }
 
         return resultado;
@@ -200,6 +201,24 @@ public class AdminController {
     }
 
     /**
+     * Reativa um usuário (marca como ativo).
+     * Recebe o id do usuário via path variable.
+     *
+     * @param id id do usuário a ser reativado
+     */
+    @PatchMapping("/users/{id}/enable")
+    @Operation(summary = "Reativar usuário")
+    public ResponseEntity<?> reativarUsuario(@PathVariable int id) {
+        return usuarioRepository.findById(id)
+                .map(u -> {
+                    u.setAtivo(true);
+                    usuarioRepository.save(u);
+                    return ResponseEntity.ok("Usuário reativado com sucesso.");
+                })
+                .orElse(ResponseEntity.notFound().build());
+    }
+
+    /**
      * Edita campos básicos de um parceiro. Campos editáveis:
      * - nome
      * - tipo (sebo ou autor_independente)
@@ -253,5 +272,17 @@ public class AdminController {
                     return ResponseEntity.ok("Parceiro desativado com sucesso.");
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }
+    @PatchMapping("/partners/{id}/enable")
+    @Operation(summary = "Ativar parceiro")
+    public ResponseEntity<?> ativarParceiro(@PathVariable Long id){
+        return partnerRepository.findById(id)
+                        .map(p -> {
+                            p.setActive(true);
+                            p.setCreatedAt(LocalDateTime.now());
+                            partnerRepository.save(p);
+                            return ResponseEntity.ok("Parceiro ativado com sucesso.");
+                        })
+                        .orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

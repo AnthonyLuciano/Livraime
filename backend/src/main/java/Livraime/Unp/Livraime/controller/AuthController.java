@@ -1,12 +1,8 @@
 package Livraime.Unp.Livraime.controller;
 
-import java.util.Optional;
-import java.util.Random;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,11 +21,14 @@ import Livraime.Unp.Livraime.controller.dto.request.ConfirmEmailRequestDTO;
 
 import Livraime.Unp.Livraime.controller.dto.request.LoginRequest;
 import Livraime.Unp.Livraime.controller.dto.request.user.CreateUserDTO;
+import Livraime.Unp.Livraime.controller.dto.response.LoginResponseDTO;
+import Livraime.Unp.Livraime.controller.dto.response.ResendEmailResponseDTO;
 import Livraime.Unp.Livraime.exceptions.BadRequestException;
 import Livraime.Unp.Livraime.exceptions.ConflictException;
+import Livraime.Unp.Livraime.exceptions.EmailNotVerifiedException;
+import Livraime.Unp.Livraime.exceptions.ResourceNotFoundException;
+import Livraime.Unp.Livraime.exceptions.UnauthorizedException;
 import Livraime.Unp.Livraime.modelo.Usuario;
-import Livraime.Unp.Livraime.repositorio.UsuarioRepository;
-import Livraime.Unp.Livraime.servico.ServicoEmail;
 import Livraime.Unp.Livraime.servico.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,15 +40,6 @@ public class AuthController {
 
     @Autowired
     private UserService userService;
-
-    @Autowired
-    private UsuarioRepository usuarioRepository;
-
-    @Autowired
-    private ServicoEmail servicoEmail;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     /**
      * Cadastra um novo usuário no sistema.
@@ -91,22 +81,23 @@ public class AuthController {
      */
     @PostMapping("/login")
     @Operation(summary = "Login do usuário")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        String email = loginRequest.getEmail();
-        String senha = loginRequest.getSenha();
+    public ResponseEntity<LoginResponseDTO> login(@RequestBody LoginRequest loginRequest) {
+        try {
+            Usuario user = userService.loginUser(loginRequest.getEmail(), loginRequest.getSenha());
+            var mappedUser = UsuarioMapper.toResponse(user);
 
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
-        if (usuarioOpt.isPresent() && passwordEncoder.matches(senha, usuarioOpt.get().getSenha())) {
-            Usuario usuario = usuarioOpt.get();
-            if (!usuario.isEmailVerificado()) {
-                return ResponseEntity.status(403).body("Confirme seu e-mail para acessar o sistema.");
-            }
-            if (!usuario.isAtivo()) {
-                return ResponseEntity.status(403).body("Conta inativa. Contate o suporte.");
-            }
-            return ResponseEntity.ok("Login realizado com sucesso!");
+            return ResponseEntity.status(HttpStatus.OK)
+                    .body(new LoginResponseDTO(mappedUser, "Login realizado com sucesso!"));
+        } catch (UnauthorizedException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new LoginResponseDTO(null, e.getMessage()));
+        } catch (EmailNotVerifiedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new LoginResponseDTO(null, e.getMessage()));
+        } catch (BadRequestException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new LoginResponseDTO(null, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new LoginResponseDTO(null, e.getMessage()));
         }
-        return ResponseEntity.status(401).body("E-mail ou senha inválidos.");
     }
 
     /**
@@ -119,15 +110,17 @@ public class AuthController {
     @PostMapping("/confirmar-email")
     @Operation(summary = "Confirmar e-mail do usuário")
     public ResponseEntity<String> confirmarEmail(@RequestBody ConfirmEmailRequestDTO request) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(request.email());
-        if (usuarioOpt.isPresent() && request.code().equals(usuarioOpt.get().getCodigoVerificacao())) {
-            Usuario usuario = usuarioOpt.get();
-            usuario.setEmailVerificado(true);
-            usuario.setCodigoVerificacao(null);
-            usuarioRepository.save(usuario);
-            return ResponseEntity.ok("E-mail confirmado com sucesso!");
+        var isValid = userService.validateCode(request);
+        try {
+            if (isValid)
+                return ResponseEntity.ok("E-mail confirmado com sucesso!");
+
+            return ResponseEntity.badRequest().body("Código inválido.");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
         }
-        return ResponseEntity.badRequest().body("Código inválido.");
     }
 
     /**
@@ -138,16 +131,40 @@ public class AuthController {
      */
     @PostMapping("/reenviar-codigo")
     @Operation(summary = "Reenviar código de verificação de e-mail")
-    public ResponseEntity<?> reenviarCodigo(@RequestParam String email) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByEmail(email);
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
-            String novoCodigo = String.format("%06d", new Random().nextInt(999999));
-            usuario.setCodigoVerificacao(novoCodigo);
-            usuarioRepository.save(usuario);
-            servicoEmail.enviarCodigoVerificacao(usuario.getEmail(), novoCodigo);
-            return ResponseEntity.ok("Novo código enviado para seu e-mail.");
+    public ResponseEntity<ResendEmailResponseDTO> reenviarCodigo(@RequestParam String email) {
+        try {
+            userService.resendCodeToEmail(email);
+            return ResponseEntity.ok(new ResendEmailResponseDTO(true, "Novo código enviado para seu e-mail."));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.badRequest().body(new ResendEmailResponseDTO(true, e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(new ResendEmailResponseDTO(true, e.getMessage()));
         }
-        return ResponseEntity.badRequest().body("Usuário não encontrado.");
+    }
+
+    @PostMapping("/forgot-password")
+    @Operation(summary = "Solicitar código de redefinição de senha")
+    public ResponseEntity<String> forgotPassword(@RequestParam String email) {
+        try {
+            userService.requestPasswordReset(email);
+            return ResponseEntity.ok("Código de redefinição enviado por email.");
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
+    }
+
+    @PostMapping("/reset-password")
+    @Operation(summary = "Redefinir senha usando código enviado por email")
+    public ResponseEntity<String> resetPassword(@RequestBody Livraime.Unp.Livraime.controller.dto.request.ResetPasswordRequestDTO request) {
+        try {
+            userService.resetPassword(request.email(), request.code(), request.newPassword());
+            return ResponseEntity.ok("Senha redefinida com sucesso.");
+        } catch (ResourceNotFoundException | BadRequestException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body(e.getMessage());
+        }
     }
 }

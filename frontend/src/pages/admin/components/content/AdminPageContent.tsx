@@ -8,7 +8,7 @@ export default function AdminPageContent() {
   return (
     <>
       <Tabs defaultValue="usuarios" className="space-y-6">
-        <TabsList className="grid grid-cols-3 w-fit mx-auto">
+        <TabsList className="grid grid-cols-4 w-fit mx-auto">
           <TabsTrigger value="usuarios" className="flex items-center space-x-2">
             <Users className="h-4 w-4" />
             <span>Usuários</span>
@@ -18,6 +18,7 @@ export default function AdminPageContent() {
             <BookOpen className="h-4 w-4" />
             <span>Parceiros</span>
           </TabsTrigger>
+
           <TabsTrigger value="relatorios" className="flex items-center space-x-2">
             <FileText className="h-4 w-4" />
             <span>Relatórios</span>
