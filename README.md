@@ -92,8 +92,6 @@ Garanta que a URL aponte para o backend em execução (porta 8081 por padrão).
 npm run dev
 ```
 
-O Vite normalmente serve em `http://localhost:5173` (o terminal mostrará a URL).
-
 ### Fluxo de desenvolvimento recomendado
 
 1. Inicie o backend (`./mvnw spring-boot:run`).
