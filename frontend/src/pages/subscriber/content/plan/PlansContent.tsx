@@ -28,7 +28,7 @@ export default function PlansContent() {
           period: "mês",
           popular: nivel.toLowerCase() === "intermediario",
           description: p.beneficios?.[0]?.descricao ?? "",
-          features: p.beneficios?.map((b) => b.nome ?? b.descricao) ?? [],
+          features: p.beneficios?.map((b) => b.descricao ?? b.nome) ?? [],
         };
       })
     : [];
